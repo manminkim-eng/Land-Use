@@ -31,8 +31,9 @@
 <link rel="manifest" href="manifest.json">
 
 <!-- ── 파비콘 ── -->
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+<link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
 <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
@@ -968,6 +969,83 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
 .jpg-act-btn.close-btn{background:var(--surf2);color:var(--text2);border:1px solid var(--border)}
 .jpg-act-btn:hover{transform:translateY(-2px)}
 .jpg-preview-label{font-size:11px;color:var(--slate);text-align:center}
+
+/* ── PWA 설치 버튼 ── */
+.pwa-install-btn{
+  display:flex;align-items:center;gap:5px;
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  border:none;border-radius:8px;
+  padding:7px 13px;cursor:pointer;
+  font-family:var(--font-base);font-size:12px;font-weight:800;
+  color:#0B1B2E;letter-spacing:.03em;
+  box-shadow:0 2px 14px rgba(0,194,168,.35);
+  transition:all .2s;white-space:nowrap;flex-shrink:0;
+  animation:pwa-glow 2.5s ease-in-out infinite;
+}
+.pwa-install-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 20px rgba(0,194,168,.55);
+  animation:none;
+}
+.pwa-install-ico{font-size:14px;line-height:1;}
+.pwa-install-txt{font-size:11px;}
+@keyframes pwa-glow{
+  0%,100%{box-shadow:0 2px 14px rgba(0,194,168,.35);}
+  50%{box-shadow:0 2px 22px rgba(0,194,168,.65),0 0 12px rgba(232,160,32,.3);}
+}
+
+/* ── PWA 하단 설치 배너 ── */
+.pwa-banner{
+  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:linear-gradient(135deg,#0d2a4a,#0B1B2E);
+  border-top:1px solid var(--teal);
+  padding:14px 20px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:0 -4px 30px rgba(0,0,0,.5);
+  animation:slideUp .3s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.pwa-banner-icon{
+  width:52px;height:52px;border-radius:12px;
+  overflow:hidden;flex-shrink:0;
+  box-shadow:0 2px 12px rgba(0,194,168,.3);
+}
+.pwa-banner-icon img{width:100%;height:100%;object-fit:cover;}
+.pwa-banner-txt{flex:1;min-width:0;}
+.pwa-banner-title{font-size:14px;font-weight:800;color:var(--text);line-height:1.3;letter-spacing:-.01em;}
+.pwa-banner-sub{font-size:11px;color:var(--slate);margin-top:3px;line-height:1.4;}
+.pwa-banner-actions{display:flex;gap:8px;flex-shrink:0;}
+.pwa-banner-install{
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  border:none;border-radius:10px;
+  padding:10px 18px;font-family:var(--font-base);
+  font-size:13px;font-weight:800;color:#0B1B2E;
+  cursor:pointer;white-space:nowrap;
+  box-shadow:0 3px 14px rgba(0,194,168,.4);
+  transition:all .2s;
+}
+.pwa-banner-install:hover{transform:translateY(-1px);}
+.pwa-banner-close{
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:8px;padding:9px 12px;
+  font-size:13px;cursor:pointer;color:var(--slate);
+  font-family:var(--font-base);font-weight:700;
+  transition:all .2s;white-space:nowrap;
+}
+.pwa-banner-close:hover{color:var(--text2);}
+@media(max-width:480px){
+  .pwa-install-txt{display:none;}
+  .pwa-install-btn{padding:7px 10px;}
+  .pwa-banner{padding:12px 14px;gap:10px;}
+  .pwa-banner-icon{width:42px;height:42px;border-radius:10px;}
+  .pwa-banner-title{font-size:12px;}
+  .pwa-banner-sub{font-size:10px;}
+  .pwa-banner-install{font-size:12px;padding:9px 14px;}
+  .pwa-banner-close{padding:8px 10px;font-size:12px;}
+}
+@media(max-width:360px){
+  .pwa-banner-sub{display:none;}
+}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -977,7 +1055,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
 <header class="hdr">
   <div class="hdr-inner">
     <a class="brand" href="#">
-      <div class="brand-logo">MM</div>
+      <div class="brand-logo" style="background:none;padding:0;overflow:hidden;">
+        <img src="icons/brand-icon.jpg" alt="MANMIN 로고"
+             style="width:42px;height:42px;object-fit:cover;border-radius:10px;display:block;" />
+      </div>
       <div class="brand-txt">
         <span class="nm">MANMIN</span>
         <span class="sb">Ver 1.0 · 건폐율·용적률 계산기</span>
@@ -987,6 +1068,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
       <span class="ver-pill">Ver 1.0</span>
       <span class="ord-active-badge" id="ord-badge">조례 적용 중</span>
       <button class="law-btn" onclick="openLaw()">⚖️ 사용법 · 법규</button>
+      <!-- PWA 설치 버튼 (beforeinstallprompt 발생 시 표시) -->
+      <button class="pwa-install-btn" id="pwa-hdr-btn" onclick="pwaTriggerInstall('header')"
+              style="display:none;" title="앱으로 설치하기">
+        <span class="pwa-install-ico">📲</span>
+        <span class="pwa-install-txt">앱 설치</span>
+      </button>
     </div>
   </div>
 </header>
@@ -2445,5 +2532,135 @@ function shareNative(){
 </script>
 <!-- ── PWA 스크립트 ── -->
 <script src="pwa.js" defer></script>
+
+<!-- ══ PWA 설치 배너 ══ -->
+<div class="pwa-banner" id="pwa-install-banner" style="display:none;">
+  <div class="pwa-banner-icon">
+    <img src="icons/brand-icon.jpg" alt="MANMIN">
+  </div>
+  <div class="pwa-banner-txt">
+    <div class="pwa-banner-title">📲 MANMIN을 앱으로 설치하세요!</div>
+    <div class="pwa-banner-sub">홈 화면에 추가 → 오프라인 사용 가능 · 빠른 실행</div>
+  </div>
+  <div class="pwa-banner-actions">
+    <button class="pwa-banner-install" onclick="pwaTriggerInstall('banner')">설치하기</button>
+    <button class="pwa-banner-close" onclick="pwaDismissBanner()">나중에</button>
+  </div>
+</div>
+
+<!-- ══ SW 업데이트 알림 배너 (동적 생성) ══ -->
+
+<script>
+/* ════════════════════════════════════════════════
+   PWA — Service Worker 등록 + 설치 버튼 제어
+════════════════════════════════════════════════ */
+(function(){
+  var _deferredPrompt = null;
+
+  /* ── 1. Service Worker 등록 ── */
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('./sw.js').then(function(reg){
+        console.log('[PWA] SW 등록:', reg.scope);
+        /* 업데이트 감지 */
+        reg.addEventListener('updatefound', function(){
+          var nw = reg.installing;
+          if(!nw) return;
+          nw.addEventListener('statechange', function(){
+            if(nw.state === 'installed' && navigator.serviceWorker.controller){
+              /* 업데이트 배너 */
+              var bar = document.createElement('div');
+              bar.style.cssText='position:fixed;bottom:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#0d2a4a,#0B1B2E);color:#E8F4F2;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;font-weight:700;box-shadow:0 -4px 20px rgba(0,0,0,.5);border-top:1px solid #00C2A8;';
+              var sp=document.createElement('span'); sp.textContent='🔄 새 버전이 업데이트되었습니다!';
+              var btn=document.createElement('button');
+              btn.textContent='지금 업데이트';
+              btn.style.cssText='background:linear-gradient(135deg,#00C2A8,#E8A020);border:none;color:#0B1B2E;padding:8px 16px;border-radius:8px;cursor:pointer;font-weight:800;font-size:12px;';
+              btn.onclick=function(){
+                navigator.serviceWorker.ready.then(function(r){if(r.waiting)r.waiting.postMessage({type:'SKIP_WAITING'});});
+                bar.remove(); location.reload();
+              };
+              bar.appendChild(sp); bar.appendChild(btn);
+              document.body.appendChild(bar);
+            }
+          });
+        });
+      }).catch(function(e){console.warn('[PWA] SW 실패:',e);});
+    });
+  }
+
+  /* ── 2. beforeinstallprompt: 설치 가능 이벤트 포착 ── */
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    _deferredPrompt = e;
+
+    /* 헤더 설치 버튼 표시 */
+    var hBtn = document.getElementById('pwa-hdr-btn');
+    if(hBtn) hBtn.style.display = 'flex';
+
+    /* 2.5초 후 하단 배너 표시 (닫은 적 없을 때만) */
+    if(!sessionStorage.getItem('pwa-banner-dismissed')){
+      setTimeout(function(){
+        var banner = document.getElementById('pwa-install-banner');
+        if(banner) banner.style.display = 'flex';
+      }, 2500);
+    }
+  });
+
+  /* ── 3. 설치 실행 함수 ── */
+  window.pwaTriggerInstall = function(src){
+    var banner = document.getElementById('pwa-install-banner');
+    if(banner) banner.style.display = 'none';
+
+    if(!_deferredPrompt){
+      var isApp = window.matchMedia('(display-mode:standalone)').matches
+               || window.navigator.standalone === true;
+      if(isApp){
+        if(typeof showToast==='function') showToast('✅ 이미 앱으로 설치되어 있습니다.');
+        else alert('✅ 이미 앱으로 설치되어 있습니다.');
+      } else {
+        alert('📱 수동 설치 방법\n\n• Android Chrome: 주소창 오른쪽 메뉴 → "앱 설치"\n• iPhone Safari: 하단 공유 버튼 → "홈 화면에 추가"\n• PC Chrome/Edge: 주소창 오른쪽 설치 아이콘 클릭');
+      }
+      return;
+    }
+
+    _deferredPrompt.prompt();
+    _deferredPrompt.userChoice.then(function(r){
+      console.log('[PWA] 설치 선택:', r.outcome);
+      if(r.outcome === 'accepted'){
+        var hBtn = document.getElementById('pwa-hdr-btn');
+        if(hBtn) hBtn.style.display = 'none';
+        if(typeof showToast==='function') showToast('🎉 앱 설치 완료!');
+      }
+      _deferredPrompt = null;
+    });
+  };
+
+  /* ── 4. 배너 닫기 ── */
+  window.pwaDismissBanner = function(){
+    var banner = document.getElementById('pwa-install-banner');
+    if(banner) banner.style.display = 'none';
+    try{ sessionStorage.setItem('pwa-banner-dismissed','1'); }catch(e){}
+  };
+
+  /* ── 5. 설치 완료 후 버튼·배너 숨기기 ── */
+  window.addEventListener('appinstalled', function(){
+    var hBtn = document.getElementById('pwa-hdr-btn');
+    if(hBtn) hBtn.style.display = 'none';
+    var banner = document.getElementById('pwa-install-banner');
+    if(banner) banner.style.display = 'none';
+    _deferredPrompt = null;
+    if(typeof showToast==='function') showToast('🎉 MANMIN 앱이 설치되었습니다!');
+  });
+
+  /* ── 6. standalone(앱 모드)에서 설치 버튼 숨기기 ── */
+  if(window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone === true){
+    document.addEventListener('DOMContentLoaded', function(){
+      var hBtn = document.getElementById('pwa-hdr-btn');
+      if(hBtn) hBtn.style.display = 'none';
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
