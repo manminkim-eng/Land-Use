@@ -821,7 +821,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
   /* 모바일 미리보기 폰 크기 태블릿에서 */
   .phone{width:340px}
   .print-layout{gap:20px}
-  .print-side{width:180px}
+  .print-side{width:190px}
+  .share-tab{font-size:10px;padding:7px 3px}
 }
 
 /* ── 모바일 (480px 이하) ── */
@@ -919,16 +920,22 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
   .phone{width:calc(100vw - 60px);max-width:320px;border-radius:30px}
   .print-side{
     width:calc(100vw - 60px);max-width:320px;
-    flex-direction:row;flex-wrap:wrap;gap:6px;
+    flex-direction:column;gap:8px;
     padding-bottom:8px;
   }
-  .print-side-title{width:100%}
-  .pside-btn{flex:1;min-width:120px;padding:9px 10px}
-  .pside-ico{font-size:16px}
-  .pside-lbl{font-size:11px}
-  .pside-sub{font-size:9px}
+  .print-side-title{width:100%;padding-bottom:2px}
+  .pside-btn{width:100%;padding:11px 12px}
+  .pside-ico{font-size:18px}
+  .pside-lbl{font-size:12px}
+  .pside-sub{font-size:10px}
   .pside-sep{width:100%;height:1px}
   .pside-status{width:100%}
+  .share-tab-row{gap:3px;padding:3px}
+  .share-tab{font-size:10px;padding:7px 3px}
+  .share-exec-btn{padding:11px 12px}
+  .seb-lbl{font-size:12px}
+  .seb-sub{font-size:9px}
+  .share-status{font-size:10px}
 
   /* JPG 미리보기 */
   .jpg-preview-ov{padding:16px 12px;gap:12px}
@@ -937,7 +944,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
   .jpg-preview-actions{gap:8px}
 
   /* 공유 탭 */
-  .share-tab-row{display:none} /* 사이드 버튼으로 대체됨 */
+  /* 공유 탭: 모바일에서도 유지 */
 }
 
 /* ── 초소형 (360px 이하) ── */
@@ -956,22 +963,77 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
 }
 
 /* ── SHARE TAB ── */
-.share-tab-row{display:flex;gap:6px;background:var(--surf2);border-radius:10px;padding:4px;margin-top:14px}
-.share-tab{flex:1;padding:8px 4px;border-radius:8px;border:none;background:transparent;color:var(--slate);font-family:var(--font-base);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:4px}
-.share-tab.on{background:var(--navy4);color:var(--teal2);border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.share-panel{display:none;padding-top:10px}
-.share-panel.on{display:block;animation:fdIn .2s ease}
-.share-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.share-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:14px 8px;background:var(--surf2);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;font-size:11px;color:var(--text2);letter-spacing:.02em;text-transform:uppercase;font-family:var(--font-base);font-weight:700}
-.share-btn .sico{font-size:22px;display:block}
-.share-btn:hover{background:var(--navy4);border-color:var(--teal);color:var(--teal2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3)}
-.share-btn.primary{background:rgba(0,194,168,.1);border-color:rgba(0,194,168,.3);color:var(--teal2)}
-.share-btn.primary:hover{background:rgba(0,194,168,.2);box-shadow:0 4px 16px rgba(0,194,168,.2)}
-.share-btn.gold-btn{background:rgba(232,160,32,.1);border-color:rgba(232,160,32,.3);color:var(--gold2)}
-.share-btn.gold-btn:hover{background:rgba(232,160,32,.2);box-shadow:0 4px 16px rgba(232,160,32,.2)}
-.share-status{font-size:10px;color:var(--slate);text-align:center;margin-top:8px;min-height:16px;transition:all .2s}
-.share-status.ok{color:var(--green)}
-.share-status.loading{color:var(--teal)}
+/* ── 공유 탭 선택 UI ── */
+/* 탭 선택 행 */
+.share-tab-row{
+  display:flex;gap:4px;
+  background:var(--surf2);
+  border:1px solid var(--border2);
+  border-radius:10px;padding:4px;
+  margin-top:0;
+}
+.share-tab{
+  flex:1;padding:7px 4px;
+  border-radius:7px;border:none;background:transparent;
+  color:var(--slate);
+  font-family:var(--font-base);font-size:11px;font-weight:700;
+  cursor:pointer;transition:all .18s;text-align:center;
+  letter-spacing:.01em;
+  display:flex;align-items:center;justify-content:center;gap:4px;
+  white-space:nowrap;
+}
+.share-tab:hover{color:var(--text2);background:rgba(0,194,168,.05)}
+.share-tab.on{
+  background:var(--navy4);color:var(--teal2);
+  border:1px solid var(--border);
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+/* 탭 패널 */
+.share-panel{display:none;animation:fdIn .2s ease}
+.share-panel.on{display:block}
+/* 공유 버튼 (패널 안) */
+.share-exec-btn{
+  width:100%;
+  display:flex;align-items:center;gap:10px;
+  padding:12px 14px;
+  background:rgba(0,194,168,.08);
+  border:1px solid rgba(0,194,168,.22);
+  border-radius:10px;cursor:pointer;
+  transition:all .2s;margin-top:8px;
+}
+.share-exec-btn:hover{
+  background:rgba(0,194,168,.18);
+  border-color:rgba(0,194,168,.4);
+  transform:translateY(-1px);
+  box-shadow:0 4px 14px rgba(0,194,168,.2);
+}
+.share-exec-btn.gold{
+  background:rgba(232,160,32,.08);
+  border-color:rgba(232,160,32,.22);
+}
+.share-exec-btn.gold:hover{
+  background:rgba(232,160,32,.18);
+  border-color:rgba(232,160,32,.4);
+  box-shadow:0 4px 14px rgba(232,160,32,.2);
+}
+.seb-ico{font-size:20px;flex-shrink:0;line-height:1}
+.seb-lbl{
+  font-family:var(--font-base);font-size:13px;font-weight:700;
+  color:var(--text2);letter-spacing:.01em;
+}
+.seb-sub{
+  font-size:10px;font-weight:400;color:var(--slate);
+  display:block;margin-top:2px;
+}
+/* 상태 메시지 */
+.share-status{
+  font-size:11px;color:var(--slate);
+  text-align:center;margin-top:8px;min-height:18px;
+  transition:all .2s;padding:4px 0;
+  border-radius:6px;
+}
+.share-status.ok{color:var(--green);background:rgba(0,200,150,.06)}
+.share-status.loading{color:var(--teal);animation:blink 1s step-end infinite}
 /* JPG preview canvas overlay */
 .jpg-preview-ov{position:fixed;inset:0;z-index:1100;background:rgba(5,10,20,.95);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px}
 .jpg-preview-ov.open{display:flex;animation:ovIn .25s ease}
@@ -1416,75 +1478,60 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
     <!-- 사이드 액션 패널 -->
     <div class="print-side">
 
-      <!-- 저장 -->
+      <!-- ① JPG 저장 (항상 노출) -->
       <div class="print-side-title">💾 저장</div>
       <button class="pside-btn primary" onclick="captureJpg()">
         <span class="pside-ico">🖼</span>
         <span class="pside-info">
           <span class="pside-lbl">JPG 저장</span>
-          <span class="pside-sub">이미지로 다운로드</span>
-        </span>
-      </button>
-      <button class="pside-btn" onclick="copyRes()">
-        <span class="pside-ico">📋</span>
-        <span class="pside-info">
-          <span class="pside-lbl">텍스트 복사</span>
-          <span class="pside-sub">클립보드에 복사</span>
+          <span class="pside-sub">폰 화면 이미지 다운로드</span>
         </span>
       </button>
 
       <div class="pside-sep"></div>
 
-      <!-- 공유 -->
-      <div class="print-side-title">📤 공유</div>
-      <button class="pside-btn gold-btn" onclick="shareKakao()">
-        <span class="pside-ico">💬</span>
-        <span class="pside-info">
-          <span class="pside-lbl">카카오 공유</span>
-          <span class="pside-sub">카카오스토리</span>
-        </span>
-      </button>
-      <button class="pside-btn" onclick="shareSMS()">
-        <span class="pside-ico">📱</span>
-        <span class="pside-info">
-          <span class="pside-lbl">문자 공유</span>
-          <span class="pside-sub">SMS 메시지</span>
-        </span>
-      </button>
-      <button class="pside-btn" onclick="shareURL()">
-        <span class="pside-ico">🔗</span>
-        <span class="pside-info">
-          <span class="pside-lbl">링크 복사</span>
-          <span class="pside-sub">결과 텍스트 복사</span>
-        </span>
-      </button>
-      <button class="pside-btn" onclick="shareNative()">
-        <span class="pside-ico">📤</span>
-        <span class="pside-info">
-          <span class="pside-lbl">기타 공유</span>
-          <span class="pside-sub">시스템 공유</span>
-        </span>
-      </button>
+      <!-- ② 공유 탭 선택 후 공유 버튼 연동 -->
+      <div class="print-side-title">📤 공유 채널 선택</div>
 
-      <div class="pside-sep"></div>
+      <!-- 탭 선택 행 -->
+      <div class="share-tab-row">
+        <button class="share-tab on" id="st-kakao" onclick="selectShareTab('kakao',this)">💬 카카오</button>
+        <button class="share-tab"    id="st-sms"   onclick="selectShareTab('sms',this)">📱 문자</button>
+        <button class="share-tab"    id="st-link"  onclick="selectShareTab('link',this)">🔗 링크</button>
+        <button class="share-tab"    id="st-more"  onclick="selectShareTab('more',this)">📤 기타</button>
+      </div>
 
-      <!-- 출력 -->
-      <div class="print-side-title">🖨 출력</div>
-      <button class="pside-btn" onclick="printRes()">
-        <span class="pside-ico">🖨</span>
-        <span class="pside-info">
-          <span class="pside-lbl">프린터 출력</span>
-          <span class="pside-sub">인쇄 대화상자</span>
-        </span>
-      </button>
-      <button class="pside-btn" onclick="captureJpgShare()">
-        <span class="pside-ico">📲</span>
-        <span class="pside-info">
-          <span class="pside-lbl">이미지 공유</span>
-          <span class="pside-sub">캡처 후 공유</span>
-        </span>
-      </button>
+      <!-- 카카오 패널 -->
+      <div class="share-panel on" id="sp-kakao">
+        <button class="share-exec-btn gold" onclick="shareKakao()">
+          <span class="seb-ico">💬</span>
+          <span><span class="seb-lbl">카카오스토리 공유</span><span class="seb-sub">카카오스토리로 결과 공유</span></span>
+        </button>
+      </div>
+      <!-- 문자 패널 -->
+      <div class="share-panel" id="sp-sms">
+        <button class="share-exec-btn" onclick="shareSMS()">
+          <span class="seb-ico">📱</span>
+          <span><span class="seb-lbl">문자(SMS) 공유</span><span class="seb-sub">결과를 문자로 전송</span></span>
+        </button>
+      </div>
+      <!-- 링크 패널 -->
+      <div class="share-panel" id="sp-link">
+        <button class="share-exec-btn" onclick="shareURL()">
+          <span class="seb-ico">🔗</span>
+          <span><span class="seb-lbl">링크·텍스트 복사</span><span class="seb-sub">클립보드에 복사 후 붙여넣기</span></span>
+        </button>
+      </div>
+      <!-- 기타 패널 -->
+      <div class="share-panel" id="sp-more">
+        <button class="share-exec-btn" onclick="shareNative()">
+          <span class="seb-ico">📤</span>
+          <span><span class="seb-lbl">기타 앱으로 공유</span><span class="seb-sub">시스템 공유 시트 열기</span></span>
+        </button>
+      </div>
 
+      <!-- 공유 상태 메시지 -->
+      <div class="share-status" id="share-status"></div>
       <div class="pside-status" id="save-status"></div>
     </div>
 
@@ -2395,24 +2442,34 @@ if(window.innerWidth>960)togTbl();
 
 /* ═══════════════════════════════════════
    SHARE TAB SYSTEM
+   탭 선택 → 해당 공유 패널 활성화
 ═══════════════════════════════════════ */
-function switchShareTab(t){
-  ['save','share','print'].forEach(x=>{
-    document.getElementById('st-'+x).classList.toggle('on',x===t);
-    document.getElementById('sp-'+x).classList.toggle('on',x===t);
+function selectShareTab(id, btn){
+  /* 탭 버튼 active 전환 */
+  ['kakao','sms','link','more'].forEach(x=>{
+    const t=document.getElementById('st-'+x);
+    const p=document.getElementById('sp-'+x);
+    if(t) t.classList.toggle('on', x===id);
+    if(p) p.classList.toggle('on', x===id);
   });
 }
+/* 하위 호환 - 기존 코드에서 혹시 호출 시 */
+function switchShareTab(t){ selectShareTab(t); }
 
 /* ── JPG CAPTURE ── */
 let jpgDataUrl = null;
 
 function setStatus(id,msg,type){
-  // save-status는 pside-status 클래스로 통합됨
-  const el=document.getElementById(id)||document.getElementById('save-status');
-  if(!el)return;
-  el.textContent=msg;
-  el.className='pside-status'+(type?' '+type:'');
-  if(type==='ok')setTimeout(()=>{el.textContent='';el.className='pside-status';},3000);
+  /* id 우선, 없으면 share-status, 그것도 없으면 save-status */
+  const el = document.getElementById(id)
+           || document.getElementById('share-status')
+           || document.getElementById('save-status');
+  if(!el) return;
+  el.textContent = msg;
+  /* share-status 클래스 적용 */
+  const baseClass = el.id === 'save-status' ? 'pside-status' : 'share-status';
+  el.className = baseClass + (type ? ' ' + type : '');
+  if(type==='ok') setTimeout(()=>{ el.textContent=''; el.className=baseClass; }, 3000);
 }
 
 function captureJpg(){
@@ -2440,7 +2497,6 @@ function captureJpg(){
   });
 }
 
-function captureJpgShare(){captureJpg();}
 
 function downloadJpg(){
   if(!jpgDataUrl){toast('먼저 JPG를 생성해 주세요.');return;}
