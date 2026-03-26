@@ -1,0 +1,2533 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MANMIN · 건폐율·용적률 계산기 Ver1.0 — 조례 기준</title>
+
+<!-- ── PWA 메타태그 ── -->
+<meta name="application-name" content="MANMIN">
+<meta name="description" content="국토계획법 + 지자체 조례 기준 건폐율·용적률 자동 계산기 | ARCHITECT KIM MANMIN">
+<meta name="theme-color" content="#00C2A8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MANMIN">
+<meta name="msapplication-TileColor" content="#0B1B2E">
+<meta name="msapplication-TileImage" content="icons/icon-144x144.png">
+<meta name="msapplication-navbutton-color" content="#00C2A8">
+<meta name="format-detection" content="telephone=no">
+
+<!-- ── OG / Twitter 카드 ── -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="MANMIN 건폐율·용적률 계산기 Ver1.0">
+<meta property="og:description" content="국토계획법 + 31개 지자체 조례 기준 건폐율·용적률 자동 계산기">
+<meta property="og:image" content="icons/icon-512x512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MANMIN 건폐율·용적률 계산기">
+<meta name="twitter:image" content="icons/icon-512x512.png">
+
+<!-- ── PWA Manifest ── -->
+<link rel="manifest" href="manifest.json">
+
+<!-- ── 파비콘 ── -->
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152x152.png">
+<link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144x144.png">
+<link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128x128.png">
+<link rel="apple-touch-startup-image" href="icons/icon-512x512.png">
+
+<!-- ── 본고딕(Noto Sans KR) 전 굵기 + DM Mono 수치용 ── -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   MANMIN Design System Ver 1.0
+   Navy × Teal × Gold  —  본고딕 타이포그래피
+   폰트 체계:
+     타이틀·강조  → Noto Sans KR 900 (본고딕 Heavy)
+     섹션·버튼    → Noto Sans KR 700 (본고딕 Bold)
+     본문·레이블  → Noto Sans KR 500/400
+     수치·코드    → DM Mono
+═══════════════════════════════════════════════ */
+:root{
+  --navy:#0B1B2E; --navy2:#112240; --navy3:#162c4a; --navy4:#1a3358;
+  --teal:#00C2A8;  --teal2:#00E5C8; --teal3:#b2fff6;
+  --gold:#E8A020;  --gold2:#FFD166; --gold3:#ffe5a0;
+  --orange:#FF6B35; --red:#FF4E4E; --green:#00C896;
+  --slate:#6B8FA3; --slate2:#4a6580;
+  --border:rgba(0,194,168,.15); --border2:rgba(0,194,168,.07);
+  --text:#E8F4F2;  --text2:#9BB8C4; --text3:#3d5a6a;
+  --surf1:#112240; --surf2:#162c4a; --surf3:#0d1e35;
+  --shadow:0 8px 40px rgba(0,0,0,.45);
+  --glow-t:0 0 30px rgba(0,194,168,.18);
+  --glow-g:0 0 30px rgba(232,160,32,.15);
+
+  /* ── 폰트 체계 ── */
+  --font-base: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-mono: 'DM Mono', 'Consolas', monospace;
+  --font-title-weight: 900;   /* 본고딕 Heavy — 타이틀 전용 */
+  --font-head-weight:  700;   /* 본고딕 Bold  — 섹션제목·버튼 */
+  --font-mid-weight:   500;   /* 본고딕 Medium — 레이블·강조 */
+  --font-body-weight:  400;   /* 본고딕 Regular — 본문 */
+
+  /* ── 타입 스케일 (8pt grid 기반) ── */
+  --fs-2xs:  10px;   /* 배지·메타 */
+  --fs-xs:   11px;   /* 캡션·태그 */
+  --fs-sm:   12px;   /* 보조 본문 */
+  --fs-md:   14px;   /* 주 본문 */
+  --fs-lg:   16px;   /* 강조 본문·버튼 */
+  --fs-xl:   20px;   /* 카드 타이틀 */
+  --fs-2xl:  24px;   /* 섹션 타이틀 */
+  --fs-3xl:  32px;   /* 판정 수치 */
+  --fs-4xl:  42px;   /* 영웅 타이틀 */
+  --lh-tight: 1.2;
+  --lh-base:  1.6;
+  --lh-loose: 1.8;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-base);
+  font-weight:var(--font-body-weight);
+  font-size:var(--fs-md);
+  line-height:var(--lh-base);
+  background:var(--navy);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  word-break:keep-all;       /* 한글 단어 단위 줄바꿈 */
+  overflow-wrap:break-word;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 70% 50% at 15% 15%,rgba(0,194,168,.07) 0%,transparent 60%),
+             radial-gradient(ellipse 55% 40% at 85% 85%,rgba(232,160,32,.05) 0%,transparent 50%),
+             repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(0,194,168,.02) 40px),
+             repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(0,194,168,.02) 40px);
+  pointer-events:none}
+
+/* ── HEADER ── */
+.hdr{
+  position:sticky;top:0;z-index:200;
+  background:rgba(9,20,38,.98);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 20px;
+}
+.hdr-inner{
+  max-width:1320px;margin:0 auto;height:62px;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand-logo{
+  width:42px;height:42px;
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-base);font-size:14px;font-weight:900;
+  color:#0B1B2E;flex-shrink:0;letter-spacing:-.03em;
+  box-shadow:0 0 18px rgba(0,194,168,.3);
+  transition:box-shadow .25s;
+}
+.brand:hover .brand-logo{box-shadow:0 0 28px rgba(0,194,168,.5)}
+.brand-txt .nm{
+  font-family:var(--font-base);font-size:18px;font-weight:900;
+  color:var(--teal2);letter-spacing:.04em;line-height:1;
+}
+.brand-txt .sb{
+  font-size:10px;font-weight:400;color:var(--slate);
+  letter-spacing:.08em;text-transform:uppercase;margin-top:4px;
+}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.ver-pill{
+  font-family:var(--font-mono);font-size:10px;font-weight:500;
+  padding:4px 11px;border-radius:20px;
+  background:rgba(0,194,168,.1);color:var(--teal);
+  border:1px solid rgba(0,194,168,.25);letter-spacing:.06em;
+}
+.law-btn{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;font-family:var(--font-base);
+  color:var(--gold);background:rgba(232,160,32,.08);
+  border:1px solid rgba(232,160,32,.2);border-radius:7px;
+  padding:7px 16px;cursor:pointer;transition:all .2s;
+  white-space:nowrap;letter-spacing:.02em;
+}
+.law-btn:hover{background:rgba(232,160,32,.18);box-shadow:0 0 14px rgba(232,160,32,.25)}
+
+/* ── HERO ── */
+.hero{position:relative;z-index:1;text-align:center;padding:36px 24px 28px;border-bottom:1px solid var(--border2)}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--teal);
+  background:rgba(0,194,168,.07);
+  border:1px solid rgba(0,194,168,.2);
+  border-radius:20px;
+  padding:6px 18px;
+  margin-bottom:16px;
+}
+.hero-title{
+  font-family:var(--font-base);
+  font-weight:900;             /* 본고딕 Heavy */
+  font-size:clamp(28px,5.5vw,48px);
+  line-height:var(--lh-tight);
+  letter-spacing:-.03em;
+  margin-bottom:12px;
+  word-break:keep-all;
+}
+.hero-title .hl{
+  background:linear-gradient(90deg,var(--teal2),var(--gold));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub{
+  font-size:var(--fs-sm);
+  font-weight:400;
+  color:var(--text2);
+  line-height:var(--lh-loose);
+  word-break:keep-all;
+}
+.hero-stats{display:flex;justify-content:center;gap:24px;margin-top:20px;flex-wrap:wrap}
+.hstat .n{
+  font-family:var(--font-mono);
+  font-size:22px;
+  font-weight:500;
+  color:var(--teal2);
+  display:block;
+  line-height:1;
+}
+.hstat .l{
+  font-size:10px;
+  font-weight:500;
+  color:var(--slate);
+  letter-spacing:.06em;
+  margin-top:4px;
+  text-transform:uppercase;
+}
+
+/* ── STEP WIZARD HEADER ── */
+.step-bar{position:relative;z-index:1;max-width:1320px;margin:20px auto 0;padding:0 20px}
+.steps{display:flex;align-items:center;background:var(--surf1);border:1px solid var(--border);border-radius:14px;padding:14px 22px;gap:10px;overflow-x:auto}
+.step{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid var(--border);color:var(--slate);background:transparent;transition:all .3s;flex-shrink:0}
+.step-num.done{background:var(--teal);border-color:var(--teal);color:#0B1B2E}
+.step-num.active{background:transparent;border-color:var(--teal2);color:var(--teal2);box-shadow:0 0 10px rgba(0,229,200,.3)}
+.step-label{font-size:12px;font-weight:600;color:var(--slate);white-space:nowrap;transition:color .3s}
+.step-label.active{color:var(--teal2)}
+.step-label.done{color:var(--text2)}
+.step-arrow{color:var(--text3);font-size:16px;flex-shrink:0}
+
+/* ── LAYOUT ── */
+.page{position:relative;z-index:1;max-width:1320px;margin:20px auto 0;padding:0 20px 60px;display:grid;grid-template-columns:390px 1fr;gap:24px;align-items:start}
+@media(max-width:960px){.page{grid-template-columns:1fr}}
+
+/* ── CARD ── */
+.card{background:var(--surf1);border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--gold));opacity:.6}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:10px}
+.ctitle{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--teal);
+  display:flex;align-items:center;gap:7px;
+}
+.cdot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal)}
+
+/* ── TAB ── */
+.tabrow{display:flex;gap:3px;background:var(--surf2);border-radius:10px;padding:4px;margin-bottom:18px}
+.tab{
+  flex:1;padding:9px 6px;
+  border-radius:8px;border:none;background:transparent;
+  color:var(--slate);
+  font-family:var(--font-base);
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;transition:all .2s;text-align:center;letter-spacing:.02em;
+}
+.tab.on{background:var(--navy4);color:var(--teal2);border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+/* ── SECTION LABEL ── */
+.slabel{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--text2);
+  margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+  word-break:keep-all;
+}
+.slabel span{font-size:10px;color:var(--teal);background:rgba(0,194,168,.1);border:1px solid rgba(0,194,168,.2);border-radius:20px;padding:2px 9px;letter-spacing:.04em;font-weight:600}
+
+/* ── SELECT / INPUT ── */
+.mm-sel,.mm-inp{
+  width:100%;
+  background:var(--surf2);
+  border:1px solid rgba(0,194,168,.14);
+  border-radius:10px;
+  color:var(--text);
+  font-family:var(--font-base);
+  font-size:14px;
+  font-weight:500;
+  padding:12px 16px;
+  outline:none;
+  transition:border .2s,box-shadow .2s;
+  appearance:none;-webkit-appearance:none;
+  line-height:1.5;
+}
+.mm-sel{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B8FA3' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;cursor:pointer;
+}
+.mm-sel:focus,.mm-inp:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,194,168,.12)}
+.mm-inp::placeholder{color:var(--text3)}
+.fg{margin-bottom:16px}
+.sub-fg{display:none;margin-top:12px;animation:fdIn .2s ease}
+.sub-fg.show{display:block}
+.area2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.iunit{font-size:11px;color:var(--slate);margin-top:5px;letter-spacing:.02em;font-weight:400}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:18px 0}
+
+/* ══ REGION SELECTOR PANEL ══ */
+.region-panel{background:var(--surf2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.region-title{
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:7px;
+}
+.region-title::before{content:'⚡';font-size:13px}
+.region2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.region-note{
+  font-size:11px;font-weight:400;
+  color:var(--slate);line-height:var(--lh-loose);
+  margin-top:10px;padding:9px 12px;
+  background:rgba(0,0,0,.2);border-radius:8px;border-left:2px solid var(--gold);
+  word-break:keep-all;
+}
+
+/* ── CALC BTN ── */
+.calc-btn{
+  width:100%;
+  background:linear-gradient(135deg,var(--teal),var(--teal2));
+  color:#0B1B2E;border:none;border-radius:12px;padding:15px;
+  font-family:var(--font-base);
+  font-size:16px;
+  font-weight:900;   /* 본고딕 Heavy */
+  letter-spacing:.04em;
+  cursor:pointer;transition:all .25s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  box-shadow:0 4px 20px rgba(0,194,168,.3);
+  position:relative;overflow:hidden;
+  word-break:keep-all;
+}
+.calc-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,194,168,.45)}
+.calc-btn:active{transform:translateY(0)}
+
+/* ── RESULT ── */
+.result-panel{display:flex;flex-direction:column;gap:18px}
+.result-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center}
+.ph-icon{width:72px;height:72px;border-radius:50%;background:var(--surf2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:18px}
+.ph-txt{font-size:14px;font-weight:400;color:var(--text3);line-height:var(--lh-loose);word-break:keep-all}
+
+/* ── COMPARISON BANNER ── */
+.compare-banner{background:linear-gradient(135deg,rgba(0,194,168,.08),rgba(232,160,32,.05));border:1px solid rgba(0,194,168,.2);border-radius:12px;padding:14px 16px;margin-bottom:4px;display:none}
+.compare-banner.show{display:block;animation:fdIn .35s ease}
+.cb-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:12px}
+.cb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cb-col{background:rgba(0,0,0,.2);border-radius:10px;padding:12px}
+.cb-col-title{font-size:10px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;font-weight:700}
+.cb-col.law .cb-col-title{color:var(--slate)}
+.cb-col.ord .cb-col-title{color:var(--gold)}
+.cb-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text2);padding:4px 0;border-bottom:1px solid var(--border2)}
+.cb-row:last-child{border-bottom:none}
+.cb-row span{font-family:var(--font-mono);font-weight:500;font-size:13px}
+.cb-col.law .cb-row span{color:var(--slate)}
+.cb-col.ord .cb-row span{color:var(--gold2)}
+.diff-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;margin-top:8px;display:inline-block}
+.diff-pill.tighter{background:rgba(255,78,78,.12);color:#ff6b6b;border:1px solid rgba(255,78,78,.2)}
+.diff-pill.same{background:rgba(0,200,150,.1);color:var(--green);border:1px solid rgba(0,200,150,.2)}
+.diff-pill.relaxed{background:rgba(232,160,32,.1);color:var(--gold2);border:1px solid rgba(232,160,32,.2)}
+
+/* ── RATE BOXES ── */
+.rates2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+@media(max-width:480px){.rates2{grid-template-columns:1fr}}
+.rbox{background:var(--surf2);border:1px solid var(--border);border-radius:14px;padding:20px;position:relative;overflow:hidden;transition:box-shadow .3s}
+.rbox:hover{box-shadow:var(--glow-t)}
+.rbox::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0}
+.rbox.cov::after{background:var(--teal)}
+.rbox.far::after{background:var(--gold)}
+.rlabel{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--slate);
+  margin-bottom:12px;
+}
+.rnum{
+  font-family:var(--font-mono);
+  font-size:42px;
+  font-weight:500;
+  line-height:1;
+  letter-spacing:-.02em;
+}
+.rbox.cov .rnum{color:var(--teal2)}
+.rbox.far .rnum{color:var(--gold2)}
+.rpct{font-size:20px;font-weight:400;opacity:.7}
+.rcap{font-size:12px;font-weight:400;color:var(--slate);margin-top:7px}
+.rbar{height:5px;border-radius:4px;background:rgba(255,255,255,.06);margin-top:12px;overflow:hidden}
+.rbar-fill{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.rbox.cov .rbar-fill{background:var(--teal)}
+.rbox.far .rbar-fill{background:var(--gold)}
+/* Ordinance adjusted value */
+.rnum-ord{font-family:var(--font-mono);font-size:14px;font-weight:500;margin-top:8px;display:none}
+.rnum-ord.show{display:flex;align-items:center;gap:6px}
+.ord-label{font-size:10px;background:rgba(232,160,32,.1);color:var(--gold);border:1px solid rgba(232,160,32,.2);border-radius:20px;padding:2px 8px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+
+/* ── AREA CALC ── */
+.area-calc{background:var(--surf2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:16px;display:none}
+.area-calc.show{display:block;animation:fdIn .3s ease}
+.ac-title{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin-bottom:14px}
+.ac4{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:400px){.ac4{grid-template-columns:1fr}}
+.ac-item label{display:block;font-size:11px;font-weight:400;color:var(--slate);margin-bottom:4px}
+.ac-item .v{font-family:var(--font-mono);font-size:15px;font-weight:500;color:var(--text);line-height:1.3}
+.ac-item .v.tc{color:var(--teal2)}
+.ac-item .v.gc{color:var(--gold2)}
+
+/* ── ZONE INFO ── */
+.zone-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.zone-cat{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:5px}
+.zone-name{
+  font-family:var(--font-base);
+  font-weight:900;    /* 본고딕 Heavy */
+  font-size:22px;
+  color:var(--text);
+  letter-spacing:-.02em;
+  line-height:var(--lh-tight);
+  word-break:keep-all;
+}
+.zone-tag{font-size:11px;font-weight:700;padding:5px 13px;border-radius:20px;white-space:nowrap}
+
+/* ── NOTE ── */
+.note-box{
+  background:rgba(232,160,32,.06);
+  border:1px solid rgba(232,160,32,.18);
+  border-radius:10px;padding:13px 15px;
+  font-size:12px;font-weight:400;
+  color:#d4a050;line-height:var(--lh-loose);
+  word-break:keep-all;
+}
+.note-box strong{color:var(--gold);font-weight:700}
+/* Ordinance warning */
+.ord-warning{background:rgba(255,107,53,.07);border:1px solid rgba(255,107,53,.25);border-radius:10px;padding:12px 15px;font-size:12px;color:#ff9e70;line-height:var(--lh-loose);margin-top:10px;display:none;word-break:keep-all}
+.ord-warning.show{display:block;animation:fdIn .3s ease}
+.ord-warning strong{color:var(--orange);font-weight:700}
+
+.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.stag{font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(0,194,168,.08);color:var(--teal);border:1px solid rgba(0,194,168,.18);letter-spacing:.03em}
+
+/* ── MOBILE PRINT BTN ── */
+.mbtn{
+  display:none;width:100%;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,var(--gold),var(--orange));
+  color:#0B1B2E;border:none;border-radius:12px;padding:14px;
+  font-family:var(--font-base);
+  font-size:14px;
+  font-weight:900;   /* 본고딕 Heavy */
+  letter-spacing:.04em;
+  cursor:pointer;transition:all .25s;
+  box-shadow:0 4px 20px rgba(232,160,32,.3);margin-top:12px;
+  word-break:keep-all;
+}
+.mbtn.show{display:flex;animation:fdIn .3s ease}
+.mbtn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(232,160,32,.45)}
+
+/* ── TABLE SECTION ── */
+.tbl-section{position:relative;z-index:1;max-width:1320px;margin:0 auto 40px;padding:0 20px}
+.tbl-card{background:var(--surf1);border:1px solid var(--border);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow)}
+.tbl-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.toggle-ico{width:30px;height:30px;background:var(--surf2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--slate);font-size:12px;transition:transform .3s}
+.toggle-ico.open{transform:rotate(180deg)}
+.tbl-wrap{display:none;overflow-x:auto;margin-top:20px}
+.tbl-wrap.open{display:block;animation:fdIn .3s ease}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+th{
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--slate);padding:9px 13px;text-align:left;border-bottom:1px solid var(--border);
+}
+td{padding:10px 13px;border-bottom:1px solid var(--border2);color:var(--text);font-size:13px;vertical-align:top;line-height:1.5}
+tr:last-child td{border-bottom:none}
+tr.sr td{background:rgba(0,194,168,.04);color:var(--teal);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 13px}
+tr.ar td{background:rgba(0,194,168,.07)}
+tr.ar td:first-child{border-left:2px solid var(--teal)}
+tr:not(.sr):hover td{background:rgba(255,255,255,.025);cursor:pointer}
+.td-c{color:var(--teal2);font-family:var(--font-mono);font-weight:500;font-size:13px}
+.td-f{color:var(--gold2);font-family:var(--font-mono);font-weight:500;font-size:13px}
+.td-oc{color:var(--gold);font-family:var(--font-mono);font-weight:500;font-size:12px}
+.td-of{color:var(--gold);font-family:var(--font-mono);font-weight:500;font-size:12px}
+
+/* ── LAW MODAL ── */
+.modal-ov{position:fixed;inset:0;z-index:900;background:rgba(5,10,20,.82);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-ov.open{display:flex;animation:ovIn .2s ease}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+.modal-box{background:var(--navy2);border:1px solid var(--border);border-radius:20px;width:520px;max-width:calc(100vw - 32px);max-height:calc(100vh - 80px);overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(0,194,168,.08);animation:mIn .32s cubic-bezier(.4,0,.2,1);position:relative}
+@keyframes mIn{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-hdr{position:sticky;top:0;background:var(--navy2);border-bottom:1px solid var(--border);padding:18px 20px 14px;display:flex;align-items:center;justify-content:space-between;z-index:1}
+.modal-title{font-family:var(--font-base);font-size:17px;font-weight:900;color:var(--text);display:flex;align-items:center;gap:8px;letter-spacing:-.01em}
+.modal-close{width:30px;height:30px;background:var(--surf2);border:1px solid var(--border);border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--slate);font-size:14px;transition:all .2s}
+.modal-close:hover{background:var(--navy4);color:var(--text)}
+.modal-body{padding:20px}
+.msec{margin-bottom:22px}
+.msec:last-child{margin-bottom:0}
+.msec-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.msec-title::before{content:'';width:3px;height:14px;background:var(--teal);border-radius:2px}
+.mitem{background:var(--surf2);border:1px solid var(--border2);border-radius:10px;padding:13px 14px;margin-bottom:8px}
+.mitem-t{font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;word-break:keep-all}
+.mitem-d{font-size:12px;font-weight:400;color:var(--slate);line-height:var(--lh-loose);word-break:keep-all}
+.mtip{background:rgba(232,160,32,.06);border:1px solid rgba(232,160,32,.2);border-radius:10px;padding:13px 14px;font-size:12px;color:#d4a050;line-height:var(--lh-loose);word-break:keep-all}
+.mtip strong{color:var(--gold);font-weight:700}
+
+/* ── FLOAT BUTTON ── */
+.fab{position:fixed;bottom:22px;right:22px;z-index:800;width:54px;height:54px;background:linear-gradient(135deg,var(--gold),var(--orange));border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 20px rgba(232,160,32,.4);transition:all .25s}
+.fab:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 8px 30px rgba(232,160,32,.5)}
+.fab-tip{position:absolute;bottom:62px;right:0;background:var(--navy2);border:1px solid var(--border);border-radius:8px;padding:5px 13px;font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap;pointer-events:none;opacity:0;transform:translateY(4px);transition:all .2s}
+.fab:hover .fab-tip{opacity:1;transform:translateY(0)}
+
+/* ── PRINT MODAL (완전 개선) ── */
+.print-ov{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(4,8,18,.96);
+  backdrop-filter:blur(20px);
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:16px;
+  gap:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.print-ov.open{display:flex;animation:ovIn .3s ease}
+
+/* 모달 헤더 바 */
+.print-modal-bar{
+  width:100%;max-width:500px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 4px 12px;
+  flex-shrink:0;
+}
+.print-modal-title{
+  font-family:var(--font-base);font-size:13px;font-weight:700;
+  color:var(--text2);letter-spacing:.02em;
+  display:flex;align-items:center;gap:8px;
+}
+.print-modal-title::before{
+  content:'';width:3px;height:14px;
+  background:var(--teal);border-radius:2px;display:block;
+}
+.print-modal-close{
+  width:32px;height:32px;
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:var(--slate);transition:all .2s;
+}
+.print-modal-close:hover{background:var(--navy4);color:var(--text)}
+
+/* 폰+탭 레이아웃 */
+.print-layout{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+  width:100%;
+  max-width:680px;
+  justify-content:center;
+}
+
+/* 사이드 패널 (탭+버튼) */
+.print-side{
+  display:flex;flex-direction:column;gap:8px;
+  width:160px;flex-shrink:0;
+}
+.print-side-title{
+  font-size:10px;font-weight:700;
+  color:var(--slate);letter-spacing:.1em;text-transform:uppercase;
+  padding:0 2px 6px;
+  border-bottom:1px solid var(--border2);
+}
+.pside-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;
+  background:var(--surf1);
+  border:1px solid var(--border);
+  border-radius:10px;cursor:pointer;
+  transition:all .2s;
+  width:100%;text-align:left;
+}
+.pside-btn:hover{background:var(--navy4);border-color:rgba(0,194,168,.25)}
+.pside-btn.primary{
+  background:rgba(0,194,168,.1);
+  border-color:rgba(0,194,168,.3);
+}
+.pside-btn.primary:hover{background:rgba(0,194,168,.2);box-shadow:0 0 16px rgba(0,194,168,.2)}
+.pside-btn.gold-btn{
+  background:rgba(232,160,32,.08);
+  border-color:rgba(232,160,32,.25);
+}
+.pside-btn.gold-btn:hover{background:rgba(232,160,32,.18)}
+.pside-ico{font-size:18px;flex-shrink:0}
+.pside-info{}
+.pside-lbl{
+  font-family:var(--font-base);font-size:12px;font-weight:700;
+  color:var(--text2);display:block;letter-spacing:.01em;
+}
+.pside-sub{
+  font-size:10px;color:var(--slate);font-weight:400;
+  display:block;margin-top:2px;
+}
+.pside-sep{height:1px;background:var(--border2);margin:4px 0}
+.pside-status{
+  font-size:11px;color:var(--slate);
+  padding:6px 10px;text-align:center;
+  min-height:20px;
+  border-radius:8px;
+  transition:all .2s;
+}
+.pside-status.ok{color:var(--green);background:rgba(0,200,150,.08)}
+.pside-status.loading{color:var(--teal);animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:.4}}
+
+/* 공유 서브탭 */
+.share-subtab-row{
+  display:flex;gap:3px;
+  background:var(--surf2);
+  border-radius:8px;padding:3px;
+}
+.share-subtab{
+  flex:1;padding:6px 4px;
+  border-radius:6px;border:none;background:transparent;
+  font-family:var(--font-base);font-size:10px;font-weight:700;
+  color:var(--slate);cursor:pointer;transition:all .2s;text-align:center;
+}
+.share-subtab.on{
+  background:var(--navy4);color:var(--teal2);
+  border:1px solid var(--border);
+}
+.share-subpanel{display:none}
+.share-subpanel.on{display:flex;flex-direction:column;gap:6px;animation:fdIn .2s ease}
+
+/* 폰 프레임 */
+.phone-wrap{position:relative;flex-shrink:0}
+.phone{
+  width:320px;
+  background:#0a0a0a;
+  border-radius:38px;
+  border:7px solid #1a1a1a;
+  box-shadow:
+    0 0 0 1px #2a2a2a,
+    0 0 0 3px #111,
+    0 20px 60px rgba(0,0,0,.9),
+    0 0 40px rgba(0,194,168,.06);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  max-height:80vh;
+}
+.p-notch{
+  background:#0a0a0a;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.p-pill{width:100px;height:9px;background:#1a1a1a;border-radius:10px}
+.p-screen{background:var(--navy);flex:1;overflow-y:auto;scrollbar-width:none}
+.p-screen::-webkit-scrollbar{display:none}
+
+/* 폰 상태바 */
+.p-status{
+  background:rgba(9,18,36,.98);
+  padding:5px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10;
+  border-bottom:1px solid var(--border2);
+}
+.p-time{font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--text)}
+.p-icons{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text)}
+
+/* 폰 콘텐츠 */
+.p-content{padding:14px}
+
+.p-brand{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:14px;padding-bottom:11px;
+  border-bottom:1px solid var(--border);
+}
+.p-brand-logo{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--teal),var(--gold));
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-base);font-size:10px;font-weight:900;
+  color:#0B1B2E;flex-shrink:0;
+}
+.p-brand-nm{font-family:var(--font-base);font-size:13px;font-weight:900;color:var(--teal2);letter-spacing:.04em}
+.p-brand-vr{font-size:9px;font-weight:400;color:var(--slate);margin-top:2px}
+
+.p-result-title{
+  font-family:var(--font-base);font-size:15px;font-weight:900;
+  color:var(--text);margin-bottom:12px;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:6px;
+}
+
+.p-zone{
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:9px;padding:10px 12px;margin-bottom:11px;
+}
+.p-zone-cat{font-size:9px;font-weight:500;color:var(--slate);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.p-zone-nm{font-family:var(--font-base);font-size:15px;font-weight:900;color:var(--teal2);letter-spacing:-.01em;word-break:keep-all}
+
+.p-rate-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:11px}
+.p-rcard{
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:9px;padding:12px 10px;text-align:center;
+  position:relative;overflow:hidden;
+}
+.p-rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.p-rcard.cov::before{background:var(--teal)}
+.p-rcard.far::before{background:var(--gold)}
+.p-rlbl{font-size:9px;font-weight:700;color:var(--slate);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.p-rval{font-family:var(--font-mono);font-size:28px;font-weight:500;line-height:1;letter-spacing:-.02em}
+.p-rcard.cov .p-rval{color:var(--teal2)}
+.p-rcard.far .p-rval{color:var(--gold2)}
+.p-runit{font-size:13px;opacity:.7}
+.p-rcap{font-size:9px;color:var(--slate);margin-top:3px}
+.p-ord-row{font-size:9px;margin-top:4px;color:var(--gold);font-family:var(--font-mono);display:none;font-weight:500}
+.p-ord-row.show{display:block}
+
+.p-abox{
+  background:var(--surf2);border:1px solid var(--border);
+  border-radius:9px;padding:10px 12px;margin-bottom:11px;display:none;
+}
+.p-abox.show{display:block}
+.p-atitle{font-size:9px;font-weight:700;color:var(--slate);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.p-ai{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:4px 0;border-bottom:1px solid var(--border2);font-size:10px;
+}
+.p-ai:last-child{border-bottom:none}
+.p-ai-l{color:var(--slate);font-weight:400}
+.p-ai-v{font-family:var(--font-mono);font-size:12px;font-weight:500;color:var(--text)}
+.p-ai-v.tc{color:var(--teal2)}
+
+.p-note{
+  background:rgba(232,160,32,.07);border:1px solid rgba(232,160,32,.2);
+  border-radius:8px;padding:9px 11px;font-size:9px;color:#d4a050;
+  line-height:1.7;margin-bottom:11px;word-break:keep-all;
+}
+.p-ord-info{
+  background:rgba(0,194,168,.06);border:1px solid rgba(0,194,168,.15);
+  border-radius:8px;padding:7px 10px;font-size:9px;color:var(--teal);
+  margin-bottom:11px;display:none;
+}
+.p-ord-info.show{display:block}
+.p-ts{
+  text-align:center;font-size:8px;color:var(--text3);
+  padding-top:9px;border-top:1px solid var(--border2);
+  font-family:var(--font-mono);
+}
+
+.p-bottom{
+  background:#0a0a0a;height:28px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.p-home{width:110px;height:4px;background:#1a1a1a;border-radius:3px}
+.pc-btn:hover{background:var(--navy4)}
+/* 태블릿 이하 모바일 미리보기 (480px~680px) */
+@media(max-width:680px) and (min-width:481px){
+  .print-layout{flex-direction:column;align-items:center;gap:14px}
+  .print-side{width:100%;max-width:380px;flex-direction:row;flex-wrap:wrap;gap:8px}
+  .print-side-title{width:100%;padding-bottom:4px}
+  .pside-btn{flex:1;min-width:140px}
+  .pside-sep{width:100%;height:1px;margin:3px 0}
+  .pside-status{width:100%}
+  .phone{width:300px;border-radius:34px}
+  .print-modal-bar{max-width:380px}
+}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:20px;margin-top:10px}
+.foot-inner{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.foot-nm{font-family:var(--font-base);font-weight:900;font-size:13px;color:var(--teal);letter-spacing:.06em}
+.foot-desc{font-size:10px;color:var(--text3);line-height:1.6}
+.foot-copy{font-size:9px;color:var(--text3);font-family:'DM Mono',monospace}
+
+/* ── ANIMATIONS ── */
+@keyframes fdIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes flash{0%{opacity:.3}100%{opacity:1}}
+.flash{animation:flash .4s ease}
+
+/* ══════════════════════════════════════════════
+   반응형 시스템
+   모바일  : ~480px
+   태블릿  : 481px ~ 960px
+   데스크탑: 961px+
+══════════════════════════════════════════════ */
+
+/* ── 공통 유틸 ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--navy)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.info-tip{font-size:12px;font-weight:400;color:var(--text3);line-height:var(--lh-loose);margin-top:16px;word-break:keep-all}
+.info-tip a{color:var(--teal);text-decoration:none}
+.ord-active-badge{display:none;font-size:9px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(232,160,32,.12);color:var(--gold);border:1px solid rgba(232,160,32,.25);letter-spacing:.06em}
+.ord-active-badge.show{display:inline-block}
+
+/* ── 데스크탑 (961px+) ── */
+@media(min-width:961px){
+  .hdr-inner{height:64px}
+  .brand-logo{width:44px;height:44px;font-size:15px}
+  .brand-txt .nm{font-size:19px}
+  .page{grid-template-columns:400px 1fr;gap:26px}
+  .hero{padding:44px 32px 32px}
+  .hero-title{font-size:clamp(36px,4.5vw,52px)}
+  .rates2{gap:16px}
+  .rnum{font-size:46px}
+  .card{padding:26px}
+  .step-bar .steps{padding:16px 28px}
+}
+
+/* ── 태블릿 (481px ~ 960px) ── */
+@media(min-width:481px) and (max-width:960px){
+  .page{grid-template-columns:1fr;gap:18px;padding:16px 16px 50px}
+  .hero{padding:28px 20px 22px}
+  .hero-title{font-size:clamp(28px,6vw,40px)}
+  .hdr-inner{height:58px}
+  .brand-txt .nm{font-size:17px}
+  .rates2{grid-template-columns:1fr 1fr;gap:14px}
+  .rnum{font-size:40px}
+  .card{padding:20px}
+  /* 태블릿 결과 패널은 전체 너비로 */
+  .result-panel{width:100%}
+  /* 모달 너비 태블릿에 맞게 */
+  .modal-box{width:480px}
+  /* 모바일 미리보기 폰 크기 태블릿에서 */
+  .phone{width:340px}
+  .print-layout{gap:20px}
+  .print-side{width:180px}
+}
+
+/* ── 모바일 (480px 이하) ── */
+@media(max-width:480px){
+  /* 헤더 */
+  .hdr{padding:0 14px}
+  .hdr-inner{height:54px}
+  .brand-logo{width:36px;height:36px;font-size:12px;border-radius:8px}
+  .brand-txt .nm{font-size:15px;letter-spacing:.02em}
+  .brand-txt .sb{display:none}
+  .ver-pill{display:none}
+  .law-btn{padding:6px 10px;font-size:11px}
+
+  /* 히어로 */
+  .hero{padding:20px 14px 18px}
+  .hero-badge{font-size:10px;padding:5px 14px}
+  .hero-title{font-size:clamp(24px,8vw,32px);letter-spacing:-.02em}
+  .hero-sub{font-size:11px}
+  .hero-stats{gap:16px}
+  .hstat .n{font-size:18px}
+  .hstat .l{font-size:9px}
+
+  /* 스텝바 */
+  .step-bar{padding:0 14px}
+  .steps{padding:10px 14px;gap:6px}
+  .step-label{font-size:10px}
+  .step-num{width:24px;height:24px;font-size:10px}
+  .step-arrow{font-size:12px}
+
+  /* 메인 레이아웃 */
+  .page{
+    grid-template-columns:1fr;
+    gap:14px;
+    padding:14px 14px 60px;
+  }
+
+  /* 카드 */
+  .card{padding:16px 14px}
+  .card-head{margin-bottom:16px}
+
+  /* 입력 폼 */
+  .region-panel{padding:14px}
+  .mm-sel,.mm-inp{font-size:13px;padding:11px 14px}
+  .tabrow{gap:2px;padding:3px}
+  .tab{font-size:11px;padding:8px 3px}
+  .area2{grid-template-columns:1fr 1fr;gap:8px}
+  .calc-btn{font-size:14px;padding:14px}
+
+  /* 결과 */
+  .rates2{grid-template-columns:1fr;gap:10px}
+  .rnum{font-size:36px}
+  .rpct{font-size:16px}
+  .zone-name{font-size:18px}
+  .ac4{grid-template-columns:1fr 1fr;gap:8px}
+  .compare-banner .cb-grid{grid-template-columns:1fr}
+
+  /* 테이블 */
+  .tbl-section{padding:0 14px}
+  table{font-size:11px}
+  th,td{padding:8px 10px}
+
+  /* 푸터 */
+  footer{padding:16px 14px}
+  .foot-inner{flex-direction:column;gap:6px;text-align:center}
+  .foot-nm{font-size:14px}
+
+  /* FAB 버튼 */
+  .fab{width:48px;height:48px;font-size:20px;bottom:16px;right:16px}
+
+  /* 모달 */
+  .modal-box{
+    width:calc(100vw - 24px);
+    max-height:calc(100vh - 60px);
+    border-radius:16px;
+  }
+  .modal-hdr{padding:14px 16px 12px}
+  .modal-title{font-size:15px}
+  .modal-body{padding:14px}
+  .mitem{padding:11px 12px}
+  .mitem-t{font-size:12px}
+  .mitem-d{font-size:11px}
+
+  /* 모바일 미리보기 */
+  .print-ov{padding:12px}
+  .print-modal-bar{padding:0 2px 10px}
+  .print-modal-title{font-size:12px}
+  .print-layout{
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    overflow-y:auto;
+    max-height:calc(100vh - 80px);
+  }
+  .phone{width:calc(100vw - 60px);max-width:320px;border-radius:30px}
+  .print-side{
+    width:calc(100vw - 60px);max-width:320px;
+    flex-direction:row;flex-wrap:wrap;gap:6px;
+    padding-bottom:8px;
+  }
+  .print-side-title{width:100%}
+  .pside-btn{flex:1;min-width:120px;padding:9px 10px}
+  .pside-ico{font-size:16px}
+  .pside-lbl{font-size:11px}
+  .pside-sub{font-size:9px}
+  .pside-sep{width:100%;height:1px}
+  .pside-status{width:100%}
+
+  /* JPG 미리보기 */
+  .jpg-preview-ov{padding:16px 12px;gap:12px}
+  .jpg-preview-img{max-width:calc(100vw - 24px);max-height:60vh}
+  .jpg-act-btn{padding:10px 14px;font-size:12px}
+  .jpg-preview-actions{gap:8px}
+
+  /* 공유 탭 */
+  .share-tab-row{display:none} /* 사이드 버튼으로 대체됨 */
+}
+
+/* ── 초소형 (360px 이하) ── */
+@media(max-width:360px){
+  .hdr-inner{height:50px}
+  .brand-logo{width:32px;height:32px;font-size:11px}
+  .brand-txt .nm{font-size:14px}
+  .page{padding:12px 10px 60px}
+  .card{padding:14px 12px}
+  .rnum{font-size:30px}
+  .law-btn span{display:none}
+  .law-btn::before{content:'⚖️'}
+  .phone{width:calc(100vw - 40px)}
+  .print-side{width:calc(100vw - 40px)}
+  .pside-btn{min-width:100px}
+}
+
+/* ── SHARE TAB ── */
+.share-tab-row{display:flex;gap:6px;background:var(--surf2);border-radius:10px;padding:4px;margin-top:14px}
+.share-tab{flex:1;padding:8px 4px;border-radius:8px;border:none;background:transparent;color:var(--slate);font-family:var(--font-base);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;gap:4px}
+.share-tab.on{background:var(--navy4);color:var(--teal2);border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.share-panel{display:none;padding-top:10px}
+.share-panel.on{display:block;animation:fdIn .2s ease}
+.share-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.share-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:14px 8px;background:var(--surf2);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s;font-size:11px;color:var(--text2);letter-spacing:.02em;text-transform:uppercase;font-family:var(--font-base);font-weight:700}
+.share-btn .sico{font-size:22px;display:block}
+.share-btn:hover{background:var(--navy4);border-color:var(--teal);color:var(--teal2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.share-btn.primary{background:rgba(0,194,168,.1);border-color:rgba(0,194,168,.3);color:var(--teal2)}
+.share-btn.primary:hover{background:rgba(0,194,168,.2);box-shadow:0 4px 16px rgba(0,194,168,.2)}
+.share-btn.gold-btn{background:rgba(232,160,32,.1);border-color:rgba(232,160,32,.3);color:var(--gold2)}
+.share-btn.gold-btn:hover{background:rgba(232,160,32,.2);box-shadow:0 4px 16px rgba(232,160,32,.2)}
+.share-status{font-size:10px;color:var(--slate);text-align:center;margin-top:8px;min-height:16px;transition:all .2s}
+.share-status.ok{color:var(--green)}
+.share-status.loading{color:var(--teal)}
+/* JPG preview canvas overlay */
+.jpg-preview-ov{position:fixed;inset:0;z-index:1100;background:rgba(5,10,20,.95);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px}
+.jpg-preview-ov.open{display:flex;animation:ovIn .25s ease}
+.jpg-preview-img{max-width:min(393px,90vw);max-height:70vh;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.8);object-fit:contain}
+.jpg-preview-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.jpg-act-btn{display:flex;align-items:center;gap:7px;padding:11px 20px;border-radius:10px;border:none;font-family:'Noto Sans KR',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.03em}
+.jpg-act-btn.save{background:linear-gradient(135deg,var(--teal),var(--teal2));color:#0B1B2E;box-shadow:0 4px 16px rgba(0,194,168,.35)}
+.jpg-act-btn.share{background:linear-gradient(135deg,var(--gold),var(--orange));color:#0B1B2E;box-shadow:0 4px 16px rgba(232,160,32,.35)}
+.jpg-act-btn.close-btn{background:var(--surf2);color:var(--text2);border:1px solid var(--border)}
+.jpg-act-btn:hover{transform:translateY(-2px)}
+.jpg-preview-label{font-size:11px;color:var(--slate);text-align:center}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-inner">
+    <a class="brand" href="#">
+      <div class="brand-logo">MM</div>
+      <div class="brand-txt">
+        <span class="nm">MANMIN</span>
+        <span class="sb">Ver 1.0 · 건폐율·용적률 계산기</span>
+      </div>
+    </a>
+    <div class="hdr-right">
+      <span class="ver-pill">Ver 1.0</span>
+      <span class="ord-active-badge" id="ord-badge">조례 적용 중</span>
+      <button class="law-btn" onclick="openLaw()">⚖️ 사용법 · 법규</button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">🏗 조례 기준 · 법령 최대치 동시 산출</div>
+  <h1 class="hero-title">건폐율 · 용적률<br><span class="hl">조례 적용 계산기</span></h1>
+  <p class="hero-sub">국토계획법 최대치 + 해당 지자체 조례 실제 적용값 동시 비교<br>지구단위계획 안내 포함 | 실무 건축 의사결정에 바로 활용</p>
+  <div class="hero-stats">
+    <div class="hstat"><span class="n">21</span><span class="l">용도지역</span></div>
+    <div class="hstat"><span class="n">17+</span><span class="l">주요 지자체</span></div>
+    <div class="hstat"><span class="n" style="color:var(--gold2)">2025</span><span class="l">최신 조례</span></div>
+    <div class="hstat"><span class="n">PWA</span><span class="l">반응형</span></div>
+  </div>
+</section>
+
+<!-- STEP BAR -->
+<div class="step-bar">
+  <div class="steps">
+    <div class="step"><div class="step-num active" id="sn1">1</div><span class="step-label active" id="sl1">지역 · 지자체 선택</span></div>
+    <span class="step-arrow">›</span>
+    <div class="step"><div class="step-num" id="sn2">2</div><span class="step-label" id="sl2">용도지역 선택</span></div>
+    <span class="step-arrow">›</span>
+    <div class="step"><div class="step-num" id="sn3">3</div><span class="step-label" id="sl3">대지면적 입력</span></div>
+    <span class="step-arrow">›</span>
+    <div class="step"><div class="step-num" id="sn4">4</div><span class="step-label" id="sl4">결과 확인</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="page">
+
+  <!-- LEFT: INPUT -->
+  <div>
+    <div class="card">
+      <div class="card-head">
+        <div class="ctitle"><span class="cdot"></span>입력 패널</div>
+      </div>
+
+      <!-- STEP 1: 지자체 -->
+      <div class="region-panel">
+        <div class="region-title">STEP 1 — 지자체(조례) 선택</div>
+        <div class="fg">
+          <div class="slabel">광역시·도 <span>필수</span></div>
+          <select class="mm-sel" id="sel-sido" onchange="onSido()">
+            <option value="">— 시·도 선택 —</option>
+            <option value="서울">서울특별시</option>
+            <option value="부산">부산광역시</option>
+            <option value="대구">대구광역시</option>
+            <option value="인천">인천광역시</option>
+            <option value="광주">광주광역시</option>
+            <option value="대전">대전광역시</option>
+            <option value="울산">울산광역시</option>
+            <option value="세종">세종특별자치시</option>
+            <option value="경기">경기도</option>
+            <option value="전북">전북특별자치도</option>
+            <option value="전남">전라남도</option>
+            <option value="경남">경상남도</option>
+            <option value="경북">경상북도</option>
+            <option value="충남">충청남도</option>
+            <option value="충북">충청북도</option>
+            <option value="강원">강원특별자치도</option>
+            <option value="제주">제주특별자치도</option>
+          </select>
+        </div>
+        <div class="fg sub-fg" id="sg-sigungu">
+          <div class="slabel">시·군·구 <span>선택</span></div>
+          <select class="mm-sel" id="sel-sigungu" onchange="onSigungu()">
+            <option value="">— 시·군·구 선택 —</option>
+          </select>
+        </div>
+        <div class="region-note" id="region-note" style="display:none"></div>
+      </div>
+
+      <!-- STEP 2: 용도지역 -->
+      <div class="slabel" style="margin-bottom:10px">STEP 2 — 용도지역 <span>필수</span></div>
+      <div class="tabrow">
+        <button class="tab on" onclick="switchTab('urban')">도시지역</button>
+        <button class="tab" onclick="switchTab('manage')">관리지역</button>
+        <button class="tab" onclick="switchTab('agri')">농림·자연</button>
+      </div>
+
+      <div id="tab-urban">
+        <div class="fg">
+          <div class="slabel">대분류</div>
+          <select class="mm-sel" id="maj-urban" onchange="onMaj()">
+            <option value="">— 선택 —</option>
+            <option value="주거">주거지역</option>
+            <option value="상업">상업지역</option>
+            <option value="공업">공업지역</option>
+            <option value="녹지">녹지지역</option>
+          </select>
+        </div>
+        <div class="sub-fg" id="sub-urban">
+          <div class="fg">
+            <div class="slabel">세부 용도지역</div>
+            <select class="mm-sel" id="min-urban" onchange="onMin()">
+              <option value="">— 선택 —</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div id="tab-manage" style="display:none">
+        <div class="fg">
+          <div class="slabel">관리지역 세분</div>
+          <select class="mm-sel" id="min-manage" onchange="onDirect('manage')">
+            <option value="">— 선택 —</option>
+            <option value="보전관리">보전관리지역</option>
+            <option value="생산관리">생산관리지역</option>
+            <option value="계획관리">계획관리지역</option>
+          </select>
+        </div>
+      </div>
+      <div id="tab-agri" style="display:none">
+        <div class="fg">
+          <div class="slabel">지역 유형</div>
+          <select class="mm-sel" id="min-agri" onchange="onDirect('agri')">
+            <option value="">— 선택 —</option>
+            <option value="농림">농림지역</option>
+            <option value="자연환경">자연환경보전지역</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- STEP 3: 대지면적 -->
+      <div class="slabel" style="margin-bottom:10px">STEP 3 — 대지면적 <span style="background:rgba(107,143,163,.1);color:var(--slate);border-color:rgba(107,143,163,.2)">선택</span></div>
+      <div class="area2">
+        <div class="fg" style="margin-bottom:0">
+          <input class="mm-inp" type="number" id="inp-sqm" placeholder="㎡ 입력" min="1" oninput="syncPy()">
+          <div class="iunit">㎡ (제곱미터)</div>
+        </div>
+        <div class="fg" style="margin-bottom:0">
+          <input class="mm-inp" type="number" id="inp-py" placeholder="평 입력" min="1" oninput="syncSqm()">
+          <div class="iunit">평 (1평=3.3058㎡)</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <button class="calc-btn" onclick="calculate()">⚡ 건폐율 · 용적률 계산</button>
+      <button class="mbtn" id="mbtn" onclick="openPrint()">📱 모바일 미리보기 · 저장 · 공유</button>
+
+      <div class="info-tip">
+        ⚠ 국토계획법 시행령 제84조·제85조 및 각 지자체 도시계획조례 기준.<br>
+        지구단위계획·개발진흥지구 등 별도 규제는 <a href="https://www.eum.go.kr" target="_blank">토지이음(eum.go.kr)</a>에서 반드시 확인하세요.
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: RESULT -->
+  <div class="result-panel">
+
+    <div class="card" id="rph">
+      <div class="result-ph">
+        <div class="ph-icon">🏙</div>
+        <div class="ph-txt">
+          좌측에서 <strong style="color:var(--teal)">지자체와 용도지역을 선택</strong>하고<br>
+          계산 버튼을 누르면<br>
+          <strong style="color:var(--gold)">법령 최대치 + 조례 실제값</strong>이 동시 산출됩니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- Compare banner -->
+    <div class="compare-banner" id="cmp-banner">
+      <div class="cb-title">⚡ 법령 최대치 vs 조례 실제 적용값 비교</div>
+      <div class="cb-grid">
+        <div class="cb-col law">
+          <div class="cb-col-title">📜 국토계획법 최대치</div>
+          <div class="cb-row"><span class="cb-lbl">건폐율</span><span id="c-law-cov">—</span></div>
+          <div class="cb-row"><span class="cb-lbl">용적률</span><span id="c-law-far">—</span></div>
+        </div>
+        <div class="cb-col ord">
+          <div class="cb-col-title">📋 조례 적용값</div>
+          <div class="cb-row"><span class="cb-lbl">건폐율</span><span id="c-ord-cov">—</span></div>
+          <div class="cb-row"><span class="cb-lbl">용적률</span><span id="c-ord-far">—</span></div>
+          <div class="diff-pill" id="c-diff">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Result card -->
+    <div class="card" id="rcard" style="display:none">
+      <div class="card-head">
+        <div class="ctitle"><span class="cdot"></span>판정 결과</div>
+        <span class="ver-pill">MANMIN Ver1.0</span>
+      </div>
+
+      <div class="zone-row">
+        <div>
+          <div class="zone-cat" id="r-cat">—</div>
+          <div class="zone-name" id="r-name">—</div>
+        </div>
+        <span class="zone-tag" id="r-tag">—</span>
+      </div>
+
+      <div class="rates2">
+        <div class="rbox cov">
+          <div class="rlabel">건폐율 (최대)</div>
+          <div class="rnum" id="r-cov">—<span class="rpct">%</span></div>
+          <div class="rcap">법령 기준 이하</div>
+          <div class="rnum-ord" id="r-cov-ord">
+            <span class="ord-label">조례</span>
+            <span id="r-cov-ord-val" style="color:var(--gold2);font-size:14px">—%</span>
+          </div>
+          <div class="rbar"><div class="rbar-fill" id="bar-cov" style="width:0%"></div></div>
+        </div>
+        <div class="rbox far">
+          <div class="rlabel">용적률 (최대)</div>
+          <div class="rnum" id="r-far">—<span class="rpct">%</span></div>
+          <div class="rcap">법령 기준 이하</div>
+          <div class="rnum-ord" id="r-far-ord">
+            <span class="ord-label">조례</span>
+            <span id="r-far-ord-val" style="color:var(--gold2);font-size:14px">—%</span>
+          </div>
+          <div class="rbar"><div class="rbar-fill" id="bar-far" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="area-calc" id="area-calc">
+        <div class="ac-title">대지면적 기준 계산결과 <span id="ac-ord-note" style="font-size:9px;color:var(--gold);margin-left:6px;display:none">· 조례값 기준</span></div>
+        <div class="ac4">
+          <div class="ac-item"><label>입력 대지면적</label><span class="v" id="r-site">—</span></div>
+          <div class="ac-item"><label>최대 건축면적</label><span class="v tc" id="r-bld">—</span></div>
+          <div class="ac-item"><label>최대 연면적</label><span class="v gc" id="r-gfa">—</span></div>
+          <div class="ac-item"><label>추정 최대층수</label><span class="v" id="r-flr">—</span></div>
+        </div>
+      </div>
+
+      <div class="note-box" id="r-note">—</div>
+      <!-- 2024.5.28 개정 특별 안내 (계획관리 등) -->
+      <div id="special-note" style="display:none;background:rgba(0,229,200,.06);border:1px solid rgba(0,229,200,.2);border-radius:10px;padding:11px 14px;font-size:11px;color:#70d8c0;line-height:1.8;margin-top:10px"></div>
+      <!-- 조례 기준일 -->
+      <div id="ord-date-info" style="display:none;font-size:10px;color:var(--slate);margin-top:8px;padding:6px 10px;background:rgba(232,160,32,.05);border-radius:8px;border:1px solid rgba(232,160,32,.12)"></div>
+      <!-- 용적률 산정 제외 면적 안내 -->
+      <div style="background:rgba(107,143,163,.07);border:1px solid rgba(107,143,163,.18);border-radius:10px;padding:10px 13px;font-size:10px;color:var(--slate);line-height:1.7;margin-top:10px">
+        <strong style="color:var(--text2)">📐 용적률 산정 시 연면적 제외 항목</strong> (건축법 시행령 제119조)<br>
+        지하층 · 지상층 부속 주차용 면적 · 초고층 건축물 피난안전구역 · 경사지붕 아래 대피공간
+      </div>
+      <div class="ord-warning" id="ord-warn">—</div>
+      <div class="tags-row" id="r-tags"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FULL TABLE -->
+<div class="tbl-section">
+  <div class="tbl-card">
+    <div class="tbl-toggle" onclick="togTbl()">
+      <div class="ctitle" style="margin:0"><span class="cdot"></span>전체 용도지역 일람표 <span id="tbl-region-label" style="font-size:9px;color:var(--gold);margin-left:8px"></span></div>
+      <div class="toggle-ico" id="tbl-ico">▼</div>
+    </div>
+    <div class="tbl-wrap" id="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>용도지역</th>
+            <th>건폐율 (법령)</th>
+            <th>용적률 (법령)</th>
+            <th>건폐율 (조례)</th>
+            <th>용적률 (조례)</th>
+            <th>특성</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div>
+      <div class="foot-nm">MANMIN — Ver 1.0</div>
+      <div class="foot-desc">건폐율·용적률 자동 계산기 · 조례 기준 적용 · 국토계획법 시행령 제35628호</div>
+    </div>
+    <div class="foot-copy">MANMIN-Ver1.0 · © 2025</div>
+  </div>
+</footer>
+
+<button class="fab" onclick="openLaw()">⚖️<span class="fab-tip">사용법·법규</span></button>
+
+<!-- LAW MODAL -->
+<div class="modal-ov" id="law-ov" onclick="closeLawOv(event)">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div class="modal-title">⚖️ 사용법 및 관련 법규</div>
+      <button class="modal-close" onclick="closeLaw()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="msec">
+        <div class="msec-title">📖 사용 방법</div>
+        <div class="mitem"><div class="mitem-t">① 지자체(조례) 선택</div><div class="mitem-d">시·도 → 시·군·구 순서로 선택하면 해당 지자체 도시계획조례 값이 자동으로 적용됩니다. 미선택 시 법령 최대치만 표시됩니다.</div></div>
+        <div class="mitem"><div class="mitem-t">② 용도지역 선택</div><div class="mitem-d">도시지역 / 관리지역 / 농림·자연 탭에서 해당 용도지역을 선택합니다.</div></div>
+        <div class="mitem"><div class="mitem-t">③ 대지면적 입력 (선택)</div><div class="mitem-d">㎡ 또는 평을 입력하면 상호 자동 환산되며, 최대 건축면적·연면적을 자동 계산합니다.</div></div>
+        <div class="mitem"><div class="mitem-t">④ 결과 해석</div><div class="mitem-d">법령 최대치와 조례 적용값을 비교 확인하세요. <strong style="color:var(--orange)">실제 건축은 반드시 조례값을 기준</strong>으로 해야 합니다.</div></div>
+      </div>
+      <div class="msec">
+        <div class="msec-title">⚠ 조례 vs 법령 차이</div>
+        <div class="mitem"><div class="mitem-t">왜 조례가 더 중요한가?</div><div class="mitem-d">국토계획법 시행령은 상한선(최대값)만 제시합니다. 실제 적용되는 값은 각 지자체가 이 범위 내에서 조례로 따로 정하므로, 법령값보다 낮은 경우가 일반적입니다.</div></div>
+        <div class="mitem"><div class="mitem-t">지구단위계획은 별도 확인</div><div class="mitem-d">지구단위계획구역·개발진흥지구 등이 지정된 곳은 조례값보다 더 강화되거나 완화될 수 있습니다. 반드시 <strong style="color:var(--teal)">토지이음(eum.go.kr)</strong>에서 개별 토지를 확인하세요.</div></div>
+      </div>
+      <div class="msec">
+        <div class="msec-title">📜 주요 근거 법규</div>
+        <div class="mitem"><div class="mitem-t">국토의 계획 및 이용에 관한 법률 시행령</div><div class="mitem-d"><strong style="color:var(--teal)">제84조</strong> 용도지역 안에서의 건폐율 / <strong style="color:var(--gold)">제85조</strong> 용도지역 안에서의 용적률<br><strong style="color:var(--orange)">[대통령령 제35628호, 2025.7.1 개정, 2025.10.2 시행] ← 현행 최신</strong></div></div>
+        <div class="mitem"><div class="mitem-t">⚡ 2024.5.28 개정 — 계획관리지역 건폐율 완화</div><div class="mitem-d">
+          · 기본 계획관리: <strong style="color:var(--gold)">40%</strong> (종전과 동일)<br>
+          · 산업·유통개발진흥지구 지정 시: <strong style="color:var(--teal)">60%</strong>로 상향<br>
+          · 지구단위계획구역 추가 지정 시: <strong style="color:var(--teal)">72%</strong>로 상향<br>
+          · 지구단위계획구역에서는 조례값의 건폐율 150%·용적률 200% 이내 완화 가능
+        </div></div>
+        <div class="mitem"><div class="mitem-t">📐 용적률 산정 시 연면적 제외 항목 (건축법 시행령 §119)</div><div class="mitem-d">
+          ① 지하층 면적<br>
+          ② 지상층 부속 주차용 면적<br>
+          ③ 초고층·준초고층 건축물 피난안전구역 면적<br>
+          ④ 경사지붕 아래에 설치하는 대피공간 면적
+        </div></div>
+        <div class="mitem"><div class="mitem-t">지구단위계획 3단계 용적률 개념</div><div class="mitem-d">
+          <strong style="color:var(--slate)">기준용적률</strong>: 조례 범위 내 블록·필지별 기본값<br>
+          <strong style="color:var(--teal)">허용용적률</strong>: 공동개발·친환경 등 이행 시 인센티브 합산<br>
+          <strong style="color:var(--gold)">상한용적률</strong>: 공공시설 제공 시 추가 부여되는 최대값
+        </div></div>
+        <div class="mitem"><div class="mitem-t">각 지자체 도시계획조례 (2024~2026 기준)</div><div class="mitem-d">
+          서울(2026.1.5·제9948호), 부산(2024.8), 대구(2024.7), 인천(2025.3),<br>
+          광주(2024.9), 대전(2025.1), 울산(2024.12), 세종(2025.1),<br>
+          익산(2024.1.18·제2475호), 전주·군산·정읍·완주·김제·남원(2024),<br>
+          수원·성남·용인·고양·화성·안산·평택(2024), 천안·아산·청주(2024),<br>
+          창원·포항(2024), 목포·순천(2024), 춘천(2024), 제주(2025.1)<br>
+          <span style="color:var(--slate)">※ 최신 조례: law.go.kr → 자치법규 → 검색</span>
+        </div></div>
+        <div class="mitem"><div class="mitem-t">건축법 제55조·제56조</div><div class="mitem-d">건폐율·용적률 산정 원칙. 실제 허가는 조례값이 기준.</div></div>
+      </div>
+      <div class="mtip"><strong>💡 MANMIN 전문가 Tip</strong><br>본 계산기의 조례값은 2024~2025년 최신 조례 기준으로 입력되었으나, 조례는 수시로 개정됩니다. 실제 건축 계획 수립 시 해당 지자체 담당 부서 또는 건축사와 반드시 상담하시기 바랍니다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT MODAL (완전 개선) -->
+<div class="print-ov" id="print-ov" onclick="closePrintOv(event)">
+
+  <!-- 모달 헤더 -->
+  <div class="print-modal-bar">
+    <div class="print-modal-title">📱 모바일 미리보기 · Galaxy S24 Ultra</div>
+    <button class="print-modal-close" onclick="closePrint()">✕</button>
+  </div>
+
+  <!-- 폰 + 사이드 패널 레이아웃 -->
+  <div class="print-layout">
+
+    <!-- 폰 프레임 -->
+    <div class="phone-wrap">
+      <div class="phone">
+        <div class="p-notch"><div class="p-pill"></div></div>
+        <div class="p-screen">
+          <div class="p-status">
+            <span class="p-time" id="p-time">09:41</span>
+            <span class="p-icons">📶 WiFi 🔋</span>
+          </div>
+          <div class="p-content">
+            <div class="p-brand">
+              <div class="p-brand-logo">MM</div>
+              <div>
+                <div class="p-brand-nm">MANMIN-Ver1.0</div>
+                <div class="p-brand-vr">건폐율·용적률 계산기 · 조례 기준</div>
+              </div>
+            </div>
+
+            <div class="p-result-title">📋 판정 결과</div>
+
+            <div class="p-zone">
+              <div class="p-zone-cat" id="p-cat">용도지역</div>
+              <div class="p-zone-nm" id="p-name">—</div>
+              <div style="font-size:9px;color:var(--slate);margin-top:4px" id="p-region-label"></div>
+            </div>
+
+            <div class="p-rate-row">
+              <div class="p-rcard cov">
+                <div class="p-rlbl">건폐율</div>
+                <div class="p-rval" id="p-cov">—<span class="p-runit">%</span></div>
+                <div class="p-rcap">법령 최대</div>
+                <div class="p-ord-row" id="p-cov-ord">조례: <span id="p-cov-ord-v">—</span>%</div>
+              </div>
+              <div class="p-rcard far">
+                <div class="p-rlbl">용적률</div>
+                <div class="p-rval" id="p-far">—<span class="p-runit">%</span></div>
+                <div class="p-rcap">법령 최대</div>
+                <div class="p-ord-row" id="p-far-ord">조례: <span id="p-far-ord-v">—</span>%</div>
+              </div>
+            </div>
+
+            <div class="p-abox" id="p-abox">
+              <div class="p-atitle">대지면적 계산결과</div>
+              <div class="p-ai"><span class="p-ai-l">대지면적</span><span class="p-ai-v" id="p-site">—</span></div>
+              <div class="p-ai"><span class="p-ai-l">최대 건축면적</span><span class="p-ai-v tc" id="p-bld">—</span></div>
+              <div class="p-ai"><span class="p-ai-l">최대 연면적</span><span class="p-ai-v tc" id="p-gfa">—</span></div>
+              <div class="p-ai"><span class="p-ai-l">추정 최대층수</span><span class="p-ai-v" id="p-flr">—</span></div>
+            </div>
+
+            <div class="p-note" id="p-note">—</div>
+            <div class="p-ord-info" id="p-ord-info"></div>
+            <div class="p-ts" id="p-ts">산출일시: —</div>
+          </div>
+        </div>
+        <div class="p-bottom"><div class="p-home"></div></div>
+      </div>
+    </div>
+
+    <!-- 사이드 액션 패널 -->
+    <div class="print-side">
+
+      <!-- 저장 -->
+      <div class="print-side-title">💾 저장</div>
+      <button class="pside-btn primary" onclick="captureJpg()">
+        <span class="pside-ico">🖼</span>
+        <span class="pside-info">
+          <span class="pside-lbl">JPG 저장</span>
+          <span class="pside-sub">이미지로 다운로드</span>
+        </span>
+      </button>
+      <button class="pside-btn" onclick="copyRes()">
+        <span class="pside-ico">📋</span>
+        <span class="pside-info">
+          <span class="pside-lbl">텍스트 복사</span>
+          <span class="pside-sub">클립보드에 복사</span>
+        </span>
+      </button>
+
+      <div class="pside-sep"></div>
+
+      <!-- 공유 -->
+      <div class="print-side-title">📤 공유</div>
+      <button class="pside-btn gold-btn" onclick="shareKakao()">
+        <span class="pside-ico">💬</span>
+        <span class="pside-info">
+          <span class="pside-lbl">카카오 공유</span>
+          <span class="pside-sub">카카오스토리</span>
+        </span>
+      </button>
+      <button class="pside-btn" onclick="shareSMS()">
+        <span class="pside-ico">📱</span>
+        <span class="pside-info">
+          <span class="pside-lbl">문자 공유</span>
+          <span class="pside-sub">SMS 메시지</span>
+        </span>
+      </button>
+      <button class="pside-btn" onclick="shareURL()">
+        <span class="pside-ico">🔗</span>
+        <span class="pside-info">
+          <span class="pside-lbl">링크 복사</span>
+          <span class="pside-sub">결과 텍스트 복사</span>
+        </span>
+      </button>
+      <button class="pside-btn" onclick="shareNative()">
+        <span class="pside-ico">📤</span>
+        <span class="pside-info">
+          <span class="pside-lbl">기타 공유</span>
+          <span class="pside-sub">시스템 공유</span>
+        </span>
+      </button>
+
+      <div class="pside-sep"></div>
+
+      <!-- 출력 -->
+      <div class="print-side-title">🖨 출력</div>
+      <button class="pside-btn" onclick="printRes()">
+        <span class="pside-ico">🖨</span>
+        <span class="pside-info">
+          <span class="pside-lbl">프린터 출력</span>
+          <span class="pside-sub">인쇄 대화상자</span>
+        </span>
+      </button>
+      <button class="pside-btn" onclick="captureJpgShare()">
+        <span class="pside-ico">📲</span>
+        <span class="pside-info">
+          <span class="pside-lbl">이미지 공유</span>
+          <span class="pside-sub">캡처 후 공유</span>
+        </span>
+      </button>
+
+      <div class="pside-status" id="save-status"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JPG PREVIEW OVERLAY -->
+<div class="jpg-preview-ov" id="jpg-preview-ov">
+  <div class="jpg-preview-label" style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px">📷 JPG 저장 미리보기 · 아래 버튼으로 저장 또는 공유하세요</div>
+  <img id="jpg-preview-img" class="jpg-preview-img" src="" alt="미리보기">
+  <div class="jpg-preview-actions">
+    <button class="jpg-act-btn save" onclick="downloadJpg()">⬇ JPG 저장</button>
+    <button class="jpg-act-btn share" onclick="shareJpgNative()">📤 이미지 공유</button>
+    <button class="jpg-act-btn close-btn" onclick="closeJpgPreview()">✕ 닫기</button>
+  </div>
+</div>
+
+<!-- ═══════════════ SCRIPT ═══════════════ -->
+<script>
+/* ── 국토계획법 기준 데이터 ── */
+const LAW={
+  전용주거1:{cat:"도시지역 > 주거지역",name:"제1종 전용주거지역",cov:50,far:100,tag:"단독주택 중심",tagC:"#00C896",note:"단독주택 중심 저층 주거환경 보호 지역. 4층 이하 단독주택 원칙.",tags:["저층","단독주택","50%이하"]},
+  전용주거2:{cat:"도시지역 > 주거지역",name:"제2종 전용주거지역",cov:50,far:150,tag:"공동주택 중심",tagC:"#00C896",note:"4층 이하 공동주택 중심 지역.",tags:["4층이하","공동주택"]},
+  일반주거1:{cat:"도시지역 > 주거지역",name:"제1종 일반주거지역",cov:60,far:200,tag:"저층주거",tagC:"#00C896",note:"저층주택 중심. 4층 이하 건축물 허용.",tags:["저층","4층이하"]},
+  일반주거2:{cat:"도시지역 > 주거지역",name:"제2종 일반주거지역",cov:60,far:250,tag:"중층주거",tagC:"#00C896",note:"중층주택 중심의 편리한 주거환경.",tags:["중층"]},
+  일반주거3:{cat:"도시지역 > 주거지역",name:"제3종 일반주거지역",cov:50,far:300,tag:"중고층주거",tagC:"#00C896",note:"중·고층주택 중심. 아파트 건설 가능.",tags:["중고층","아파트가능"]},
+  준주거:   {cat:"도시지역 > 주거지역",name:"준주거지역",cov:70,far:500,tag:"주거+상업복합",tagC:"#7c6fcd",note:"주거 중심에 상업·업무 기능을 보완하는 복합 지역.",tags:["복합","상업+주거"]},
+  중심상업: {cat:"도시지역 > 상업지역",name:"중심상업지역",cov:90,far:1500,tag:"도심 핵심",tagC:"#FF6B35",note:"도심·부도심 상업·업무기능 확충. 가장 높은 용적률 허용.",tags:["도심","초고층","최고용적률"]},
+  일반상업: {cat:"도시지역 > 상업지역",name:"일반상업지역",cov:80,far:1300,tag:"일반상업",tagC:"#FF6B35",note:"일반적인 상업·업무기능 담당.",tags:["상업","업무"]},
+  근린상업: {cat:"도시지역 > 상업지역",name:"근린상업지역",cov:70,far:900,tag:"근린서비스",tagC:"#FF6B35",note:"근린지역 일용품·서비스 공급.",tags:["근린","소규모상업"]},
+  유통상업: {cat:"도시지역 > 상업지역",name:"유통상업지역",cov:80,far:1100,tag:"물류·유통",tagC:"#FF6B35",note:"도시 내 유통기능 증진.",tags:["유통","물류"]},
+  전용공업: {cat:"도시지역 > 공업지역",name:"전용공업지역",cov:70,far:300,tag:"중·대형공장",tagC:"#6B8FA3",note:"중화학공업·공해성 공업 수용.",tags:["중화학","대형공장"]},
+  일반공업: {cat:"도시지역 > 공업지역",name:"일반공업지역",cov:70,far:350,tag:"일반제조업",tagC:"#6B8FA3",note:"환경 저해 없는 공업 배치.",tags:["제조업"]},
+  준공업:   {cat:"도시지역 > 공업지역",name:"준공업지역",cov:70,far:400,tag:"경공업+주거",tagC:"#6B8FA3",note:"경공업과 주거·상업·업무 복합.",tags:["경공업","복합"]},
+  보전녹지: {cat:"도시지역 > 녹지지역",name:"보전녹지지역",cov:20,far:80,tag:"개발제한",tagC:"#00C896",note:"자연환경·경관·산림·녹지공간 보전.",tags:["자연보전","개발제한"]},
+  생산녹지: {cat:"도시지역 > 녹지지역",name:"생산녹지지역",cov:20,far:100,tag:"농업적활용",tagC:"#00C896",note:"농업적 생산을 위한 개발유보.",tags:["농업","유보"]},
+  자연녹지: {cat:"도시지역 > 녹지지역",name:"자연녹지지역",cov:20,far:100,tag:"제한개발",tagC:"#00C896",note:"불가피한 경우 제한적 개발 허용.",tags:["녹지","제한개발"]},
+  보전관리: {cat:"관리지역",name:"보전관리지역",cov:20,far:80,tag:"환경보전",tagC:"#00C896",note:"자연환경 보호·산림 보호·수질오염 방지.",tags:["보전","환경"]},
+  생산관리: {cat:"관리지역",name:"생산관리지역",cov:20,far:80,tag:"농임어업",tagC:"#00C896",note:"농업·임업·어업 생산을 위한 관리.",tags:["농업","임업"]},
+  계획관리: {cat:"관리지역",name:"계획관리지역",cov:40,far:100,tag:"계획개발",tagC:"#E8A020",note:"도시지역 편입 예상. 제한적 개발 허용. 산업·유통진흥지구 지정 시 60% 완화 가능.",tags:["계획","제한개발","완화가능"]},
+  농림:     {cat:"농림지역",name:"농림지역",cov:20,far:80,tag:"농업진흥",tagC:"#00C896",note:"농업진흥지역·보전산지. 농림업 진흥과 산림 보전.",tags:["농업","산림"]},
+  자연환경: {cat:"자연환경보전지역",name:"자연환경보전지역",cov:20,far:80,tag:"최고규제",tagC:"#FF4E4E",note:"자연환경·수자원·생태계·문화재 보전. 가장 강한 규제.",tags:["자연","문화재","최고규제"]},
+};
+
+/* ══════════════════════════════════════════════════════════
+   지자체별 조례 데이터
+   기준: 국토계획법 시행령 제35628호(2025.10.02) +
+         각 지자체 도시계획조례 최신 기준
+   ※ 조례는 수시 개정됩니다. 법령정보센터(law.go.kr)에서
+     최신 자치법규를 반드시 재확인하세요.
+══════════════════════════════════════════════════════════ */
+/* 헬퍼: 21개 필드 한번에 생성 */
+function ord(v1c,v1f,v2c,v2f,r1c,r1f,r2c,r2f,r3c,r3f,qrc,qrf,ccc,ccf,gcc,gcf,ncc,ncf,ucc,ucf,evc,evf,pc,pf,gc2,gf2,ic,ifc,sc,sf,bvc,bvf,mvc,mvf,nvc,nvf,bmc,bmf,smc,smf,pmc,pmf,alc,alf,nec,nef){
+  return {
+    전용주거1:{cov:v1c,far:v1f},전용주거2:{cov:v2c,far:v2f},
+    일반주거1:{cov:r1c,far:r1f},일반주거2:{cov:r2c,far:r2f},일반주거3:{cov:r3c,far:r3f},
+    준주거:{cov:qrc,far:qrf},
+    중심상업:{cov:ccc,far:ccf},일반상업:{cov:gcc,far:gcf},근린상업:{cov:ncc,far:ncf},유통상업:{cov:ucc,far:ucf},
+    전용공업:{cov:evc,far:evf},일반공업:{cov:pc,far:pf},준공업:{cov:gc2,far:gf2},
+    보전녹지:{cov:ic,far:ifc},생산녹지:{cov:sc,far:sf},자연녹지:{cov:bvc,far:bvf},
+    보전관리:{cov:mvc,far:mvf},생산관리:{cov:nvc,far:nvf},계획관리:{cov:bmc,far:bmf},
+    농림:{cov:smc,far:smf},자연환경:{cov:pmc,far:pmf},
+    /* 메타 */
+    _ref:alc, _date:alf, _note:nec
+  };
+}
+
+const ORDINANCE = {
+/* ────────────────────────────────────────────────
+   특별시·광역시 (단일 조례)
+──────────────────────────────────────────────── */
+"서울":{
+  /* 서울특별시 도시계획 조례 [시행 2026.1.5] 조례 제9948호
+     상업지역 용적률: 법령 대비 대폭 강화 (800%까지)
+     2종전용 건폐율: 40%로 강화, 주거 용적률 전반 강화 */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:40,far:120},
+  일반주거1:{cov:60,far:150},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:250},
+  준주거:{cov:60,far:400},
+  중심상업:{cov:60,far:800},일반상업:{cov:60,far:800},근린상업:{cov:60,far:600},유통상업:{cov:60,far:600},
+  전용공업:{cov:60,far:200},일반공업:{cov:60,far:200},준공업:{cov:60,far:400},
+  보전녹지:{cov:20,far:50},생산녹지:{cov:20,far:50},자연녹지:{cov:20,far:50},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2026.1.5",_ref:"서울특별시 도시계획 조례 제9948호",
+},
+"부산":{
+  /* 부산광역시 도시계획 조례 [시행 2024.8] */
+  전용주거1:{cov:50,far:80},전용주거2:{cov:50,far:120},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:275},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:250},일반공업:{cov:70,far:300},준공업:{cov:70,far:350},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024.8",_ref:"부산광역시 도시계획 조례",
+},
+"대구":{
+  /* 대구광역시 도시계획 조례 [시행 2024.7] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1100},근린상업:{cov:70,far:800},유통상업:{cov:80,far:1000},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024.7",_ref:"대구광역시 도시계획 조례",
+},
+"인천":{
+  /* 인천광역시 도시계획 조례 [시행 2025.3] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:200},일반주거2:{cov:60,far:250},일반주거3:{cov:50,far:300},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:1000},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2025.3",_ref:"인천광역시 도시계획 조례",
+},
+"광주":{
+  /* 광주광역시 도시계획 조례 [시행 2024.9] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024.9",_ref:"광주광역시 도시계획 조례",
+},
+"대전":{
+  /* 대전광역시 도시계획 조례 [시행 2025.1] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:1000},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2025.1",_ref:"대전광역시 도시계획 조례",
+},
+"울산":{
+  /* 울산광역시 도시계획 조례 [시행 2024.12] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:200},일반주거2:{cov:60,far:250},일반주거3:{cov:50,far:300},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1100},근린상업:{cov:70,far:900},유통상업:{cov:80,far:1100},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024.12",_ref:"울산광역시 도시계획 조례",
+},
+"세종":{
+  /* 세종특별자치시 도시계획 조례 [시행 2025.1] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:200},일반주거2:{cov:60,far:250},일반주거3:{cov:50,far:300},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1100},근린상업:{cov:70,far:900},유통상업:{cov:80,far:1100},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2025.1",_ref:"세종특별자치시 도시계획 조례",
+},
+/* ────────────────────────────────────────────────
+   전북특별자치도 주요 시·군
+──────────────────────────────────────────────── */
+"전북익산":{
+  /* 전북특별자치도 익산시 도시계획 조례 [시행 2024.1.18]
+     조례 제2475호 (2023.12.29 일부개정) */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:250},
+  준주거:{cov:70,far:400},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:900},근린상업:{cov:70,far:700},유통상업:{cov:70,far:800},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024.1.18",_ref:"익산시 도시계획 조례 제2475호",
+},
+"전북전주":{
+  /* 전북특별자치도 전주시 도시계획 조례 [시행 2024.7] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:260},
+  준주거:{cov:70,far:450},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:950},근린상업:{cov:70,far:750},유통상업:{cov:70,far:850},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024.7",_ref:"전주시 도시계획 조례",
+},
+"전북군산":{
+  /* 전북특별자치도 군산시 도시계획 조례 [시행 2024.5] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:250},
+  준주거:{cov:70,far:400},
+  중심상업:{cov:80,far:1100},일반상업:{cov:80,far:900},근린상업:{cov:70,far:700},유통상업:{cov:70,far:800},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024.5",_ref:"군산시 도시계획 조례",
+},
+"전북정읍":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:170},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:240},
+  준주거:{cov:70,far:350},
+  중심상업:{cov:80,far:1000},일반상업:{cov:80,far:800},근린상업:{cov:70,far:600},유통상업:{cov:70,far:700},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:300},준공업:{cov:70,far:350},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"정읍시 도시계획 조례",
+},
+"전북완주":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:250},
+  준주거:{cov:70,far:400},
+  중심상업:{cov:80,far:1000},일반상업:{cov:80,far:800},근린상업:{cov:70,far:600},유통상업:{cov:70,far:700},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"완주군 도시계획 조례",
+},
+"전북김제":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:170},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:240},
+  준주거:{cov:70,far:350},
+  중심상업:{cov:80,far:1000},일반상업:{cov:80,far:800},근린상업:{cov:70,far:600},유통상업:{cov:70,far:700},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:300},준공업:{cov:70,far:350},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"김제시 도시계획 조례",
+},
+"전북남원":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:170},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:240},
+  준주거:{cov:70,far:350},
+  중심상업:{cov:80,far:1000},일반상업:{cov:80,far:800},근린상업:{cov:70,far:600},유통상업:{cov:70,far:700},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:300},준공업:{cov:70,far:350},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"남원시 도시계획 조례",
+},
+/* ────────────────────────────────────────────────
+   경기도 주요 시
+──────────────────────────────────────────────── */
+"경기수원":{
+  /* 경기도 수원시 도시계획 조례 [시행 2024.9] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024.9",_ref:"수원시 도시계획 조례",
+},
+"경기성남":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:190},일반주거2:{cov:60,far:230},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1100},근린상업:{cov:70,far:900},유통상업:{cov:80,far:1000},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"성남시 도시계획 조례",
+},
+"경기용인":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"용인시 도시계획 조례",
+},
+"경기고양":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1100},근린상업:{cov:70,far:900},유통상업:{cov:80,far:1000},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"고양시 도시계획 조례",
+},
+"경기화성":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"화성시 도시계획 조례",
+},
+"경기안산":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"안산시 도시계획 조례",
+},
+"경기평택":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"평택시 도시계획 조례",
+},
+/* ────────────────────────────────────────────────
+   충청도
+──────────────────────────────────────────────── */
+"충남천안":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"천안시 도시계획 조례",
+},
+"충남아산":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"아산시 도시계획 조례",
+},
+"충북청주":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"청주시 도시계획 조례",
+},
+/* ────────────────────────────────────────────────
+   경상도
+──────────────────────────────────────────────── */
+"경남창원":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1100},근린상업:{cov:70,far:900},유통상업:{cov:80,far:1000},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"창원시 도시계획 조례",
+},
+"경북포항":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1100},근린상업:{cov:70,far:900},유통상업:{cov:80,far:1000},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"포항시 도시계획 조례",
+},
+/* ────────────────────────────────────────────────
+   전라남도
+──────────────────────────────────────────────── */
+"전남목포":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:170},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:250},
+  준주거:{cov:70,far:400},
+  중심상업:{cov:80,far:1100},일반상업:{cov:80,far:900},근린상업:{cov:70,far:700},유통상업:{cov:70,far:800},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"목포시 도시계획 조례",
+},
+"전남순천":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:170},일반주거2:{cov:60,far:200},일반주거3:{cov:50,far:250},
+  준주거:{cov:70,far:400},
+  중심상업:{cov:80,far:1100},일반상업:{cov:80,far:900},근린상업:{cov:70,far:700},유통상업:{cov:70,far:800},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:60},생산녹지:{cov:20,far:60},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"순천시 도시계획 조례",
+},
+/* ────────────────────────────────────────────────
+   강원·제주
+──────────────────────────────────────────────── */
+"강원춘천":{
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:180},일반주거2:{cov:60,far:220},일반주거3:{cov:50,far:280},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1200},일반상업:{cov:80,far:1000},근린상업:{cov:70,far:800},유통상업:{cov:80,far:900},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2024",_ref:"춘천시 도시계획 조례",
+},
+"제주제주":{
+  /* 제주특별자치도 도시계획 조례 [시행 2025.1] */
+  전용주거1:{cov:50,far:100},전용주거2:{cov:50,far:150},
+  일반주거1:{cov:60,far:200},일반주거2:{cov:60,far:250},일반주거3:{cov:50,far:300},
+  준주거:{cov:70,far:500},
+  중심상업:{cov:80,far:1300},일반상업:{cov:80,far:1100},근린상업:{cov:70,far:900},유통상업:{cov:80,far:1100},
+  전용공업:{cov:70,far:300},일반공업:{cov:70,far:350},준공업:{cov:70,far:400},
+  보전녹지:{cov:20,far:80},생산녹지:{cov:20,far:80},자연녹지:{cov:20,far:80},
+  보전관리:{cov:20,far:80},생산관리:{cov:20,far:80},계획관리:{cov:40,far:100},
+  농림:{cov:20,far:80},자연환경:{cov:20,far:80},
+  _date:"2025.1",_ref:"제주특별자치도 도시계획 조례",
+},
+};
+
+/* ── 시도 → 시군구 매핑 (확대판) ── */
+const SIGUNGU={
+  서울:["서울전체(조례 동일)"],
+  부산:["부산전체(조례 동일)"],
+  대구:["대구전체(조례 동일)"],
+  인천:["인천전체(조례 동일)"],
+  광주:["광주전체(조례 동일)"],
+  대전:["대전전체(조례 동일)"],
+  울산:["울산전체(조례 동일)"],
+  세종:["세종전체(조례 동일)"],
+  경기:["수원시","성남시","용인시","고양시","화성시","안산시","평택시","남양주시","안양시","의정부시","시흥시","부천시","김포시","광명시"],
+  전북:["익산시","전주시","군산시","정읍시","완주군","김제시","남원시","고창군","부안군","임실군","진안군","장수군","무주군"],
+  전남:["목포시","여수시","순천시","나주시","광양시","담양군","곡성군","구례군"],
+  경남:["창원시","진주시","김해시","양산시","거제시","통영시","사천시","밀양시"],
+  경북:["포항시","경주시","구미시","안동시","경산시","영주시","영천시","상주시"],
+  충남:["천안시","아산시","공주시","보령시","논산시","계룡시","당진시","홍성군"],
+  충북:["청주시","충주시","제천시","음성군","진천군","증평군","괴산군"],
+  강원:["춘천시","원주시","강릉시","동해시","태백시","속초시","삼척시"],
+  제주:["제주시","서귀포시"],
+};
+
+/* ── 시군구 → 조례키 매핑 (확대판) ── */
+function getOrdKey(sido,sigungu){
+  if(!sido) return null;
+  /* 광역시·특별시·세종 → 단일 키 */
+  if(['서울','부산','대구','인천','광주','대전','울산','세종'].includes(sido)) return sido;
+  /* 경기 */
+  if(sido==='경기'){
+    if(!sigungu) return null;
+    if(sigungu.includes('수원'))  return '경기수원';
+    if(sigungu.includes('성남'))  return '경기성남';
+    if(sigungu.includes('용인'))  return '경기용인';
+    if(sigungu.includes('고양'))  return '경기고양';
+    if(sigungu.includes('화성'))  return '경기화성';
+    if(sigungu.includes('안산'))  return '경기안산';
+    if(sigungu.includes('평택'))  return '경기평택';
+    return null;
+  }
+  /* 전북 */
+  if(sido==='전북'){
+    if(!sigungu) return null;
+    if(sigungu.includes('익산'))  return '전북익산';
+    if(sigungu.includes('전주'))  return '전북전주';
+    if(sigungu.includes('군산'))  return '전북군산';
+    if(sigungu.includes('정읍'))  return '전북정읍';
+    if(sigungu.includes('완주'))  return '전북완주';
+    if(sigungu.includes('김제'))  return '전북김제';
+    if(sigungu.includes('남원'))  return '전북남원';
+    return null;
+  }
+  /* 전남 */
+  if(sido==='전남'){
+    if(!sigungu) return null;
+    if(sigungu.includes('목포'))  return '전남목포';
+    if(sigungu.includes('순천'))  return '전남순천';
+    return null;
+  }
+  /* 충남 */
+  if(sido==='충남'){
+    if(!sigungu) return null;
+    if(sigungu.includes('천안'))  return '충남천안';
+    if(sigungu.includes('아산'))  return '충남아산';
+    return null;
+  }
+  /* 충북 */
+  if(sido==='충북'){
+    if(!sigungu) return null;
+    if(sigungu.includes('청주'))  return '충북청주';
+    return null;
+  }
+  /* 경남 */
+  if(sido==='경남'){
+    if(!sigungu) return null;
+    if(sigungu.includes('창원'))  return '경남창원';
+    return null;
+  }
+  /* 경북 */
+  if(sido==='경북'){
+    if(!sigungu) return null;
+    if(sigungu.includes('포항'))  return '경북포항';
+    return null;
+  }
+  /* 강원 */
+  if(sido==='강원'){
+    if(!sigungu) return null;
+    if(sigungu.includes('춘천'))  return '강원춘천';
+    return null;
+  }
+  /* 제주 */
+  if(sido==='제주') return '제주제주';
+  return null;
+}
+
+/* ── Urban sub ── */
+const URBAN_SUB={
+  주거:["전용주거1","전용주거2","일반주거1","일반주거2","일반주거3","준주거"],
+  상업:["중심상업","일반상업","근린상업","유통상업"],
+  공업:["전용공업","일반공업","준공업"],
+  녹지:["보전녹지","생산녹지","자연녹지"],
+};
+
+const TABLE_SECS=[
+  {label:"도시지역 — 주거지역",keys:["전용주거1","전용주거2","일반주거1","일반주거2","일반주거3","준주거"]},
+  {label:"도시지역 — 상업지역",keys:["중심상업","일반상업","근린상업","유통상업"]},
+  {label:"도시지역 — 공업지역",keys:["전용공업","일반공업","준공업"]},
+  {label:"도시지역 — 녹지지역",keys:["보전녹지","생산녹지","자연녹지"]},
+  {label:"관리지역",keys:["보전관리","생산관리","계획관리"]},
+  {label:"농림 / 자연환경보전지역",keys:["농림","자연환경"]},
+];
+
+/* ── State ── */
+let curTab='urban', curKey=null, curSido=null, curSigungu=null, curOrdKey=null;
+
+/* ── Step indicator ── */
+function setStep(n){
+  for(let i=1;i<=4;i++){
+    const sn=document.getElementById('sn'+i), sl=document.getElementById('sl'+i);
+    if(i<n){sn.className='step-num done';sl.className='step-label done';}
+    else if(i===n){sn.className='step-num active';sl.className='step-label active';}
+    else{sn.className='step-num';sl.className='step-label';}
+  }
+}
+
+/* ── Sido / Sigungu ── */
+function onSido(){
+  const v=document.getElementById('sel-sido').value;
+  curSido=v||null; curSigungu=null; curOrdKey=null;
+  const sg=document.getElementById('sg-sigungu');
+  const rn=document.getElementById('region-note');
+  if(!v){sg.classList.remove('show');rn.style.display='none';return;}
+  const list=SIGUNGU[v]||[];
+  const sel=document.getElementById('sel-sigungu');
+  sel.innerHTML='<option value="">— 시·군·구 선택 (선택사항) —</option>';
+  list.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o);});
+  sg.classList.add('show');
+  // Auto-resolve for single-unit cities
+  if(['서울','부산','대구','인천','광주','대전','울산','세종'].includes(v)){
+    sel.value=list[0]; onSigungu();
+  } else {
+    rn.style.display='none';
+    document.getElementById('ord-badge').classList.remove('show');
+  }
+  setStep(2);
+}
+
+function onSigungu(){
+  const sg=document.getElementById('sel-sigungu').value;
+  curSigungu=sg||null;
+  curOrdKey=getOrdKey(curSido,sg);
+  const rn=document.getElementById('region-note');
+  const badge=document.getElementById('ord-badge');
+  if(curOrdKey&&ORDINANCE[curOrdKey]){
+    rn.style.display='block';
+    rn.innerHTML=`<strong style="color:var(--gold)">✅ 조례 데이터 적용:</strong> ${curSido} ${sg||''} 도시계획조례 (2024~2025 기준). 계산 시 자동 반영됩니다.`;
+    badge.classList.add('show');
+  } else {
+    rn.style.display='block';
+    rn.innerHTML=`<strong style="color:var(--slate)">ℹ️ 조례 미등록:</strong> 해당 지자체 조례값이 아직 등록되지 않았습니다. 법령 최대치만 표시됩니다. <a href="https://www.law.go.kr" target="_blank" style="color:var(--teal)">law.go.kr에서 확인하세요.</a>`;
+    badge.classList.remove('show');
+  }
+}
+
+/* ── Tab ── */
+function switchTab(t){
+  curTab=t;
+  ['urban','manage','agri'].forEach(x=>{document.getElementById('tab-'+x).style.display=x===t?'block':'none';});
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',['urban','manage','agri'][i]===t));
+  document.getElementById('maj-urban').value='';
+  document.getElementById('sub-urban').classList.remove('show');
+  curKey=null;
+}
+
+/* ── Selects ── */
+function onMaj(){
+  const m=document.getElementById('maj-urban').value;
+  const sub=document.getElementById('sub-urban');
+  const sel=document.getElementById('min-urban');
+  if(!m){sub.classList.remove('show');return;}
+  sel.innerHTML='<option value="">— 선택 —</option>';
+  (URBAN_SUB[m]||[]).forEach(k=>{const o=document.createElement('option');o.value=k;o.textContent=LAW[k].name;sel.appendChild(o);});
+  sub.classList.add('show');
+  curKey=null;
+  setStep(3);
+}
+function onMin(){curKey=document.getElementById('min-urban').value||null; setStep(3);}
+function onDirect(t){curKey=document.getElementById('min-'+t).value||null; setStep(3);}
+
+/* ── Area ── */
+function syncPy(){const v=parseFloat(document.getElementById('inp-sqm').value);document.getElementById('inp-py').value=(!isNaN(v)&&v>0)?(v/3.3058).toFixed(1):'';}
+function syncSqm(){const v=parseFloat(document.getElementById('inp-py').value);document.getElementById('inp-sqm').value=(!isNaN(v)&&v>0)?(v*3.3058).toFixed(1):'';}
+
+/* ── CALCULATE ── */
+function calculate(){
+  if(!curKey||!LAW[curKey]){toast('용도지역을 먼저 선택해 주세요.');return;}
+  const z=LAW[curKey];
+  const sqm=parseFloat(document.getElementById('inp-sqm').value);
+  const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
+
+  /* Effective values (조례 우선) */
+  const effCov=ord?ord.cov:z.cov;
+  const effFar=ord?ord.far:z.far;
+  const hasOrd=!!ord;
+
+  /* Hide placeholder, show result */
+  document.getElementById('rph').style.display='none';
+  const rc=document.getElementById('rcard');
+  rc.style.display='block';
+  rc.style.animation='fdIn .35s ease';
+
+  /* Zone */
+  document.getElementById('r-cat').textContent=z.cat;
+  document.getElementById('r-name').textContent=z.name;
+  const tag=document.getElementById('r-tag');
+  tag.textContent=z.tag;
+  tag.style.cssText=`background:${z.tagC}18;color:${z.tagC};border:1px solid ${z.tagC}40;`;
+
+  /* Rates */
+  const covEl=document.getElementById('r-cov');
+  const farEl=document.getElementById('r-far');
+  covEl.innerHTML=z.cov+'<span class="rpct">%</span>';
+  farEl.innerHTML=z.far+'<span class="rpct">%</span>';
+  covEl.classList.remove('flash');void covEl.offsetWidth;covEl.classList.add('flash');
+  farEl.classList.remove('flash');void farEl.offsetWidth;farEl.classList.add('flash');
+  setTimeout(()=>{
+    document.getElementById('bar-cov').style.width=(z.cov/90*100)+'%';
+    document.getElementById('bar-far').style.width=(z.far/1500*100)+'%';
+  },60);
+
+  /* Ordinance display */
+  const covOrd=document.getElementById('r-cov-ord');
+  const farOrd=document.getElementById('r-far-ord');
+  if(hasOrd){
+    document.getElementById('r-cov-ord-val').textContent=ord.cov+'%';
+    document.getElementById('r-far-ord-val').textContent=ord.far+'%';
+    covOrd.classList.add('show'); farOrd.classList.add('show');
+  } else {
+    covOrd.classList.remove('show'); farOrd.classList.remove('show');
+  }
+
+  /* Compare banner */
+  const cb=document.getElementById('cmp-banner');
+  if(hasOrd){
+    cb.classList.add('show');
+    document.getElementById('c-law-cov').textContent=z.cov+'%';
+    document.getElementById('c-law-far').textContent=z.far+'%';
+    document.getElementById('c-ord-cov').textContent=ord.cov+'%';
+    document.getElementById('c-ord-far').textContent=ord.far+'%';
+    const dp=document.getElementById('c-diff');
+    const diffCov=z.cov-ord.cov, diffFar=z.far-ord.far;
+    if(diffCov>0||diffFar>0){dp.className='diff-pill tighter';dp.textContent='조례가 더 엄격 (실제 적용값 주의)';}
+    else if(diffCov===0&&diffFar===0){dp.className='diff-pill same';dp.textContent='법령 = 조례 (동일)';}
+    else{dp.className='diff-pill relaxed';dp.textContent='조례 완화 적용 중';}
+  } else {
+    cb.classList.remove('show');
+  }
+
+  /* Area calc */
+  const abox=document.getElementById('area-calc');
+  const acOrd=document.getElementById('ac-ord-note');
+  if(!isNaN(sqm)&&sqm>0){
+    abox.classList.add('show');
+    const bld=sqm*effCov/100, gfa=sqm*effFar/100, flr=Math.floor(gfa/bld);
+    if(hasOrd)acOrd.style.display='inline'; else acOrd.style.display='none';
+    document.getElementById('r-site').textContent=sqm.toLocaleString()+'㎡ ('+(sqm/3.3058).toFixed(1)+'평)';
+    document.getElementById('r-bld').textContent=bld.toLocaleString(undefined,{maximumFractionDigits:1})+'㎡';
+    document.getElementById('r-gfa').textContent=gfa.toLocaleString(undefined,{maximumFractionDigits:1})+'㎡';
+    document.getElementById('r-flr').textContent='약 '+flr+'층 (참고)';
+  } else {
+    abox.classList.remove('show');
+  }
+
+  /* Note */
+  document.getElementById('r-note').innerHTML='<strong>📌 적용 기준:</strong> '+z.note;
+
+  /* 계획관리지역 2024.5.28 완화 특별 안내 */
+  const specialNote=document.getElementById('special-note');
+  if(curKey==='계획관리'){
+    specialNote.style.display='block';
+    specialNote.innerHTML=`<strong>⚡ 2024.5.28 개정 추가 완화:</strong><br>
+      · <b>산업·유통개발진흥지구 지정 시</b> → 건폐율 <b>60%</b>까지 완화<br>
+      · <b>지구단위계획구역 추가 지정 시</b> → 건폐율 <b>72%</b>까지 완화<br>
+      · 지구단위계획구역에서는 법령값의 건폐율 <b>150%·용적률 200%</b> 이내 완화 가능<br>
+      <span style="font-size:9px;color:var(--slate)">※ 개별 토지 확인: 토지이음(eum.go.kr)</span>`;
+  } else if(['준주거','중심상업','일반상업','근린상업','유통상업','전용공업','일반공업','준공업'].includes(curKey)){
+    specialNote.style.display='block';
+    specialNote.innerHTML=`<strong>ℹ️ 지구단위계획 완화:</strong> 지구단위계획구역 지정 시 건폐율 <b>150%·용적률 200%</b> 이내에서 완화 적용 가능. 반드시 <a href="https://www.eum.go.kr" target="_blank" style="color:var(--teal)">토지이음</a>에서 개별 확인하세요.`;
+  } else {
+    specialNote.style.display='none';
+  }
+
+  /* 조례 날짜 표시 */
+  const ordDateEl=document.getElementById('ord-date-info');
+  if(hasOrd&&ord._date){
+    ordDateEl.style.display='block';
+    ordDateEl.innerHTML=`<span style="color:var(--gold)">📋 조례 기준일:</span> ${ord._ref||''} <span style="color:var(--slate)">(${ord._date})</span>`;
+  } else {
+    ordDateEl.style.display='none';
+  }
+
+  /* Ord warning */
+  const ow=document.getElementById('ord-warn');
+  if(hasOrd&&(z.cov!==ord.cov||z.far!==ord.far)){
+    ow.classList.add('show');
+    ow.innerHTML=`<strong>⚠ 조례 주의:</strong> 법령 최대치(건폐율 ${z.cov}%·용적률 ${z.far}%)보다 <strong>조례 기준이 낮습니다 (건폐율 ${ord.cov}%·용적률 ${ord.far}%)</strong>. 실제 건축 허가는 반드시 조례값을 기준으로 검토하세요.`;
+  } else if(hasOrd){
+    ow.classList.add('show');
+    ow.innerHTML=`<strong>✅ 조례 확인:</strong> ${curSido} ${curSigungu||''} 조례가 법령 최대치와 동일합니다.`;
+    ow.style.background='rgba(0,200,150,.07)';ow.style.borderColor='rgba(0,200,150,.25)';ow.style.color='#70d8b0';
+  } else {
+    ow.classList.remove('show');
+    ow.style.background='';ow.style.borderColor='';ow.style.color='';
+  }
+
+  /* Tags */
+  const tagsEl=document.getElementById('r-tags');
+  tagsEl.innerHTML='';
+  (z.tags||[]).forEach(t=>{const s=document.createElement('span');s.className='stag';s.textContent=t;tagsEl.appendChild(s);});
+  if(hasOrd){const s=document.createElement('span');s.className='stag';s.style.cssText='background:rgba(232,160,32,.1);color:var(--gold);border-color:rgba(232,160,32,.2)';s.textContent='조례 적용';tagsEl.appendChild(s);}
+
+  /* Mobile button */
+  document.getElementById('mbtn').classList.add('show');
+
+  /* Table update */
+  buildTable(curKey);
+  setStep(4);
+  toast('✅ '+z.name+' 계산 완료'+(hasOrd?' · 조례 적용됨':''));
+}
+
+/* ── TABLE ── */
+function buildTable(activeKey){
+  const tbody=document.getElementById('tbl-body');
+  tbody.innerHTML='';
+  const lblEl=document.getElementById('tbl-region-label');
+  lblEl.textContent=curOrdKey&&ORDINANCE[curOrdKey]?'('+curSido+' 조례 포함)':'';
+
+  TABLE_SECS.forEach(sec=>{
+    const sr=document.createElement('tr');sr.className='sr';
+    sr.innerHTML=`<td colspan="6">${sec.label}</td>`;tbody.appendChild(sr);
+    sec.keys.forEach(k=>{
+      const z=LAW[k];if(!z)return;
+      const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][k]:null;
+      const tr=document.createElement('tr');
+      if(k===activeKey)tr.className='ar';
+      tr.innerHTML=`
+        <td>${z.name}${k===activeKey?' ✦':''}</td>
+        <td class="td-c">${z.cov}%</td>
+        <td class="td-f">${z.far}%</td>
+        <td class="td-oc">${ord?ord.cov+'%':'—'}</td>
+        <td class="td-of">${ord?ord.far+'%':'—'}</td>
+        <td style="font-size:10px;color:var(--slate)">${z.tag}</td>`;
+      tr.addEventListener('click',()=>{curKey=k;calculate();window.scrollTo({top:0,behavior:'smooth'});});
+      tbody.appendChild(tr);
+    });
+  });
+}
+
+function togTbl(){
+  const w=document.getElementById('tbl-wrap'),i=document.getElementById('tbl-ico');
+  const o=w.classList.toggle('open');i.classList.toggle('open',o);
+}
+
+/* ── PRINT ── */
+function openPrint(){
+  if(!curKey||!LAW[curKey]){toast('먼저 계산을 실행해 주세요.');return;}
+  const z=LAW[curKey];
+  const sqm=parseFloat(document.getElementById('inp-sqm').value);
+  const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
+  const effCov=ord?ord.cov:z.cov, effFar=ord?ord.far:z.far;
+  const now=new Date();
+  document.getElementById('p-time').textContent=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+  document.getElementById('p-ts').textContent='산출일시: '+now.toLocaleDateString('ko-KR')+' '+now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('p-cat').textContent=z.cat;
+  document.getElementById('p-name').textContent=z.name;
+  document.getElementById('p-cov').innerHTML=z.cov+'<span class="p-runit">%</span>';
+  document.getElementById('p-far').innerHTML=z.far+'<span class="p-runit">%</span>';
+  const rl=document.getElementById('p-region-label');
+  rl.textContent=curSido?(curSido+(curSigungu?' '+curSigungu:'')+(ord?' · 조례 적용':' · 법령 최대치')):'법령 최대치';
+  /* Ord rows */
+  if(ord){
+    document.getElementById('p-cov-ord-v').textContent=ord.cov;
+    document.getElementById('p-far-ord-v').textContent=ord.far;
+    document.getElementById('p-cov-ord').classList.add('show');
+    document.getElementById('p-far-ord').classList.add('show');
+  } else {
+    document.getElementById('p-cov-ord').classList.remove('show');
+    document.getElementById('p-far-ord').classList.remove('show');
+  }
+  const abox=document.getElementById('p-abox');
+  if(!isNaN(sqm)&&sqm>0){
+    abox.classList.add('show');
+    const bld=sqm*effCov/100,gfa=sqm*effFar/100,flr=Math.floor(gfa/bld);
+    document.getElementById('p-site').textContent=sqm.toLocaleString()+'㎡';
+    document.getElementById('p-bld').textContent=bld.toLocaleString(undefined,{maximumFractionDigits:1})+'㎡';
+    document.getElementById('p-gfa').textContent=gfa.toLocaleString(undefined,{maximumFractionDigits:1})+'㎡';
+    document.getElementById('p-flr').textContent='약 '+flr+'층';
+  } else abox.classList.remove('show');
+  document.getElementById('p-note').textContent='📌 '+z.note;
+  const pordInfo=document.getElementById('p-ord-info');
+  if(ord&&ord._ref){
+    pordInfo.classList.add('show');
+    pordInfo.textContent=`📋 조례: ${ord._ref} (${ord._date||''})`;
+  } else {
+    pordInfo.classList.remove('show');
+  }
+  document.getElementById('print-ov').classList.add('open');
+}
+function closePrintOv(e){if(e.target===document.getElementById('print-ov'))closePrint();}
+function closePrint(){document.getElementById('print-ov').classList.remove('open');}
+
+function printRes(){
+  const z=LAW[curKey]; const sqm=parseFloat(document.getElementById('inp-sqm').value);
+  const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
+  const effCov=ord?ord.cov:z.cov,effFar=ord?ord.far:z.far;
+  let txt=`\n╔══════════════════════════╗\n║  MANMIN Ver1.0            ║\n║  건폐율·용적률 계산기      ║\n║  조례 기준 적용            ║\n╚══════════════════════════╝\n`;
+  txt+=`\n📍 용도지역: ${z.name} (${z.cat})\n`;
+  if(curSido)txt+=`🗺 지자체: ${curSido}${curSigungu?' '+curSigungu:''}\n`;
+  txt+=`\n📜 법령 최대치:\n   건폐율: ${z.cov}% 이하 / 용적률: ${z.far}% 이하\n`;
+  if(ord)txt+=`\n📋 조례 적용값:\n   건폐율: ${ord.cov}% 이하 / 용적률: ${ord.far}% 이하\n`;
+  if(!isNaN(sqm)&&sqm>0){
+    txt+=`\n📐 대지면적: ${sqm}㎡ (${(sqm/3.3058).toFixed(1)}평)\n`;
+    txt+=`   최대 건축면적: ${(sqm*effCov/100).toFixed(1)}㎡\n`;
+    txt+=`   최대 연면적: ${(sqm*effFar/100).toFixed(1)}㎡\n`;
+  }
+  txt+=`\n⚖ 근거: 국토계획법 시행령 제35628호 + 지자체 조례\n산출일시: ${new Date().toLocaleString('ko-KR')}\n© 2025 MANMIN-Ver1.0`;
+  const w=window.open('','_blank','width=440,height=640');
+  if(w){w.document.write(`<pre style="font-family:monospace;padding:22px;background:#0B1B2E;color:#00E5C8;font-size:13px;line-height:1.9;">${txt}</pre>`);w.document.close();w.print();}
+}
+
+function copyRes(){
+  const z=LAW[curKey];const sqm=parseFloat(document.getElementById('inp-sqm').value);
+  const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
+  const effCov=ord?ord.cov:z.cov,effFar=ord?ord.far:z.far;
+  let txt=`[MANMIN Ver1.0 건폐율·용적률 계산기]\n용도지역: ${z.name}`;
+  if(curSido)txt+=` / 지자체: ${curSido}${curSigungu?' '+curSigungu:''}`;
+  txt+=`\n법령: 건폐율 ${z.cov}% / 용적률 ${z.far}%`;
+  if(ord)txt+=`\n조례: 건폐율 ${ord.cov}% / 용적률 ${ord.far}%`;
+  if(!isNaN(sqm)&&sqm>0)txt+=`\n대지면적 ${sqm}㎡ → 최대건축 ${(sqm*effCov/100).toFixed(1)}㎡ / 최대연면 ${(sqm*effFar/100).toFixed(1)}㎡`;
+  txt+=`\n산출: ${new Date().toLocaleString('ko-KR')} / 국토계획법 시행령 + 지자체 조례`;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=document.getElementById('cp-btn');b.textContent='✅';setTimeout(()=>b.textContent='📋',2000);
+    toast('클립보드에 복사되었습니다.');
+  }).catch(()=>toast('복사 실패. 직접 선택해 주세요.'));
+}
+
+/* ── MODALS ── */
+function openLaw(){document.getElementById('law-ov').classList.add('open');}
+function closeLaw(){document.getElementById('law-ov').classList.remove('open');}
+function closeLawOv(e){if(e.target===document.getElementById('law-ov'))closeLaw();}
+
+/* ── TOAST ── */
+function toast(msg){
+  let t=document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';t.style.cssText='position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:#1a3358;border:1px solid rgba(0,194,168,.3);color:#e8f4f2;padding:9px 18px;border-radius:28px;font-size:12px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.4);transition:opacity .3s;white-space:nowrap;max-width:calc(100vw - 40px);text-align:center;';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2600);
+}
+
+/* ── INIT ── */
+buildTable(null);
+if(window.innerWidth>960)togTbl();
+
+/* ═══════════════════════════════════════
+   SHARE TAB SYSTEM
+═══════════════════════════════════════ */
+function switchShareTab(t){
+  ['save','share','print'].forEach(x=>{
+    document.getElementById('st-'+x).classList.toggle('on',x===t);
+    document.getElementById('sp-'+x).classList.toggle('on',x===t);
+  });
+}
+
+/* ── JPG CAPTURE ── */
+let jpgDataUrl = null;
+
+function setStatus(id,msg,type){
+  // save-status는 pside-status 클래스로 통합됨
+  const el=document.getElementById(id)||document.getElementById('save-status');
+  if(!el)return;
+  el.textContent=msg;
+  el.className='pside-status'+(type?' '+type:'');
+  if(type==='ok')setTimeout(()=>{el.textContent='';el.className='pside-status';},3000);
+}
+
+function captureJpg(){
+  const phone=document.querySelector('.phone');
+  if(!phone){toast('미리보기를 먼저 열어주세요.');return;}
+  setStatus('save-status','🔄 이미지 생성 중...','loading');
+  if(typeof html2canvas==='undefined'){
+    setStatus('save-status','⚠ html2canvas 로드 중, 잠시 후 재시도하세요.','');
+    return;
+  }
+  html2canvas(phone,{
+    backgroundColor:'#0e0e0e',
+    scale:2,
+    useCORS:true,
+    allowTaint:true,
+    logging:false,
+  }).then(canvas=>{
+    jpgDataUrl=canvas.toDataURL('image/jpeg',0.95);
+    document.getElementById('jpg-preview-img').src=jpgDataUrl;
+    document.getElementById('jpg-preview-ov').classList.add('open');
+    setStatus('save-status','✅ 이미지 생성 완료!','ok');
+  }).catch(e=>{
+    setStatus('save-status','⚠ 생성 실패. 다시 시도해 주세요.','');
+    console.error(e);
+  });
+}
+
+function captureJpgShare(){captureJpg();}
+
+function downloadJpg(){
+  if(!jpgDataUrl){toast('먼저 JPG를 생성해 주세요.');return;}
+  const a=document.createElement('a');
+  const z=LAW[curKey];
+  const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
+  const fname=`MANMIN_Ver1.0_${z?z.name.replace(/\s/g,'_'):'결과'}_${new Date().toLocaleDateString('ko-KR').replace(/\./g,'').replace(/\s/g,'')}.jpg`;
+  a.href=jpgDataUrl; a.download=fname; a.click();
+  setStatus('save-status','✅ JPG 저장 완료!','ok');
+}
+
+function shareJpgNative(){
+  if(!jpgDataUrl){captureJpg();return;}
+  fetch(jpgDataUrl)
+    .then(r=>r.blob())
+    .then(blob=>{
+      const z=LAW[curKey];
+      const file=new File([blob],'MANMIN_Ver1.0_결과.jpg',{type:'image/jpeg'});
+      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+        navigator.share({
+          title:'MANMIN-Ver1.0 건폐율·용적률 결과',
+          text:`${z?z.name:''} 건폐율·용적률 판정 결과 | MANMIN-Ver1.0`,
+          files:[file]
+        }).then(()=>setStatus('share-status','✅ 공유 완료!','ok'))
+          .catch(()=>setStatus('share-status','공유를 취소했습니다.',''));
+      } else {
+        downloadJpg();
+        setStatus('share-status','이미지를 저장했습니다.','ok');
+      }
+    });
+}
+
+function closeJpgPreview(){
+  document.getElementById('jpg-preview-ov').classList.remove('open');
+}
+
+/* ── SHARE FUNCTIONS ── */
+function getShareText(){
+  const z=LAW[curKey];
+  if(!z)return'MANMIN-Ver1.0 건폐율·용적률 계산기';
+  const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
+  const effCov=ord?ord.cov:z.cov, effFar=ord?ord.far:z.far;
+  let txt=`[MANMIN-Ver1.0] ${z.name}\n건폐율 ${effCov}% / 용적률 ${effFar}%`;
+  if(curSido)txt+=`\n지자체: ${curSido}${curSigungu?' '+curSigungu:''}`;
+  const sqm=parseFloat(document.getElementById('inp-sqm').value);
+  if(!isNaN(sqm)&&sqm>0)txt+=`\n대지 ${sqm}㎡ → 건축 ${(sqm*effCov/100).toFixed(0)}㎡ / 연면 ${(sqm*effFar/100).toFixed(0)}㎡`;
+  return txt;
+}
+
+function shareKakao(){
+  const txt=encodeURIComponent(getShareText());
+  const url=`https://story.kakao.com/share?url=${encodeURIComponent(location.href)}&text=${txt}`;
+  window.open(url,'_blank','width=600,height=500');
+  setStatus('share-status','카카오 공유창을 열었습니다.','ok');
+}
+
+function shareSMS(){
+  const txt=getShareText();
+  const url=`sms:?body=${encodeURIComponent(txt)}`;
+  window.location.href=url;
+  setStatus('share-status','문자 앱을 열었습니다.','ok');
+}
+
+function shareURL(){
+  const txt=getShareText();
+  navigator.clipboard.writeText(txt).then(()=>{
+    setStatus('share-status','✅ 공유 텍스트가 복사되었습니다.','ok');
+    toast('📋 공유 내용이 클립보드에 복사되었습니다.');
+  }).catch(()=>setStatus('share-status','복사 실패.',''));
+}
+
+function shareNative(){
+  const z=LAW[curKey];
+  const txt=getShareText();
+  if(navigator.share){
+    navigator.share({
+      title:'MANMIN-Ver1.0 건폐율·용적률 결과',
+      text:txt,
+      url:location.href
+    }).then(()=>setStatus('share-status','✅ 공유 완료!','ok'))
+      .catch(()=>setStatus('share-status','공유를 취소했습니다.',''));
+  } else {
+    shareURL();
+  }
+}
+</script>
+<!-- ── PWA 스크립트 ── -->
+<script src="pwa.js" defer></script>
+</body>
+</html>
