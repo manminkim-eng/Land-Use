@@ -822,7 +822,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
   .phone{width:340px}
   .print-layout{gap:20px}
   .print-side{width:190px}
-  .share-tab{font-size:10px;padding:7px 3px}
 }
 
 /* ── 모바일 (480px 이하) ── */
@@ -930,12 +929,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
   .pside-sub{font-size:10px}
   .pside-sep{width:100%;height:1px}
   .pside-status{width:100%}
-  .share-tab-row{gap:3px;padding:3px}
-  .share-tab{font-size:10px;padding:7px 3px}
-  .share-exec-btn{padding:11px 12px}
-  .seb-lbl{font-size:12px}
-  .seb-sub{font-size:9px}
-  .share-status{font-size:10px}
 
   /* JPG 미리보기 */
   .jpg-preview-ov{padding:16px 12px;gap:12px}
@@ -963,77 +956,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
 }
 
 /* ── SHARE TAB ── */
-/* ── 공유 탭 선택 UI ── */
-/* 탭 선택 행 */
-.share-tab-row{
-  display:flex;gap:4px;
-  background:var(--surf2);
-  border:1px solid var(--border2);
-  border-radius:10px;padding:4px;
-  margin-top:0;
-}
-.share-tab{
-  flex:1;padding:7px 4px;
-  border-radius:7px;border:none;background:transparent;
-  color:var(--slate);
-  font-family:var(--font-base);font-size:11px;font-weight:700;
-  cursor:pointer;transition:all .18s;text-align:center;
-  letter-spacing:.01em;
-  display:flex;align-items:center;justify-content:center;gap:4px;
-  white-space:nowrap;
-}
-.share-tab:hover{color:var(--text2);background:rgba(0,194,168,.05)}
-.share-tab.on{
-  background:var(--navy4);color:var(--teal2);
-  border:1px solid var(--border);
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-}
-/* 탭 패널 */
-.share-panel{display:none;animation:fdIn .2s ease}
-.share-panel.on{display:block}
-/* 공유 버튼 (패널 안) */
-.share-exec-btn{
-  width:100%;
-  display:flex;align-items:center;gap:10px;
-  padding:12px 14px;
-  background:rgba(0,194,168,.08);
-  border:1px solid rgba(0,194,168,.22);
-  border-radius:10px;cursor:pointer;
-  transition:all .2s;margin-top:8px;
-}
-.share-exec-btn:hover{
-  background:rgba(0,194,168,.18);
-  border-color:rgba(0,194,168,.4);
-  transform:translateY(-1px);
-  box-shadow:0 4px 14px rgba(0,194,168,.2);
-}
-.share-exec-btn.gold{
-  background:rgba(232,160,32,.08);
-  border-color:rgba(232,160,32,.22);
-}
-.share-exec-btn.gold:hover{
-  background:rgba(232,160,32,.18);
-  border-color:rgba(232,160,32,.4);
-  box-shadow:0 4px 14px rgba(232,160,32,.2);
-}
-.seb-ico{font-size:20px;flex-shrink:0;line-height:1}
-.seb-lbl{
-  font-family:var(--font-base);font-size:13px;font-weight:700;
-  color:var(--text2);letter-spacing:.01em;
-}
-.seb-sub{
-  font-size:10px;font-weight:400;color:var(--slate);
-  display:block;margin-top:2px;
-}
-/* 상태 메시지 */
-.share-status{
-  font-size:11px;color:var(--slate);
-  text-align:center;margin-top:8px;min-height:18px;
-  transition:all .2s;padding:4px 0;
-  border-radius:6px;
-}
-.share-status.ok{color:var(--green);background:rgba(0,200,150,.06)}
-.share-status.loading{color:var(--teal);animation:blink 1s step-end infinite}
+
 /* JPG preview canvas overlay */
 .jpg-preview-ov{position:fixed;inset:0;z-index:1100;background:rgba(5,10,20,.95);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:20px}
 .jpg-preview-ov.open{display:flex;animation:ovIn .25s ease}
@@ -1488,50 +1411,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
         </span>
       </button>
 
-      <div class="pside-sep"></div>
-
-      <!-- ② 공유 탭 선택 후 공유 버튼 연동 -->
-      <div class="print-side-title">📤 공유 채널 선택</div>
-
-      <!-- 탭 선택 행 -->
-      <div class="share-tab-row">
-        <button class="share-tab on" id="st-kakao" onclick="selectShareTab('kakao',this)">💬 카카오</button>
-        <button class="share-tab"    id="st-sms"   onclick="selectShareTab('sms',this)">📱 문자</button>
-        <button class="share-tab"    id="st-link"  onclick="selectShareTab('link',this)">🔗 링크</button>
-        <button class="share-tab"    id="st-more"  onclick="selectShareTab('more',this)">📤 기타</button>
-      </div>
-
-      <!-- 카카오 패널 -->
-      <div class="share-panel on" id="sp-kakao">
-        <button class="share-exec-btn gold" onclick="shareKakao()">
-          <span class="seb-ico">💬</span>
-          <span><span class="seb-lbl">카카오스토리 공유</span><span class="seb-sub">카카오스토리로 결과 공유</span></span>
-        </button>
-      </div>
-      <!-- 문자 패널 -->
-      <div class="share-panel" id="sp-sms">
-        <button class="share-exec-btn" onclick="shareSMS()">
-          <span class="seb-ico">📱</span>
-          <span><span class="seb-lbl">문자(SMS) 공유</span><span class="seb-sub">결과를 문자로 전송</span></span>
-        </button>
-      </div>
-      <!-- 링크 패널 -->
-      <div class="share-panel" id="sp-link">
-        <button class="share-exec-btn" onclick="shareURL()">
-          <span class="seb-ico">🔗</span>
-          <span><span class="seb-lbl">링크·텍스트 복사</span><span class="seb-sub">클립보드에 복사 후 붙여넣기</span></span>
-        </button>
-      </div>
-      <!-- 기타 패널 -->
-      <div class="share-panel" id="sp-more">
-        <button class="share-exec-btn" onclick="shareNative()">
-          <span class="seb-ico">📤</span>
-          <span><span class="seb-lbl">기타 앱으로 공유</span><span class="seb-sub">시스템 공유 시트 열기</span></span>
-        </button>
-      </div>
-
-      <!-- 공유 상태 메시지 -->
-      <div class="share-status" id="share-status"></div>
       <div class="pside-status" id="save-status"></div>
     </div>
 
@@ -2440,36 +2319,17 @@ function toast(msg){
 buildTable(null);
 if(window.innerWidth>960)togTbl();
 
-/* ═══════════════════════════════════════
-   SHARE TAB SYSTEM
-   탭 선택 → 해당 공유 패널 활성화
-═══════════════════════════════════════ */
-function selectShareTab(id, btn){
-  /* 탭 버튼 active 전환 */
-  ['kakao','sms','link','more'].forEach(x=>{
-    const t=document.getElementById('st-'+x);
-    const p=document.getElementById('sp-'+x);
-    if(t) t.classList.toggle('on', x===id);
-    if(p) p.classList.toggle('on', x===id);
-  });
-}
-/* 하위 호환 - 기존 코드에서 혹시 호출 시 */
-function switchShareTab(t){ selectShareTab(t); }
+
 
 /* ── JPG CAPTURE ── */
 let jpgDataUrl = null;
 
 function setStatus(id,msg,type){
-  /* id 우선, 없으면 share-status, 그것도 없으면 save-status */
-  const el = document.getElementById(id)
-           || document.getElementById('share-status')
-           || document.getElementById('save-status');
+  const el = document.getElementById('save-status');
   if(!el) return;
   el.textContent = msg;
-  /* share-status 클래스 적용 */
-  const baseClass = el.id === 'save-status' ? 'pside-status' : 'share-status';
-  el.className = baseClass + (type ? ' ' + type : '');
-  if(type==='ok') setTimeout(()=>{ el.textContent=''; el.className=baseClass; }, 3000);
+  el.className = 'pside-status' + (type ? ' ' + type : '');
+  if(type==='ok') setTimeout(()=>{ el.textContent=''; el.className='pside-status'; }, 3000);
 }
 
 function captureJpg(){
