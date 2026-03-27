@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>MANMIN · 건폐율·용적률 계산기 Ver1.0 — 조례 기준</title>
+<title>국토이용 — 건폐율·용적률 계산기 Ver1.0 [MANMIN]</title>
 
 <!-- ── PWA 메타태그 ── -->
-<meta name="application-name" content="MANMIN">
+<meta name="application-name" content="국토이용">
 <meta name="description" content="국토계획법 + 지자체 조례 기준 건폐율·용적률 자동 계산기 | ARCHITECT KIM MANMIN">
 <meta name="theme-color" content="#00C2A8">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="MANMIN">
+<meta name="apple-mobile-web-app-title" content="국토이용">
 <meta name="msapplication-TileColor" content="#0B1B2E">
 <meta name="msapplication-TileImage" content="icons/icon-144x144.png">
 <meta name="msapplication-navbutton-color" content="#00C2A8">
@@ -20,11 +20,11 @@
 
 <!-- ── OG / Twitter 카드 ── -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="MANMIN 건폐율·용적률 계산기 Ver1.0">
+<meta property="og:title" content="국토이용 — 건폐율·용적률 계산기 Ver1.0">
 <meta property="og:description" content="국토계획법 + 31개 지자체 조례 기준 건폐율·용적률 자동 계산기">
 <meta property="og:image" content="icons/icon-512x512.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MANMIN 건폐율·용적률 계산기">
+<meta name="twitter:title" content="국토이용 — 건폐율·용적률 계산기">
 <meta name="twitter:image" content="icons/icon-512x512.png">
 
 <!-- ── PWA Manifest ── -->
@@ -1056,12 +1056,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border2);padding:2
   <div class="hdr-inner">
     <a class="brand" href="#">
       <div class="brand-logo" style="background:none;padding:0;overflow:hidden;">
-        <img src="icons/brand-icon.jpg" alt="MANMIN 로고"
+        <img src="icons/brand-icon.jpg" alt="국토이용 로고"
              style="width:42px;height:42px;object-fit:cover;border-radius:10px;display:block;" />
       </div>
       <div class="brand-txt">
-        <span class="nm">MANMIN</span>
-        <span class="sb">Ver 1.0 · 건폐율·용적률 계산기</span>
+        <span class="nm">국토이용</span>
+        <span class="sb">국토계획법 · 건폐율·용적률 계산기 Ver1.0</span>
       </div>
     </a>
     <div class="hdr-right">
@@ -2531,7 +2531,6 @@ function shareNative(){
 }
 </script>
 <!-- ── PWA 스크립트 ── -->
-<script src="pwa.js" defer></script>
 
 <!-- ══ PWA 설치 배너 ══ -->
 <div class="pwa-banner" id="pwa-install-banner" style="display:none;">
@@ -2539,7 +2538,7 @@ function shareNative(){
     <img src="icons/brand-icon.jpg" alt="MANMIN">
   </div>
   <div class="pwa-banner-txt">
-    <div class="pwa-banner-title">📲 MANMIN을 앱으로 설치하세요!</div>
+    <div class="pwa-banner-title">📲 국토이용 앱으로 설치하세요!</div>
     <div class="pwa-banner-sub">홈 화면에 추가 → 오프라인 사용 가능 · 빠른 실행</div>
   </div>
   <div class="pwa-banner-actions">
@@ -2611,9 +2610,18 @@ function shareNative(){
     var banner = document.getElementById('pwa-install-banner');
     if(banner) banner.style.display = 'none';
 
+    /* iOS 감지 → 안내 모달 표시 */
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    var isStandalone = window.matchMedia('(display-mode:standalone)').matches
+                    || window.navigator.standalone === true;
+    if(isIOS && !isStandalone){
+      var modal = document.getElementById('ios-guide-modal');
+      if(modal) modal.style.display = 'block';
+      return;
+    }
+
     if(!_deferredPrompt){
-      var isApp = window.matchMedia('(display-mode:standalone)').matches
-               || window.navigator.standalone === true;
+      var isApp = isStandalone;
       if(isApp){
         if(typeof showToast==='function') showToast('✅ 이미 앱으로 설치되어 있습니다.');
         else alert('✅ 이미 앱으로 설치되어 있습니다.');
@@ -2649,7 +2657,7 @@ function shareNative(){
     var banner = document.getElementById('pwa-install-banner');
     if(banner) banner.style.display = 'none';
     _deferredPrompt = null;
-    if(typeof showToast==='function') showToast('🎉 MANMIN 앱이 설치되었습니다!');
+    if(typeof showToast==='function') showToast('🎉 국토이용 앱이 설치되었습니다!');
   });
 
   /* ── 6. standalone(앱 모드)에서 설치 버튼 숨기기 ── */
@@ -2659,8 +2667,58 @@ function shareNative(){
       if(hBtn) hBtn.style.display = 'none';
     });
   }
+
+  /* ── 7. iOS Safari: 앱 미설치 상태에서 헤더 버튼 표시 + 2.5초 후 모달 ── */
+  var _isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var _isSA  = window.matchMedia('(display-mode:standalone)').matches || window.navigator.standalone === true;
+  if(_isIOS && !_isSA){
+    document.addEventListener('DOMContentLoaded', function(){
+      var hBtn = document.getElementById('pwa-hdr-btn');
+      if(hBtn) hBtn.style.display = 'flex';
+      if(!sessionStorage.getItem('pwa-banner-dismissed')){
+        setTimeout(function(){
+          var modal = document.getElementById('ios-guide-modal');
+          if(modal) modal.style.display = 'block';
+        }, 2500);
+      }
+    });
+  }
 })();
 </script>
+
+
+<!-- ══ iOS 설치 안내 모달 ══ -->
+<div id="ios-guide-modal" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:600;
+  background:#0d2a4a;border-top:2px solid #00C2A8;border-radius:20px 20px 0 0;
+  padding:24px 20px calc(20px + env(safe-area-inset-bottom,0px));
+  box-shadow:0 -8px 40px rgba(0,0,0,.6);animation:slideUp .3s ease;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+    <div style="font-size:15px;font-weight:800;color:#E8F4F2;">📱 홈 화면에 추가하는 방법</div>
+    <button onclick="document.getElementById('ios-guide-modal').style.display='none'"
+      style="background:rgba(255,255,255,.1);border:none;color:#E8F4F2;width:28px;height:28px;
+      border-radius:50%;font-size:14px;cursor:pointer;">✕</button>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px;">
+    <div style="display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.05);border-radius:10px;padding:12px;">
+      <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,194,168,.2);border:1px solid #00C2A8;
+        color:#00C2A8;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+      <div style="font-size:13px;color:#9BB8C4;line-height:1.5;">Safari 하단 <strong style="color:#E8F4F2;">공유 버튼</strong> (□↑) 을 탭하세요</div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.05);border-radius:10px;padding:12px;">
+      <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,194,168,.2);border:1px solid #00C2A8;
+        color:#00C2A8;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+      <div style="font-size:13px;color:#9BB8C4;line-height:1.5;">스크롤해서 <strong style="color:#E8F4F2;">홈 화면에 추가</strong>를 탭하세요</div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.05);border-radius:10px;padding:12px;">
+      <div style="min-width:26px;height:26px;border-radius:50%;background:rgba(0,194,168,.2);border:1px solid #00C2A8;
+        color:#00C2A8;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+      <div style="font-size:13px;color:#9BB8C4;line-height:1.5;">오른쪽 상단 <strong style="color:#E8F4F2;">추가</strong> 버튼을 탭하면 완료!</div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:14px;font-size:11px;color:#6B8FA3;">
+    홈 화면에서 국토이용을 오프라인으로도 사용할 수 있습니다 ✓
+  </div>
+</div>
 
 </body>
 </html>
