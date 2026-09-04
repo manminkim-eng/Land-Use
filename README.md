@@ -1,64 +1,38 @@
-# MANMIN-Ver1.0 — 건폐율·용적률 계산기 PWA
+# 36 국토이용 — 건폐율·용적률 조례 적용 계산기 · MANMIN Ver-5.0
 
-> **ARCHITECT KIM MANMIN** | 국토계획법 + 31개 지자체 조례 기준
+**저장소** `Land-Use` · **작업일** 2026-09-04 · **기준** S4 작업지시서 v3 §2 · §3-12 · §18-1 · §19 · §20 · 규격표 §5-25
+**착수 원본** 배포 `https://manminkim-eng.github.io/Land-Use/` = `index_백업_2026-09-04_원본v1.0.html`(blob `e84e9f23`) — 내장 브라우저 `fetch` base 로 재구성 SHA-256 일치 확인.
 
----
+## 파일
 
-## 📁 파일 구조
+| 파일 | 크기 | blob SHA | 비고 |
+|---|---|---|---|
+| index.html | 162,412 B | `54076a32` | SHA-256 앞 16 `c5286c64e968ead3` · `#dev-stamp` 없음 |
+| sw.js | 2,808 B | `9a3f9e77` | `PREFIX='gukto-'` · `gukto-v5.0.0` · ORPHAN `gukto-v1.0` · navigate 우선 · allSettled · R19 폴백 |
+| manifest.json | 1,660 B | `621d2c5a` | name/description Ver-5.0 · theme `#00C2A8 → #15803d` · bg `#0B1B2E → #f4f6f9` |
+| assets/fonts/ | 2종 | `104ae38c` · `a31539a7` | 처음 올라간다 |
+| icons/ | 15종 | — | 기존과 동일(배너 아이콘만 `brand-icon.jpg → icon-96x96.png` 참조) |
+| index_백업_2026-09-04_원본v1.0.html · sw_백업 · manifest_백업 | | `e84e9f23` 외 | = 배포본 |
 
-```
-MANMIN-Ver1.0/
-├── index.html               ← 메인 앱 (PWA 메타 완비)
-├── manifest.json            ← PWA 매니페스트
-├── sw.js                    ← Service Worker (Cache-First)
-├── pwa.js                   ← 설치 배너 + 버튼 + iOS 안내
-└── icons/  (12개)
-    ├── icon-72 ~ 512.png
-    ├── icon-512x512-maskable.png
-    ├── apple-touch-icon.png
-    └── favicon-16,32.png
-```
+**업로드** `_업로드_2026-09-04_Land-Use\` 폴더째 드래그(index · sw · manifest · assets/fonts 2 · icons 15).
 
----
+## 변경 (항목 | 기존 | 변경)
 
-## 🚀 GitHub Pages 배포
+| 항목 | 기존 (Ver1.0) | 변경 (v5.0) |
+|---|---|---|
+| 헤더·탭·스트립 | body 직속 헤더(로고·법규 버튼) + **hero** 배너 · 탭 없음 | 건축 녹색 3단 **162.2/169.6** · hero·로고 삭제(MIN 확정) · 탭 2(⌨️ 검토 입력·결과 · 📄 A4 계산서) · 우측 4줄 `국토계획법 제77조·제78조 / 시행령 제84조·제85조 [시행 2026. 7. 1.]`(LawMCP 확인) · 스트립 6값(지자체 · 용도지역 · 법정 건폐율·용적률 · 조례 건폐율·용적률 — 조례 강화값 `ng` 적색) |
+| 본문 | 다크 Navy×Teal | **§3-12 라이트** 토큰 재지정 · 건축 녹색 · 조례값은 황토색 유지 · `.page{400px 1fr}` · 결과 패널 sticky ≥1025 |
+| 공사 정보 | 없음 | 입력 패널 첫 블록 「📋 공사 정보 — A4 표제」(공사명·작성자 38px/13px) → A4 표제 · 초기화 연동 |
+| A4 | 없음(모바일 미리보기 모달 `#print-ov` + S24 프레임 JPG `#jpg-preview-ov`) | `#tab-print` + `renderA4()` — ① 검토 조건 ② 법령 최대치 vs 조례 적용값(강화 태그) ③ 대지면적 산정(입력 시) ④ **21 용도지역 표(`.long.splitok` 행 나눔)** ⑤ 적용 기준 · 794 · 53/45/83/53 · `@page 14/12/22/14` · 동일 DOM · 각인 없음 |
+| 출력 | 결과 하단 「📱 모바일 미리보기·저장·공유」 · 카카오/SMS/URL 공유 | A4 탭 `.mm-btn` 1곳(인쇄/PDF · JPG v5.4 2매 1588×2246) · 결과 하단 버튼 → 「📄 A4 계산서·인쇄·JPG」(`calculate` 래핑) · 공유 함수 전부 `window.*` 무력화 |
+| 계산 스크립트 | — | **무접촉**(diff 0행 · 8함수 동일) · `onSido/onSigungu` 가 참조하는 `#ord-badge` 는 **빈 스텁**(§20-14) · `resetAll` 신설(원본에 초기화 없음) |
+| FAB·모달 | 원형 ⚖️ 1개 + 다크 모달 | §18-11 72×72.7 × 2(초기화·이용안내) · 라이트 재지정 · 800px |
+| MQ · 인쇄 | 960·480·400 산재 | 1024·768·640·480·420 + 기능 2 + 모달 540 · 인쇄 숨김에 `.step-bar,#toast` 추가 |
 
-```bash
-git init
-git add .
-git commit -m "feat: MANMIN-Ver1.0 PWA"
-git branch -M main
-git remote add origin https://github.com/[username]/manmin.git
-git push -u origin main
-```
+## 실측 (내장 브라우저 · 35 배포 페이지에서 주입 · SHA 일치)
 
-**Settings → Pages → Branch: main → Save**
-→ `https://[username].github.io/manmin/` 에서 바로 설치 가능
+1400 헤더 **162.2**(inner 114.2 + 탭바 48) · 탭 44 · 스트립 39 · FAB 72×72.7 · 입력 38/13px · 375 헤더 **169.6** · 스트립 105(3행) · 입력 40/16px(coarse·iOS) · 문서폭 = 뷰포트 · A4 359px(배율 0.452) · 인쇄 top 0 · 좌 0 · 누출 0 · JPG 2매 1588×2246(1쪽 53→1025 행 경계) · 전북 익산 제2종일반주거 1,000㎡ → 스트립 60/250 · 조례 60/200 `ng` · A4 5절 36행 · 초기화 · 모달 라이트.
 
----
+**함정 3건(§20-16)** — ① 22 JPG 엔진 `mmBlocks` 가 소제목+표 병합 블록에 `split` 을 승계하지 않아 `.long` 표가 원자로 취급됨(1쪽 500/987) → 승계 추가 + `markLongTables` 에 `.splitok` 마커 ② 원본 토스트가 `#toast`(id) 라 인쇄 숨김 `.toast` 에 안 걸림 → `#toast` 추가 ③ ≤640 `.a4-panel` 좌우 20 → 0(35 동일).
 
-## 📱 PWA 설치
-
-| 환경 | 방법 |
-|------|------|
-| Android Chrome | 하단 배너 또는 헤더 **⬇ 앱 설치** 버튼 |
-| iOS Safari | 헤더 버튼 탭 → 안내 팝업 → 홈 화면에 추가 |
-| 데스크탑 Chrome | 주소창 ⊕ 아이콘 또는 헤더 버튼 |
-| Edge | 주소창 앱 설치 아이콘 |
-
----
-
-## ⚡ 주요 기능
-
-| 기능 | 설명 |
-|------|------|
-| 오프라인 지원 | Cache-First SW — 인터넷 없이 완전 작동 |
-| 자동 설치 배너 | 방문 2초 후 하단 슬라이드업 배너 |
-| 헤더 설치 버튼 | 맥동 효과 `⬇ 앱 설치` 버튼 |
-| iOS 가이드 팝업 | Safari 3단계 설치 안내 |
-| 업데이트 감지 | 새 버전 배포 시 새로고침 안내 |
-| 오프라인 토스트 | 연결 상태 변화 실시간 알림 |
-
----
-
-© 2025 ARCHITECT KIM MANMIN
+**PDF 점검(MIN 캡처 2026-09-04 · §20-17)** — ① collapse 표의 바깥 오른쪽 선·마지막 행 아래 선이 PDF 에서 누락 → **화면·JPG·PDF 공통**으로 `border-collapse:separate` + 셀 자체 선(첫 열 좌선 · th 위선 · 첫 행 위선)으로 전환(R24) ③ JPG·미리보기 마지막 행 아래선 소실 — 원본 전역 `tr:last-child td{border-bottom:none}`(0,1,2) 가 `.a4-tbl td`(0,1,1) 를 이김 → `.a4-page tr:last-child td{border-bottom:…}` 추가 · JPG 픽셀 검사 3표 사방 1.00 ② `td.r`·`.mono` 안 한글이 generic monospace 로 자간 벌어짐 → 서체 스택에 `Noto Sans KR` 삽입.
