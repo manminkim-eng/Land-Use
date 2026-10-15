@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   v5.1.0 회차 2026-10-15 — 시행령 시행일(2026-09-18) 정정 · 전북 14개 시·군 도시·군계획 조례 원문 내장 · 캐시명 v5.1.0
+   v5.1.0 회차 2026-10-15 — 시행령 시행일(2026-09-18) 정정 · 전북 14개 시·군 도시·군계획 조례 원문 내장 · 매뉴얼(/manual/) 캐시 제외 · 캐시명 v5.1.0
    S3-0 회차 2026-09-04 — R27 html2canvas 클론 정화 동반 캐시명 v5.0.2
    R25 회차 2026-09-04 — 자기 접두어 캐시 조회 · cors 프리캐시 · opaque 가드 · 캐시명 v5.0.1 (S10)
    건폐율·용적률 조례 적용 계산기  MANMIN Ver-5.0
@@ -40,6 +40,7 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   if (!e.request.url.startsWith('http')) return;
+  if (new URL(e.request.url).pathname.indexOf('/manual/') !== -1) return;   /* v5.1.0 — 매뉴얼은 온라인 전용 · 캐시 제외 */
   if (e.request.mode === 'navigate' || e.request.destination === 'document') {
     e.respondWith(fetch(e.request).then(res => { if (res && res.status === 200) { const c = res.clone(); caches.open(CACHE).then(x => x.put(e.request, c)); } return res; })
       .catch(() => mmMatch(e.request).then(c => c || mmMatch('./index.html'))));

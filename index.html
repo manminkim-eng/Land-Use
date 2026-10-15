@@ -146,6 +146,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
 .tb.active{color:#fff;background:#15803d;border-bottom-color:#86efac;}
 .tab-panel{display:none;width:100%;}
 .tab-panel.active{display:block;}
+/* v5.1 — 탭 막대 오른쪽 끝 매뉴얼 버튼 (부설주차장 v5.1.0과 같은 형식) */
+.tb.tb-manual{margin-left:auto;text-decoration:none;}
 /* v5.0-HDR — 요약 스트립 (헤더 3층) */
 .sum-bar-wrap{position:relative;z-index:1;background:#0f172a;padding:10px 0;}
 .sum-bar{max-width:1300px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:14px;}
@@ -743,6 +745,7 @@ footer{border-top-color:#e4e9f0;background:#fff;} .foot-nm{color:#15803d;} .foot
     <div class="tab-bar-inner">
       <button class="tb active" onclick="goTab('main',this)">⌨️ 검토 입력·결과</button>
       <button class="tb" onclick="goTab('print',this)">📄 A4 계산서</button>
+      <a class="tb tb-manual" href="https://manminkim-eng.github.io/Land-Use/manual/" target="_blank" rel="noopener" onclick="return mmOpenManual(event)">📘 매뉴얼</a>
     </div>
   </nav>
 </header>
@@ -899,7 +902,7 @@ footer{border-top-color:#e4e9f0;background:#fff;} .foot-nm{color:#15803d;} .foot
       <button class="mbtn" id="mbtn" onclick="goTab('print')">📄 A4 계산서 · 인쇄 · JPG</button>
 
       <div class="info-tip">
-        ⚠ 국토계획법 시행령 제84조·제85조 및 각 지자체 도시계획조례 기준.<br>
+        ⚠ 국토계획법 시행령 제84조·제85조 및 전북 14개 시·군 도시·군계획 조례 기준.<br>
         지구단위계획·개발진흥지구 등 별도 규제는 <a href="https://www.eum.go.kr" target="_blank">토지이음(eum.go.kr)</a>에서 반드시 확인하세요.
       </div>
     </div>
@@ -1048,7 +1051,7 @@ footer{border-top-color:#e4e9f0;background:#fff;} .foot-nm{color:#15803d;} .foot
     </div>
     <div id="a4-body"><div style="color:#94a3b8;font-size:11px;padding:10px;">「검토 입력·결과」 탭에서 지자체·용도지역을 선택하고 계산을 실행하세요.</div></div>
     <div class="a4-footer">
-      <span>건폐율·용적률 조례 적용 계산기 [MANMIN-Ver5.0]</span>
+      <span>건폐율·용적률 조례 적용 계산기 [MANMIN-Ver5.1]</span>
       <span>국토계획법 시행령 제84조·제85조 · 도시계획조례</span>
       <span>작성일: <span id="a4-foot-date">—</span></span>
     </div>
@@ -1119,13 +1122,13 @@ footer{border-top-color:#e4e9f0;background:#fff;} .foot-nm{color:#15803d;} .foot
           <strong style="color:var(--teal)">허용용적률</strong>: 공동개발·친환경 등 이행 시 인센티브 합산<br>
           <strong style="color:var(--gold)">상한용적률</strong>: 공공시설 제공 시 추가 부여되는 최대값
         </div></div>
-        <div class="mitem"><div class="mitem-t">각 지자체 도시계획조례 (2024~2026 기준)</div><div class="mitem-d">
-          서울(2026.1.5·제9948호), 부산(2024.8), 대구(2024.7), 인천(2025.3),<br>
-          광주(2024.9), 대전(2025.1), 울산(2024.12), 세종(2025.1),<br>
-          익산(2024.1.18·제2475호), 전주·군산·정읍·완주·김제·남원(2024),<br>
-          수원·성남·용인·고양·화성·안산·평택(2024), 천안·아산·청주(2024),<br>
-          창원·포항(2024), 목포·순천(2024), 춘천(2024), 제주(2025.1)<br>
-          <span style="color:var(--slate)">※ 최신 조례: law.go.kr → 자치법규 → 검색</span>
+        <div class="mitem"><div class="mitem-t">내장 조례 — 전북특별자치도 14개 시·군 (원문 대조 2026-10-15 · 괄호는 시행일)</div><div class="mitem-d">
+          전주시 도시계획 조례 제45조·제47조(2026-04-13) · 군산시 도시계획 조례 제55조·제60조(2025-04-15) · 익산시 도시계획 조례 제55조·제60조(2025-12-31)<br>
+          정읍시 도시계획 조례 제53조·제58조(2026-04-10) · 남원시 도시계획 조례 제57조·제62조(2026-09-18) · 김제시 도시계획 조례 제57조·제62조(2025-12-16)<br>
+          완주군 계획 조례 제47조·제52조(2025-12-18) · 진안군 계획 조례 제53조·제55조(2026-03-30) · 무주군 군계획 조례 제42조·제47조(2025-12-10)<br>
+          장수군 군계획 조례 제57조·제62조(2026-10-01) · 임실군 계획 조례 제44조·제45조(2026-02-25) · 순창군 계획 조례 제55조·제59조(2026-08-18)<br>
+          고창군 계획 조례 제57조·제62조(2025-12-31) · 부안군 군계획 조례 제57조·제62조(2025-07-18)<br>
+          <span style="color:var(--slate)">※ 전북 외 시·도는 조례 미내장 — 시행령 상한만 표시 · 최신 조례: law.go.kr → 자치법규 → 검색</span>
         </div></div>
         <div class="mitem"><div class="mitem-t">건축법 제55조·제56조</div><div class="mitem-d">건폐율·용적률 산정 원칙. 실제 허가는 조례값이 기준.</div></div>
       </div>
@@ -1785,6 +1788,7 @@ window.goTab=function(id,btn){
   window.scrollTo({top:0,behavior:'smooth'});
 };
 
+window.mmOpenManual=function(e){ if(navigator.onLine===false){ if(e) e.preventDefault(); toast('매뉴얼은 인터넷 연결 시 열립니다'); return false; } return true; };
 /* 현재 계산 상태 스냅샷 — 계산 스크립트의 전역(curKey·curSido·curSigungu·curOrdKey·LAW·ORDINANCE)을 읽기만 한다 */
 function mmSnap(){
   if(!curKey||!LAW[curKey]) return null;

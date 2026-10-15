@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>건폐율 · 용적률 조례 적용 계산기 사용자 매뉴얼 Ver-5.1 · MANMIN</title>
+<meta name="description" content="건폐율 · 용적률 조례 적용 계산기 MANMIN Ver-5.1 사용자 매뉴얼 — 화면 기능, 국토계획법 시행령 제84조 · 제85조와 전북 14개 시 · 군 조례 해설, 실무 작업 방법">
+<meta name="author" content="김만민 건축사 · ㈜대성건축사사무소">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&display=swap">
+<link rel="stylesheet" href="./assets/fonts/manmin-fonts.css">
+<style>
+:root{
+  --navy:#2D3A8C;--navy-d:#1F2A6B;--navy-l:#E9ECF8;--accent:#F4A261;--accent-d:#C97A3A;--accent-l:#FDF1E7;
+  --bg:#F8F9FA;--card:#FFFFFF;--text:#1A1A2E;--text2:#4A4F66;--line:#DDE1EA;--ok:#0F766E;--ng:#B42318;
+  --r:12px;--pad:24px;--shadow:0 4px 20px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:16px;line-height:1.75;word-break:keep-all;overflow-wrap:anywhere}
+a{color:var(--navy)}a:hover{color:var(--accent-d)}
+code,kbd,.mono{font-family:var(--font-mono);font-size:.9em}
+code{background:var(--navy-l);color:var(--navy-d);padding:1px 6px;border-radius:5px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;background:#fff}
+/* 상단 */
+.top{background:linear-gradient(135deg,var(--navy-d),var(--navy));color:#fff}
+.top-in{max-width:1240px;margin:0 auto;padding:44px 24px 36px}
+.eyebrow{font-family:var(--font-brand);font-weight:700;font-size:12px;letter-spacing:.18em;opacity:.85}
+.top h1{font-size:28px;font-weight:900;margin:8px 0 6px;line-height:1.35}
+.top .sub{opacity:.9;margin:0}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 12px;font-size:13px}
+a.badge{color:#fff;text-decoration:none}a.badge:hover{background:rgba(255,255,255,.24);color:#fff}
+.badge.acc{background:var(--accent);border-color:var(--accent);color:#1A1A2E;font-weight:700}
+/* 레이아웃 */
+.wrap{max-width:1240px;margin:0 auto;padding:28px 24px 80px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:32px}
+nav.toc{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 16px;font-size:14px}
+nav.toc h2{font-size:13px;letter-spacing:.12em;color:var(--text2);margin:0 0 8px}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li a{display:block;padding:5px 8px;border-radius:8px;text-decoration:none;color:var(--text)}
+nav.toc li a:hover,nav.toc li a.on{background:var(--navy-l);color:var(--navy)}
+nav.toc li.sub a{padding-left:20px;font-size:13px;color:var(--text2)}
+main{min-width:0}
+section.ch{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--pad) calc(var(--pad) + 8px);margin-bottom:28px}
+section.ch>h2{font-size:24px;font-weight:700;color:var(--navy);margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
+section.ch>h2 .n{font-family:var(--font-brand);font-weight:700;font-size:14px;color:#fff;background:var(--navy);border-radius:8px;padding:2px 9px}
+section.ch>.lead{color:var(--text2);margin:0 0 18px}
+h3{font-size:19px;color:var(--navy-d);margin:34px 0 10px;padding-top:6px;border-top:1px solid var(--line)}
+h3:first-of-type{border-top:0}
+h4{font-size:16px;margin:22px 0 8px}
+p{margin:8px 0}
+ul,ol{padding-left:22px}
+.note,.tip,.warn{border-radius:10px;padding:12px 16px;margin:14px 0;font-size:15px}
+.note{background:var(--navy-l);border-left:4px solid var(--navy)}
+.tip{background:var(--accent-l);border-left:4px solid var(--accent)}
+.warn{background:#FEF3F2;border-left:4px solid var(--ng)}
+.note b:first-child,.tip b:first-child,.warn b:first-child{margin-right:6px}
+/* 표 */
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;background:#fff}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--navy-l);color:var(--navy-d);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--font-mono);white-space:nowrap}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+/* 그림 */
+figure.shot{margin:18px 0 26px}
+figure.shot .frame{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto}
+figure.narrow{max-width:420px}
+.pin{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:var(--accent);color:#1A1A2E;font:700 13px/26px var(--font-mono);text-align:center;box-shadow:0 0 0 3px #fff,0 2px 8px rgba(0,0,0,.35);pointer-events:none}
+figcaption{font-size:14px;color:var(--text2);margin-top:8px}
+.fno{font-family:var(--font-mono);font-size:11px;background:var(--navy);color:#fff;border-radius:6px;padding:1px 7px;margin-right:8px}
+ol.legend{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 16px;font-size:14px}
+ol.legend li{display:flex;gap:8px;align-items:flex-start}
+ol.legend b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--accent);font:700 12px/22px var(--font-mono);text-align:center}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+/* 단계 */
+.steps{counter-reset:st;list-style:none;padding:0;margin:16px 0}
+.steps>li{counter-increment:st;position:relative;padding:4px 0 18px 54px;border-left:2px solid var(--line);margin-left:18px}
+.steps>li:last-child{border-left-color:transparent}
+.steps>li::before{content:counter(st);position:absolute;left:-19px;top:0;width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font:700 15px/36px var(--font-mono);text-align:center;box-shadow:0 0 0 4px var(--bg)}
+.steps>li>b.t{display:block;font-size:17px;color:var(--navy-d);margin-bottom:2px}
+/* 수식 */
+.eq{font-family:var(--font-mono);background:#0F1630;color:#E8ECFF;border-radius:10px;padding:14px 18px;margin:12px 0;overflow-x:auto;font-size:14px;line-height:1.9;white-space:pre}
+.eq .c{color:#9AA6D6}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;margin:14px 0;overflow-x:auto}
+.svgbox svg{display:block;width:100%;min-width:640px;height:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:14px 0}
+.card{border:1px solid var(--line);border-radius:var(--r);padding:16px;background:#fff}
+.card h5{margin:0 0 4px;font-size:15px;color:var(--navy)}
+.card p{margin:0;font-size:14px;color:var(--text2)}
+footer.foot{max-width:1240px;margin:0 auto;padding:0 24px 40px;color:var(--text2);font-size:13px}
+/* 라이트박스 */
+#lb{position:fixed;inset:0;background:rgba(10,14,30,.88);display:none;align-items:center;justify-content:center;z-index:99;cursor:zoom-out;padding:16px}
+#lb.open{display:flex}#lb img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
+.totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;border:0;font-size:18px;box-shadow:var(--shadow);cursor:pointer}
+/* 반응형 5단계 */
+@media (max-width:1240px){.wrap{grid-template-columns:230px minmax(0,1fr);gap:24px}}
+@media (max-width:1024px){.wrap{grid-template-columns:1fr}nav.toc{position:static;max-height:none}nav.toc ol{columns:2}}
+@media (max-width:760px){.pair{grid-template-columns:1fr}section.ch{padding:20px 18px}.top h1{font-size:24px}}
+@media (max-width:640px){nav.toc ol{columns:1}body{font-size:15px}}
+@media (max-width:480px){.wrap,.top-in{padding-left:16px;padding-right:16px}.pin{width:22px;height:22px;font-size:11px;line-height:22px}}
+@media (max-width:400px){section.ch>h2{font-size:20px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* A4 인쇄 */
+@page{size:A4;margin:14mm 12mm 14mm}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:10.5pt}
+  nav.toc,.totop,#lb{display:none!important}
+  .wrap{display:block;padding:0}
+  section.ch{box-shadow:none;padding:0 0 8mm;margin:0;break-before:page}
+  main{padding-bottom:8mm}
+  section.ch:first-of-type{break-before:auto}
+  figure.shot,.tbl,.eq,.svgbox,.note,.tip,.warn,.steps>li{break-inside:avoid}
+  h3,h4{break-after:avoid}
+  .top{border-radius:0}
+  .pfoot{position:fixed;bottom:0;left:0;right:0;height:6mm;background:#fff;font-size:8pt;color:#666;border-top:1px solid #ccc;padding-top:1.5mm;display:flex;justify-content:space-between}
+}
+.pfoot{display:none}
+@media print{.pfoot{display:flex}}
+/* ── 좁은 화면 대응(r1 · 2026-10-12) : 화면 전용 — 인쇄·PDF에는 영향 없음 ── */
+@media screen and (max-width:640px){
+  .k1 td:first-child,.k1 th:first-child{white-space:normal}
+  /* 글 표(숫자 칸 없는 표) → 행마다 카드로 쌓기 */
+  .tbl.stack{border:0;border-radius:0;overflow:visible}
+  .tbl.stack table,.tbl.stack tbody,.tbl.stack tr,.tbl.stack td{display:block;width:auto}
+  .tbl.stack thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .tbl.stack table{background:transparent}
+  .tbl.stack tr{border:1px solid var(--line);border-radius:10px;background:#fff;margin:0 0 10px;overflow:hidden}
+  .tbl.stack td{border-bottom:1px solid var(--line);padding:8px 12px}
+  .tbl.stack tr td:last-child{border-bottom:0}
+  .tbl.stack td:first-child{background:var(--navy-l);color:var(--navy-d);font-weight:700}
+  .tbl.stack td[data-th]:not(:first-child)::before{content:attr(data-th);display:block;font-size:12px;font-weight:700;color:var(--text2);margin-bottom:2px}
+  .tbl.stack.c2 td[data-th]:not(:first-child)::before{display:none}
+  .tbl.stack td:empty{display:none}
+  /* 숫자 표 → 표 모양 유지, 글자·여백 축소, 넘치면 좌우로 밀기(오른쪽 그림자로 표시) */
+  .tbl:not(.stack){background:linear-gradient(to right,#fff 30%,rgba(255,255,255,0)) left/40px 100% no-repeat local,linear-gradient(to left,#fff 30%,rgba(255,255,255,0)) right/40px 100% no-repeat local,radial-gradient(farthest-side at 100% 50%,rgba(26,26,46,.22),transparent) right/12px 100% no-repeat scroll,#fff}
+  .tbl:not(.stack) table{font-size:13px;background:transparent}
+  .tbl:not(.stack) th,.tbl:not(.stack) td{padding:7px 8px}
+  /* 수식 → 줄바꿈 허용 */
+  .eq{white-space:pre-wrap;word-break:keep-all;font-size:13px;line-height:1.75;padding:12px 14px}
+  .eq .c{display:block;padding-left:1em}
+  .svgbox{position:relative}
+  .svgbox::after{content:"← 좌우로 밀어서 보기 →";display:block;text-align:center;font-size:12px;color:var(--text2);margin-top:6px;position:sticky;left:0}
+  ol.legend{grid-template-columns:1fr}
+  .steps>li{padding-left:34px;margin-left:14px}
+}
+.rev{white-space:nowrap}
+@media print{.rev{display:none}}
+</style>
+</head><body>
+<header class="top"><div class="top-in">
+<div class="eyebrow">MANMIN ENGINEERING · USER MANUAL</div>
+<h1>건폐율 · 용적률 조례 적용 계산기 사용자 매뉴얼</h1>
+<p class="sub">지자체 · 조례 → 용도지역 → 대지면적 → 시행령 상한 vs 조례 적용값 → A4 검토 계산서</p>
+<div class="badges"><span class="badge acc">매뉴얼 <span style="font-family:var(--font-brand)">Ver-5.1</span></span><a class="badge" href="../index.html">▶ 건폐율 · 용적률 조례 적용 계산기 열기</a><a class="badge" href="건폐율용적률_사용자매뉴얼_Ver-5.1.pdf" download>⤓ PDF</a><span class="badge">2026-10-15</span><span class="badge">김만민 건축사 · ㈜대성건축사사무소</span></div>
+</div></header>
+<div class="wrap"><nav class="toc" aria-label="목차"><h2>목차</h2><ol><li><a href="#ch0">0. 이 매뉴얼에 대하여</a></li><li><a href="#ch1">1. 한눈에 보기</a></li><li class="sub"><a href="#s1-1">화면 구성</a></li><li class="sub"><a href="#s1-2">작업 탭·근거 표시</a></li><li class="sub"><a href="#s1-3">설치·보관·매뉴얼</a></li><li><a href="#ch2">2. 1분 따라하기</a></li><li><a href="#ch3">3. 화면별 기능 상세</a></li><li class="sub"><a href="#s3-1">공사 정보·지자체</a></li><li class="sub"><a href="#s3-2">용도지역·대지면적</a></li><li class="sub"><a href="#s3-3">법령 vs 조례 비교</a></li><li class="sub"><a href="#s3-4">판정 결과</a></li><li class="sub"><a href="#s3-5">조례 근거·조건부 값</a></li><li class="sub"><a href="#s3-6">사례 — 계획관리지역</a></li><li class="sub"><a href="#s3-7">사례 — 전주시 일반상업</a></li><li class="sub"><a href="#s3-8">전체 용도지역 일람표</a></li><li class="sub"><a href="#s3-9">이용안내·관련 법규 창</a></li><li class="sub"><a href="#s3-10">A4 계산서·출력</a></li><li class="sub"><a href="#s3-11">휴대전화 화면</a></li><li><a href="#ch4">4. 법령 해설</a></li><li class="sub"><a href="#s4-1">근거 체계</a></li><li class="sub"><a href="#s4-2">용도지역별 상한</a></li><li class="sub"><a href="#s4-3">면적 산정</a></li><li class="sub"><a href="#s4-4">전북 14개 시·군 조례</a></li><li class="sub"><a href="#s4-5">조례 단서·조건부 값</a></li><li class="sub"><a href="#s4-6">지구단위계획 완화</a></li><li class="sub"><a href="#s4-7">산정 범위·한계</a></li><li class="sub"><a href="#s4-8">v5.1.0 정정</a></li><li><a href="#ch5">5. 실무 작업 방법</a></li><li class="sub"><a href="#s5-1">단계별 절차</a></li><li class="sub"><a href="#s5-2">허가 전 확인</a></li><li><a href="#ch6">6. 문제 해결·FAQ</a></li><li><a href="#ch7">부록</a></li><li class="sub"><a href="#a1">예제 입력값</a></li><li class="sub"><a href="#a2">예제 결과</a></li><li class="sub"><a href="#a3">버전 변경 내역</a></li><li class="sub"><a href="#a4">용어</a></li></ol></nav><main><style>
+#fig-s12_modal,#fig-s13_modal_law{max-width:560px}
+#fig-s03_project,#fig-s04_region,#fig-s05_zone{max-width:420px}
+#fig-s15_a4page{max-width:560px}
+.k1 td:first-child,.k1 th:first-child{white-space:nowrap}
+@media (max-width:1240px){.eq{white-space:pre-wrap;word-break:keep-all}}
+.eq .c{display:block;margin-top:2px}
+.pair>div{min-width:0}
+.tri{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+@media (max-width:760px){.tri{grid-template-columns:1fr}}
+@media print{
+  figure.shot{max-width:none!important}
+  figure.shot .frame{width:fit-content;max-width:100%}
+  figure.shot img{width:auto;height:auto;max-width:100%;max-height:118mm}
+  #fig-s15_a4page img,#fig-s05_zone img,#fig-s09_planned img,#fig-s07_result img,#fig-s11_table img{max-height:190mm}
+  figure.narrow img{max-height:105mm}
+  .pair{grid-template-columns:1fr 1fr}.tri{grid-template-columns:repeat(3,1fr)}
+  .brk .tbl{break-inside:auto}.brk tr{break-inside:avoid}.brk thead{display:table-header-group}
+}
+</style><section class="ch" id="ch0"><h2><span class="n">00</span>이 매뉴얼에 대하여</h2>
+<p class="lead">건폐율 · 용적률 조례 적용 계산기는 대지가 속한 <b>용도지역</b>의 건폐율 · 용적률 최대한도를 <b>국토계획법 시행령 제84조 · 제85조</b>(법정 상한)와 <b>시 · 군 도시 · 군계획 조례</b>(실제 적용값)로 나란히 보여 주고, 대지면적을 넣으면 최대 건축면적 · 연면적을 계산해 A4 검토 계산서로 정리하는 도구입니다. 조례값은 <b>전북특별자치도 14개 시 · 군</b> 원문을 내장했습니다. 근거는 국토의 계획 및 이용에 관한 법률 제77조 · 제78조(2026. 7. 1. 시행), 같은 법 시행령 제84조 · 제85조(2026. 8. 18. 공포, 2026. 9. 18. 시행), 전북특별자치도 14개 시 · 군 도시 · 군계획 조례입니다.</p>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">내용</th></tr></thead><tbody><tr><td class="">대상 프로그램</td><td class="">건폐율 · 용적률 조례 적용 계산기 <b>MANMIN Ver-5.1</b>(v5.1.0) — 탭 막대 「📘 매뉴얼」 버튼으로 이 문서가 열립니다</td></tr><tr><td class="">접속 주소</td><td class=""><a href="https://manminkim-eng.github.io/Land-Use/" target="_blank" rel="noopener">manminkim-eng.github.io/Land-Use</a></td></tr><tr><td class="">매뉴얼 판</td><td class=""><b>Ver-5.1</b> (화면 표기와 같은 판 번호, 초판) · 2026-10-15 · 작성 김만민 건축사(㈜대성건축사사무소)</td></tr><tr><td class="">내려받기</td><td class=""><a href="건폐율용적률_사용자매뉴얼_Ver-5.1.pdf" download>PDF(A4)</a> · <a href="../index.html">건폐율 · 용적률 조례 적용 계산기 열기</a></td></tr><tr><td class="">예제</td><td class="">본문 그림은 예제 A(익산시 준주거지역 · 대지 500㎡)로 캡처했습니다 — <b>시행령 70 % · 500 % → 익산시 조례 70 % · 350 % · 최대 건축면적 350㎡ · 최대 연면적 1,750㎡</b>. 예제 B(익산시 계획관리지역 1,000㎡) · C(전주시 일반상업지역 800㎡)는 <a href="#a2">부록 A2</a></td></tr><tr><td class="">근거 법령</td><td class="">국토의 계획 및 이용에 관한 법률 제77조 · 제78조(2026. 7. 1. 시행), 같은 법 시행령 제84조 · 제85조(2026. 8. 18. 공포, 2026. 9. 18. 시행), 전북특별자치도 14개 시 · 군 도시 · 군계획 조례 — LawMCP(국가법령정보센터) 원문 대조(2026-10-15)</td></tr><tr><td class="">읽는 순서</td><td class="">처음이면 1장 → 2장(따라하기) → 필요할 때 3장(화면별 상세). 건축 계획 · 허가 검토에 쓰기 전에는 4장(법령 해설) · 5장(작업 방법)</td></tr></tbody></table></div></div>
+<div class="note"><b>표기</b>그림 위 주황색 번호(①②…)는 그림 아래 범례 번호와 같습니다. 그림을 누르면 크게 볼 수 있습니다. 「시행령」은 국토의 계획 및 이용에 관한 법률 시행령, 「법」은 같은 법률, 「조례」는 시 · 군 도시계획 조례(군은 군계획 조례)입니다. 면적 단위는 ㎡, 비율 단위는 %입니다.</div>
+<div class="warn"><b>책임 한계</b>계산값은 용도지역 기본값에 따른 예비 · 검토용 결과입니다. 조례는 전북특별자치도 14개 시 · 군만 내장했고(2026-10-15 원문 대조 — 이후 개정은 반영되지 않음), 그 밖 시 · 도는 시행령 상한만 표시합니다. 지구단위계획 · 용도지구 · 개발진흥지구 · 성장관리계획구역 등 개별 규제와 조례 단서는 계산에 넣지 않고 안내만 합니다(<a href="#s4-7">4-7</a>). 토지이음(eum.go.kr) 토지이용계획과 허가권자 확인이 필요합니다.</div>
+</section>
+<section class="ch" id="ch1"><h2><span class="n">01</span>한눈에 보기</h2>
+<p class="lead">설치 없이 브라우저에서 바로 실행되는 단일 페이지 앱(PWA)입니다. 입력한 내용은 브라우저 안에서만 계산되며 서버로 전송되지 않습니다.</p>
+<div class="cards">
+<div class="card"><h5>무엇을 계산하나</h5><p>21개 용도지역의 시행령 상한 · 조례 적용값, 최대 건축면적(대지 × 건폐율) · 최대 연면적(대지 × 용적률) · 참고 층수</p></div>
+<div class="card"><h5>조례 자동 적용</h5><p>전북 14개 시 · 군 도시 · 군계획 조례 건폐율 · 용적률 조문을 원문대로 내장 — 조문 · 시행일 표시</p></div>
+<div class="card"><h5>조건부 값 안내</h5><p>성장관리계획구역 125 %, 산업단지 · 주거복합 등 조례 단서와 시행령 제46조 · 제47조 완화 범위를 함께 보여 줌</p></div>
+</div>
+<h3 id="s1-1">1-1. 화면 구성</h3>
+<figure class="shot" id="fig-s01_overview"><div class="frame"><img src="images/s01_overview.webp" width="1440" height="900" loading="lazy" alt="전체 화면 — 검토 입력 · 결과 탭(예제 A)"><span class="pin" style="left:5.26%;top:13.49%">1</span><span class="pin" style="left:5.26%;top:19.93%">2</span><span class="pin" style="left:4.57%;top:25.38%">3</span><span class="pin" style="left:5.96%;top:36.24%">4</span><span class="pin" style="left:35.54%;top:36.24%">5</span><span class="pin" style="left:35.54%;top:61.04%">6</span><span class="pin" style="left:94.15%;top:83.96%">7</span></div><figcaption><span class="fno">S01</span>전체 화면 — 검토 입력 · 결과 탭(예제 A)</figcaption><ol class="legend"><li><b>1</b><span>작업 탭 · 매뉴얼</span></li><li><b>2</b><span>요약 스트립</span></li><li><b>3</b><span>진행 단계</span></li><li><b>4</b><span>입력 패널</span></li><li><b>5</b><span>법령 vs 조례 비교</span></li><li><b>6</b><span>판정 결과</span></li><li><b>7</b><span>초기화 · 이용안내</span></li></ol></figure>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">영역</th><th class="">내용</th></tr></thead><tbody><tr><td class="">헤더 · 탭</td><td class="">「⌨️ 검토 입력·결과」 → 「📄 A4 계산서」, 오른쪽 끝 「📘 매뉴얼」</td></tr><tr><td class="">요약 스트립</td><td class="">어느 탭에 있든 지자체 · 용도지역 · 법정 건폐율 · 용적률 · 조례 건폐율 · 용적률을 한 줄로 보여 줍니다</td></tr><tr><td class="">진행 단계</td><td class="">① 지역 · 지자체 → ② 용도지역 → ③ 대지면적 → ④ 결과 — 현재 단계가 초록 원으로 표시됩니다</td></tr><tr><td class="">왼쪽 입력</td><td class="">공사 정보(A4 표제) → STEP 1 지자체(조례) → STEP 2 용도지역 → STEP 3 대지면적 → 「⚡ 계산」</td></tr><tr><td class="">오른쪽 결과</td><td class="">법령 vs 조례 비교 → 판정 결과(건폐율 · 용적률 · 대지면적 기준 계산 · 안내) — 아래에 전체 용도지역 일람표</td></tr></tbody></table></div></div>
+<h3 id="s1-2">1-2. 작업 탭·근거 표시</h3>
+<figure class="shot" id="fig-s02_tabs"><div class="frame"><img src="images/s02_tabs.webp" width="1440" height="186" loading="lazy" alt="헤더 — 작업 탭과 근거 표시"><span class="pin" style="left:6.82%;top:66.48%">1</span><span class="pin" style="left:16.12%;top:66.48%">2</span><span class="pin" style="left:86.30%;top:66.48%">3</span><span class="pin" style="left:79.74%;top:13.74%">4</span></div><figcaption><span class="fno">S02</span>헤더 — 작업 탭과 근거 표시</figcaption><ol class="legend"><li><b>1</b><span>검토 입력 · 결과</span></li><li><b>2</b><span>A4 계산서</span></li><li><b>3</b><span>매뉴얼</span></li><li><b>4</b><span>근거 · 시행일</span></li></ol></figure>
+<p>헤더 오른쪽에는 적용 근거(국토계획법 제77조 · 제78조, 시행령 제84조 · 제85조)와 시행일 <b>[시행령 시행 2026. 9. 18.]</b>이 표시됩니다.</p>
+<h3 id="s1-3">1-3. 설치·보관·매뉴얼</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">내용</th></tr></thead><tbody><tr><td class="">설치</td><td class="">휴대전화 · PC 브라우저의 「홈 화면에 추가」 · 「앱 설치」로 설치하면 오프라인에서도 열립니다(앱 본체만 — 매뉴얼은 온라인 전용)</td></tr><tr><td class="">보관</td><td class="">계산 결과는 A4 계산서(인쇄 · PDF · JPG)로 남깁니다. 앱은 입력값을 서버에 저장하지 않습니다</td></tr><tr><td class="">매뉴얼</td><td class="">탭 막대 오른쪽 「📘 매뉴얼」 — 이 문서(HTML)와 PDF(A4)</td></tr><tr><td class="">초기화</td><td class="">오른쪽 아래 「🔄 초기화」 — 지자체 · 용도지역 · 대지면적을 모두 지웁니다</td></tr></tbody></table></div></div>
+</section>
+<section class="ch" id="ch2"><h2><span class="n">02</span>1분 따라하기</h2>
+<p class="lead">예제 A — 익산시 준주거지역 대지 500㎡입니다. 아래 순서대로 넣으면 <b>시행령 용적률 500 %가 익산시 조례로 350 %</b>가 되고, 최대 건축면적 <b>350㎡</b> · 최대 연면적 <b>1,750㎡</b>가 나옵니다.</p>
+<ol class="steps">
+<li><b class="t">① 공사 정보</b>공사명 「익산시 ○○동 근린생활시설 신축공사」, 작성자 「김만민」 — A4 계산서 표제에 들어갑니다(<a href="#s3-1">3-1</a>).</li>
+<li><b class="t">② 지자체</b>광역시 · 도 「전북특별자치도」 → 시 · 군 「익산시」 → 「✅ 조례 데이터 적용: 익산시 도시계획 조례 제55조 · 제60조(시행 2025-12-31)」 안내가 뜹니다.</li>
+<li><b class="t">③ 용도지역</b>「도시지역」 탭 → 대분류 「주거지역」 → 세부 「준주거지역」(<a href="#s3-2">3-2</a>).</li>
+<li><b class="t">④ 결과 — 조례가 더 엄격</b>「⚡ 건폐율 · 용적률 계산」 → 비교 창에 시행령 70 % · 500 %, 조례 70 % · <b>350 %</b>, 판정 「조례가 더 엄격」(<a href="#s3-3">3-3</a>).</li>
+<li><b class="t">⑤ 대지면적</b>대지면적 500㎡(평 칸은 151.2평으로 자동 환산) → 최대 건축면적 500 × 70 % = <b>350㎡</b>, 최대 연면적 500 × 350 % = <b>1,750㎡</b>(<a href="#s3-4">3-4</a>).</li>
+<li><b class="t">⑥ A4 계산서</b>「📄 A4 계산서」 탭에서 「🖨️ 인쇄 / PDF 저장」 또는 「🖼️ JPG 저장」(<a href="#s3-10">3-10</a>).</li>
+</ol>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">예제 A</th></tr></thead><tbody><tr><td class="">지자체 · 조례</td><td class="">전북 익산시 — 익산시 도시계획 조례 제55조·제60조 (시행 2025-12-31)</td></tr><tr><td class="">용도지역</td><td class="">도시지역 > 주거지역 > 준주거지역</td></tr><tr><td class="">시행령 상한</td><td class="">건폐율 70 % · 용적률 500 % (제84조 제1항 · 제85조 제1항)</td></tr><tr><td class="">조례 적용값</td><td class="">건폐율 70 % · 용적률 <b>350 %</b></td></tr><tr><td class="">최대 건축면적</td><td class="">500㎡ × 70 % = <b>350㎡</b></td></tr><tr><td class="">최대 연면적(지상)</td><td class="">500㎡ × 350 % = <b>1,750㎡</b> — 시행령 상한으로 계산하면 2,500㎡</td></tr></tbody></table></div></div>
+<div class="tip"><b>확인</b>같은 준주거지역이라도 시 · 군마다 용적률이 다릅니다 — 전북 14곳 중 익산 350 %, 군산 · 무주 · 임실 400 %, 나머지 500 %입니다(<a href="#s4-4">4-4</a>). 허가 검토에는 반드시 조례값을 씁니다.</div>
+</section>
+<section class="ch" id="ch3"><h2><span class="n">03</span>화면별 기능 상세</h2>
+<h3 id="s3-1">3-1. 공사 정보·지자체</h3>
+<div class="pair"><div><figure class="shot" id="fig-s03_project"><div class="frame"><img src="images/s03_project.webp" width="386" height="155" loading="lazy" alt="공사 정보 — A4 표제"><span class="pin" style="left:7.91%;top:59.77%">1</span><span class="pin" style="left:51.70%;top:59.77%">2</span></div><figcaption><span class="fno">S03</span>공사 정보 — A4 표제</figcaption><ol class="legend"><li><b>1</b><span>공사명</span></li><li><b>2</b><span>작성자</span></li></ol></figure></div><div><figure class="shot" id="fig-s04_region"><div class="frame"><img src="images/s04_region.webp" width="386" height="314" loading="lazy" alt="STEP 1 — 지자체(조례) 선택"><span class="pin" style="left:7.91%;top:29.68%">1</span><span class="pin" style="left:7.91%;top:56.08%">2</span><span class="pin" style="left:7.91%;top:75.46%">3</span></div><figcaption><span class="fno">S04</span>STEP 1 — 지자체(조례) 선택</figcaption><ol class="legend"><li><b>1</b><span>광역시 · 도</span></li><li><b>2</b><span>시 · 군 (전북 14곳)</span></li><li><b>3</b><span>조례 적용 안내 — 조문 · 시행일</span></li></ol></figure></div></div>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">설명</th></tr></thead><tbody><tr><td class="">공사명 · 작성자</td><td class="">A4 계산서 머리에 그대로 들어갑니다. 비워 두면 「—」로 표시됩니다</td></tr><tr><td class="">광역시 · 도</td><td class="">17개 시 · 도를 고를 수 있습니다. 조례값이 내장된 곳은 <b>전북특별자치도</b>뿐이며, 그 밖 시 · 도는 「ℹ️ 조례 미내장」 안내와 함께 시행령 상한만 표시합니다</td></tr><tr><td class="">시 · 군</td><td class="">전북을 고르면 전주 · 군산 · 익산 · 정읍 · 남원 · 김제 · 완주 · 진안 · 무주 · 장수 · 임실 · 순창 · 고창 · 부안 14개 시 · 군이 나옵니다</td></tr><tr><td class="">조례 적용 안내</td><td class="">「✅ 조례 데이터 적용」 상자에 조례 제명 · 건폐율 조 · 용적률 조 · 시행일이 표시됩니다(예: 익산시 도시계획 조례 제55조 · 제60조, 시행 2025-12-31)</td></tr></tbody></table></div></div>
+<h3 id="s3-2">3-2. 용도지역·대지면적</h3>
+<figure class="shot" id="fig-s05_zone"><div class="frame"><img src="images/s05_zone.webp" width="386" height="450" loading="lazy" alt="STEP 2 용도지역 · STEP 3 대지면적"><span class="pin" style="left:4.55%;top:4.36%">1</span><span class="pin" style="left:35.72%;top:4.36%">2</span><span class="pin" style="left:66.37%;top:4.36%">3</span><span class="pin" style="left:3.51%;top:23.31%">4</span><span class="pin" style="left:3.51%;top:41.14%">5</span><span class="pin" style="left:3.51%;top:64.95%">6</span><span class="pin" style="left:51.70%;top:64.95%">7</span><span class="pin" style="left:3.51%;top:87.01%">8</span></div><figcaption><span class="fno">S05</span>STEP 2 용도지역 · STEP 3 대지면적</figcaption><ol class="legend"><li><b>1</b><span>도시지역</span></li><li><b>2</b><span>관리지역</span></li><li><b>3</b><span>농림 · 자연</span></li><li><b>4</b><span>대분류</span></li><li><b>5</b><span>세부 용도지역</span></li><li><b>6</b><span>대지면적 ㎡</span></li><li><b>7</b><span>평 환산</span></li><li><b>8</b><span>계산</span></li></ol></figure>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">설명</th></tr></thead><tbody><tr><td class="">도시지역 탭</td><td class="">대분류(주거 · 상업 · 공업 · 녹지) → 세부 용도지역 16개</td></tr><tr><td class="">관리지역 탭</td><td class="">보전관리 · 생산관리 · 계획관리</td></tr><tr><td class="">농림 · 자연 탭</td><td class="">농림지역 · 자연환경보전지역</td></tr><tr><td class="">대지면적</td><td class="">㎡ 또는 평 중 한쪽에 넣으면 다른 쪽이 자동 환산됩니다(1평 = 3.3058㎡, 소수 첫째 자리 표시). 비우면 비율만 보여 줍니다</td></tr><tr><td class="">계산</td><td class="">「⚡ 건폐율 · 용적률 계산」 — 지자체를 고르지 않아도 계산되며, 이때는 시행령 상한만 나옵니다</td></tr></tbody></table></div></div>
+<h3 id="s3-3">3-3. 법령 vs 조례 비교</h3>
+<figure class="shot" id="fig-s06_compare"><div class="frame"><img src="images/s06_compare.webp" width="874" height="225" loading="lazy" alt="법령 최대치 vs 조례 실제 적용값 — 예제 A"><span class="pin" style="left:3.72%;top:28.13%">1</span><span class="pin" style="left:50.97%;top:28.13%">2</span><span class="pin" style="left:52.46%;top:72.38%">3</span></div><figcaption><span class="fno">S06</span>법령 최대치 vs 조례 실제 적용값 — 예제 A</figcaption><ol class="legend"><li><b>1</b><span>국토계획법(시행령) 최대치</span></li><li><b>2</b><span>조례 적용값</span></li><li><b>3</b><span>판정 — 조례가 더 엄격</span></li></ol></figure>
+<p>왼쪽은 시행령 제84조 제1항 · 제85조 제1항의 용도지역별 상한, 오른쪽은 조례 적용값입니다. 판정 알약은 <b>「조례가 더 엄격」</b>(어느 하나라도 조례가 낮음), 「법령 = 조례 (동일)」 두 가지로 나옵니다 — 조례는 시행령 범위 안에서만 정할 수 있으므로(법 제77조 제1항 · 제78조 제1항) 조례가 더 높은 경우는 없습니다.</p>
+<h3 id="s3-4">3-4. 판정 결과</h3>
+<figure class="shot" id="fig-s07_result"><div class="frame"><img src="images/s07_result.webp" width="874" height="889" loading="lazy" alt="판정 결과 카드 — 예제 A"><span class="pin" style="left:3.95%;top:9.69%">1</span><span class="pin" style="left:3.95%;top:19.24%">2</span><span class="pin" style="left:51.20%;top:19.24%">3</span><span class="pin" style="left:3.95%;top:42.32%">4</span><span class="pin" style="left:3.95%;top:60.57%">5</span></div><figcaption><span class="fno">S07</span>판정 결과 카드 — 예제 A</figcaption><ol class="legend"><li><b>1</b><span>용도지역</span></li><li><b>2</b><span>건폐율 — 시행령 · 조례</span></li><li><b>3</b><span>용적률 — 시행령 · 조례</span></li><li><b>4</b><span>대지면적 기준 계산</span></li><li><b>5</b><span>적용 기준</span></li></ol></figure>
+<p>큰 숫자는 시행령 상한이고, 그 아래 「조례」 칸이 조례 적용값입니다. <b>대지면적 기준 계산결과</b>는 조례값이 있으면 조례값(「· 조례값 기준」 표시), 없으면 시행령 상한으로 계산합니다 — 최대 건축면적 = 대지면적 × 건폐율, 최대 연면적 = 대지면적 × 용적률, 추정 최대층수 = 연면적 ÷ 건축면적(소수 버림, 참고값).</p>
+<h3 id="s3-5">3-5. 조례 근거·조건부 값</h3>
+<figure class="shot" id="fig-s08_notes"><div class="frame"><img src="images/s08_notes.webp" width="836" height="351" loading="lazy" alt="적용 기준 · 조례 근거 · 경고 — 예제 A"><span class="pin" style="left:1.84%;top:36.00%">1</span><span class="pin" style="left:1.84%;top:68.43%">2</span></div><figcaption><span class="fno">S08</span>적용 기준 · 조례 근거 · 경고 — 예제 A</figcaption><ol class="legend"><li><b>1</b><span>조례 근거 — 조문 · 시행일</span></li><li><b>2</b><span>조례 강화 경고</span></li></ol></figure>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">상자</th><th class="">내용</th></tr></thead><tbody><tr><td class="">📌 적용 기준</td><td class="">용도지역의 성격(시행령 제30조 세분 취지) 요약</td></tr><tr><td class="">📋 조례 근거</td><td class="">조례 제명 · 조문 · 시행일. 선택한 용도지역을 그 조례가 규정하지 않으면 「※ 이 조례에는 ○○지역 규정이 없어 시행령 상한을 표시합니다」(예: 임실군 제1종 전용주거지역)</td></tr><tr><td class="">⚠ 조건부 값</td><td class="">조례의 단서 · 호 단위 값(성장관리계획구역 125 %, 산업단지 · 주거복합 · 유원지 등) — 해당하면 따로 적용합니다. 계산값은 조례 본문 값 기준입니다(<a href="#s4-5">4-5</a>)</td></tr><tr><td class="">📐 연면적 제외</td><td class="">용적률 산정 때 연면적에서 빼는 면적(건축법 시행령 제119조 제1항 제4호)</td></tr><tr><td class="">⚠ 조례 주의</td><td class="">조례가 시행령보다 낮으면 「⚠ 조례 주의: … 조례 기준이 낮습니다」, 같으면 「✅ 조례 확인: … 동일합니다」로 표시</td></tr></tbody></table></div></div>
+<h3 id="s3-6">3-6. 사례 — 계획관리지역</h3>
+<figure class="shot" id="fig-s09_planned"><div class="frame"><img src="images/s09_planned.webp" width="874" height="963" loading="lazy" alt="예제 B — 익산시 계획관리지역 · 대지 1,000㎡"><span class="pin" style="left:3.95%;top:18.00%">1</span><span class="pin" style="left:51.20%;top:18.00%">2</span><span class="pin" style="left:3.95%;top:62.20%">3</span><span class="pin" style="left:3.95%;top:75.80%">4</span></div><figcaption><span class="fno">S09</span>예제 B — 익산시 계획관리지역 · 대지 1,000㎡</figcaption><ol class="legend"><li><b>1</b><span>건폐율 40 %</span></li><li><b>2</b><span>용적률 100 %</span></li><li><b>3</b><span>2024.5.28 완화 — 제84조④ · 제47조①</span></li><li><b>4</b><span>조건부 값 — 성장관리계획 125 %</span></li></ol></figure>
+<p>계획관리지역은 시행령 · 익산시 조례 모두 건폐율 40 % · 용적률 100 %로 같아 최대 건축면적 <b>400㎡</b> · 최대 연면적 <b>1,000㎡</b>입니다. 계획관리지역을 고르면 <b>⚡ 2024.5.28 개정 추가 완화</b> 상자가 나옵니다 — 산업 · 유통개발진흥지구 지정 시 60 %(시행령 제84조 제4항 제2호 가목), 그 진흥지구에 지구단위계획구역을 지정하면 60 %의 120 %인 72 %(제47조 제1항 단서), 도시지역 밖 지구단위계획구역은 건폐율 150 % · 용적률 200 % 이내(제47조 제1항). 조례 근거 상자에는 「제60조①19호 단서 성장관리계획(구역) 수립 지역 용적률 125% 이하」가 조건부 값으로 표시됩니다.</p>
+<h3 id="s3-7">3-7. 사례 — 전주시 일반상업</h3>
+<figure class="shot" id="fig-s10_jeonju"><div class="frame"><img src="images/s10_jeonju.webp" width="874" height="751" loading="lazy" alt="예제 C — 전주시 일반상업지역 · 대지 800㎡"><span class="pin" style="left:3.72%;top:10.54%">1</span><span class="pin" style="left:50.97%;top:10.54%">2</span><span class="pin" style="left:3.95%;top:79.31%">3</span></div><figcaption><span class="fno">S10</span>예제 C — 전주시 일반상업지역 · 대지 800㎡</figcaption><ol class="legend"><li><b>1</b><span>시행령 80 % · 1,300 %</span></li><li><b>2</b><span>전주시 조례 70 % · 900 %</span></li><li><b>3</b><span>대지 800㎡ 기준</span></li></ol></figure>
+<p>시행령 상한 80 % · 1,300 %에 대해 전주시 도시계획 조례는 <b>70 % · 900 %</b>입니다(제45조 · 제47조). 최대 건축면적 800 × 70 % = <b>560㎡</b>, 최대 연면적 800 × 900 % = <b>7,200㎡</b> — 시행령 상한으로 계산한 10,400㎡보다 3,200㎡ 적습니다. 조건부 값으로 「제47조 단서 주거복합건축물·오피스텔 용적률 600% 이하」가 함께 나옵니다.</p>
+<h3 id="s3-8">3-8. 전체 용도지역 일람표</h3>
+<figure class="shot" id="fig-s11_table"><div class="frame"><img src="images/s11_table.webp" width="1304" height="1177" loading="lazy" alt="전체 용도지역 일람표 — 익산시 조례 포함"><span class="pin" style="left:2.78%;top:3.43%">1</span><span class="pin" style="left:16.49%;top:4.10%">2</span><span class="pin" style="left:2.85%;top:13.17%">3</span></div><figcaption><span class="fno">S11</span>전체 용도지역 일람표 — 익산시 조례 포함</figcaption><ol class="legend"><li><b>1</b><span>일람표 펼치기</span></li><li><b>2</b><span>적용 조례 표시</span></li><li><b>3</b><span>법령 · 조례 나란히</span></li></ol></figure>
+<p>결과 아래 「전체 용도지역 일람표」 머리를 누르면 펼쳐집니다. 21개 용도지역의 시행령 상한과, 지자체를 골랐으면 그 조례값을 나란히 보여 주고 선택한 용도지역 줄을 강조합니다. 조례가 규정하지 않은 용도지역은 「—」입니다. 줄을 누르면 그 용도지역으로 바로 다시 계산합니다.</p>
+<h3 id="s3-9">3-9. 이용안내·관련 법규 창</h3>
+<div class="pair"><div><figure class="shot" id="fig-s12_modal"><div class="frame"><img src="images/s12_modal.webp" width="824" height="892" loading="lazy" alt="「📖 이용안내」 — 사용 방법 · 조례 vs 법령"></div><figcaption><span class="fno">S12</span>「📖 이용안내」 — 사용 방법 · 조례 vs 법령</figcaption></figure></div><div><figure class="shot" id="fig-s13_modal_law"><div class="frame"><img src="images/s13_modal_law.webp" width="824" height="892" loading="lazy" alt="「주요 근거 법규」 — 시행령 · 2024.5.28 개정 · 내장 조례"></div><figcaption><span class="fno">S13</span>「주요 근거 법규」 — 시행령 · 2024.5.28 개정 · 내장 조례</figcaption></figure></div></div>
+<p>오른쪽 아래 「📖 이용안내」 버튼은 사용 방법, 조례 vs 법령 차이, 주요 근거 법규(시행령 시행일, 2024.5.28 계획관리지역 완화, 연면적 제외 항목, 지구단위계획 3단계 용적률, 내장 조례 14곳의 조문 · 시행일, 건축법 제55조 · 제56조)를 한 창에 보여 줍니다.</p>
+<h3 id="s3-10">3-10. A4 계산서·출력</h3>
+<figure class="shot" id="fig-s14_a4"><div class="frame"><img src="images/s14_a4.webp" width="1440" height="900" loading="lazy" alt="A4 계산서 탭"><span class="pin" style="left:77.35%;top:27.04%">1</span><span class="pin" style="left:86.98%;top:27.04%">2</span><span class="pin" style="left:22.83%;top:38.24%">3</span></div><figcaption><span class="fno">S14</span>A4 계산서 탭</figcaption><ol class="legend"><li><b>1</b><span>인쇄 / PDF</span></li><li><b>2</b><span>JPG 저장</span></li><li><b>3</b><span>A4 계산서</span></li></ol></figure>
+<figure class="shot" id="fig-s15_a4page"><div class="frame"><img src="images/s15_a4page.webp" width="818" height="1593" loading="lazy" alt="A4 건폐율 · 용적률 검토 계산서 — 예제 A"><span class="pin" style="left:8.35%;top:8.40%">1</span><span class="pin" style="left:8.35%;top:11.86%">2</span><span class="pin" style="left:8.35%;top:17.71%">3</span><span class="pin" style="left:8.35%;top:27.16%">4</span><span class="pin" style="left:8.35%;top:36.61%">5</span><span class="pin" style="left:8.35%;top:79.78%">6</span></div><figcaption><span class="fno">S15</span>A4 건폐율 · 용적률 검토 계산서 — 예제 A</figcaption><ol class="legend"><li><b>1</b><span>공사명 · 근거 · 작성일</span></li><li><b>2</b><span>1. 검토 조건</span></li><li><b>3</b><span>2. 법령 vs 조례</span></li><li><b>4</b><span>3. 대지면적 기준 산정</span></li><li><b>5</b><span>4. 용도지역별 법정 상한</span></li><li><b>6</b><span>5. 적용 기준 · 유의사항</span></li></ol></figure>
+<p>계산서는 1. 검토 조건, 2. 건폐율 · 용적률(법령 최대치 vs 조례 적용값), 3. 대지면적 기준 산정(산식), 4. 용도지역별 법정 상한(21개), 5. 적용 기준 · 유의사항 5개 절이며, 조건부 값이 있으면 5절에 「조례 조건부 값」 줄이 더해집니다. 화면과 인쇄 · JPG가 같은 내용입니다.</p>
+<h3 id="s3-11">3-11. 휴대전화 화면</h3>
+<div class="tri"><div><figure class="shot narrow" id="fig-s16_mobile_main"><div class="frame"><img src="images/s16_mobile_main.webp" width="390" height="844" loading="lazy" alt="지자체 · 조례 선택"></div><figcaption><span class="fno">S16</span>지자체 · 조례 선택</figcaption></figure></div><div><figure class="shot narrow" id="fig-s17_mobile_result"><div class="frame"><img src="images/s17_mobile_result.webp" width="390" height="844" loading="lazy" alt="법령 vs 조례 · 판정 결과"></div><figcaption><span class="fno">S17</span>법령 vs 조례 · 판정 결과</figcaption></figure></div><div><figure class="shot narrow" id="fig-s18_mobile_a4"><div class="frame"><img src="images/s18_mobile_a4.webp" width="390" height="844" loading="lazy" alt="A4 계산서"></div><figcaption><span class="fno">S18</span>A4 계산서</figcaption></figure></div></div>
+<p>좁은 화면에서는 입력 카드와 결과 카드가 한 줄로 쌓입니다. A4 계산서는 화면 폭에 맞춰 축소해 보여 주며 인쇄 · JPG는 원본 A4 크기로 나옵니다.</p>
+</section>
+<section class="ch" id="ch4"><h2><span class="n">04</span>법령 해설</h2>
+<h3 id="s4-1">4-1. 근거 체계</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">법령</th><th class="">내용</th></tr></thead><tbody><tr><td class="">국토계획법 제77조 제1항</td><td class="">용도지역의 건폐율 최대한도는 관할 구역의 면적 · 인구 규모 · 용도지역 특성을 고려해 법이 정한 범위(주거 70 · 상업 90 · 공업 70 · 녹지 20 · 보전관리 20 · 생산관리 20 · 계획관리 40 · 농림 20 · 자연환경보전 20 % 이하)에서 대통령령 기준에 따라 조례로 정함</td></tr><tr><td class="">국토계획법 제78조 제1항</td><td class="">용적률 최대한도 — 주거 500 · 상업 1,500 · 공업 400 · 녹지 100 · 보전관리 80 · 생산관리 80 · 계획관리 100 · 농림 80 · 자연환경보전 80 % 이하 범위에서 같은 방식으로 조례로 정함</td></tr><tr><td class="">시행령 제84조 · 제85조</td><td class="">세분된 21개 용도지역별 건폐율 상한(제84조 제1항)과 용적률 범위(제85조 제1항, 「○ 이상 ○ 이하」) — 이 범위에서 시 · 군 조례가 정함. 지구 · 구역별 특례는 제84조 제4항 ~ 제9항, 제85조 제3항 ~ 제8항</td></tr><tr><td class="">시 · 군 조례</td><td class="">「○○시 도시계획 조례」 · 「○○군 계획 조례」(군계획 조례)의 「용도지역 안에서의 건폐율」 · 「용도지역 안에서의 용적률」 조문 — 실제 허가 기준</td></tr><tr><td class="">건축법 제55조 · 제56조</td><td class="">건폐율 = 대지면적에 대한 건축면적 비율, 용적률 = 대지면적에 대한 연면적 비율. 최대한도는 국토계획법 제77조 · 제78조 기준을 따름(건축법이 완화 · 강화를 따로 정한 경우 그에 따름)</td></tr></tbody></table></div></div></div>
+<p class="mono" style="font-size:13px;color:var(--text2)">LawMCP(국가법령정보센터) 원문 대조 2026-10-15 · 법률 2026. 7. 1. 시행본 · 시행령 2026. 8. 18. 공포(2026. 9. 18. 시행)본. 법률 시행예정 개정(2026-12-17 · 2027-05-13 · 2027-06-17)은 제77조 · 제78조 문언 변경이 없음을 확인했습니다.</p>
+<h3 id="s4-2">4-2. 용도지역별 상한</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">용도지역</th><th class="">건폐율 상한(%)</th><th class="">용적률 범위(%)</th><th class="">전북 14곳 건폐율</th><th class="">전북 14곳 용적률</th></tr></thead><tbody><tr><td class="">제1종 전용주거지역</td><td class="">50 이하</td><td class="">50 ~ 100</td><td class="">40 ~ 50 (13곳)</td><td class="">80 ~ 100 (13곳)</td></tr><tr><td class="">제2종 전용주거지역</td><td class="">50 이하</td><td class="">50 ~ 150</td><td class="">40 ~ 50 (13곳)</td><td class="">100 ~ 150 (13곳)</td></tr><tr><td class="">제1종 일반주거지역</td><td class="">60 이하</td><td class="">100 ~ 200</td><td class="">60</td><td class="">200</td></tr><tr><td class="">제2종 일반주거지역</td><td class="">60 이하</td><td class="">100 ~ 250</td><td class="">60</td><td class="">250</td></tr><tr><td class="">제3종 일반주거지역</td><td class="">50 이하</td><td class="">100 ~ 300</td><td class="">50 (13곳)</td><td class="">300 (13곳)</td></tr><tr><td class="">준주거지역</td><td class="">70 이하</td><td class="">200 ~ 500</td><td class="">60 ~ 70</td><td class="">350 ~ 500</td></tr><tr><td class="">중심상업지역</td><td class="">90 이하</td><td class="">200 ~ 1,500</td><td class="">80 ~ 90 (13곳)</td><td class="">1,000 ~ 1,500 (13곳)</td></tr><tr><td class="">일반상업지역</td><td class="">80 이하</td><td class="">200 ~ 1,300</td><td class="">70 ~ 80</td><td class="">800 ~ 1,300</td></tr><tr><td class="">근린상업지역</td><td class="">70 이하</td><td class="">200 ~ 900</td><td class="">60 ~ 70 (13곳)</td><td class="">600 ~ 900 (13곳)</td></tr><tr><td class="">유통상업지역</td><td class="">80 이하</td><td class="">200 ~ 1,100</td><td class="">60 ~ 80 (13곳)</td><td class="">700 ~ 1,100 (13곳)</td></tr><tr><td class="">전용공업지역</td><td class="">70 이하</td><td class="">150 ~ 300</td><td class="">60 ~ 70 (13곳)</td><td class="">250 ~ 300 (13곳)</td></tr><tr><td class="">일반공업지역</td><td class="">70 이하</td><td class="">150 ~ 350</td><td class="">60 ~ 70</td><td class="">300 ~ 350</td></tr><tr><td class="">준공업지역</td><td class="">70 이하</td><td class="">150 ~ 400</td><td class="">60 ~ 70</td><td class="">300 ~ 400</td></tr><tr><td class="">보전녹지지역</td><td class="">20 이하</td><td class="">50 ~ 80</td><td class="">20</td><td class="">50 ~ 80</td></tr><tr><td class="">생산녹지지역</td><td class="">20 이하</td><td class="">50 ~ 100</td><td class="">20</td><td class="">80 ~ 100</td></tr><tr><td class="">자연녹지지역</td><td class="">20 이하</td><td class="">50 ~ 100</td><td class="">20</td><td class="">80 ~ 100</td></tr><tr><td class="">보전관리지역</td><td class="">20 이하</td><td class="">50 ~ 80</td><td class="">20</td><td class="">50 ~ 80</td></tr><tr><td class="">생산관리지역</td><td class="">20 이하</td><td class="">50 ~ 80</td><td class="">20</td><td class="">80</td></tr><tr><td class="">계획관리지역</td><td class="">40 이하</td><td class="">50 ~ 100</td><td class="">40</td><td class="">100</td></tr><tr><td class="">농림지역</td><td class="">20 이하</td><td class="">50 ~ 80</td><td class="">20</td><td class="">80</td></tr><tr><td class="">자연환경보전지역</td><td class="">20 이하</td><td class="">50 ~ 80</td><td class="">20 (13곳)</td><td class="">50 ~ 80 (13곳)</td></tr></tbody></table></div></div></div>
+<p>용적률은 시행령 제85조 제1항이 「○퍼센트 이상 ○퍼센트 이하」 범위로 정하고 조례가 그 안에서 정합니다 — 앱은 상한만 표시합니다. 「(○곳)」은 그 용도지역을 규정한 조례 수입니다(임실군은 실제 지정된 14개 지역만 규정, 전주시는 자연환경보전지역 호가 없음).</p>
+<h3 id="s4-3">4-3. 면적 산정</h3>
+<div class="eq">최대 건축면적 = 대지면적 × 건폐율 ÷ 100     최대 연면적(용적률 산정용) = 대지면적 × 용적률 ÷ 100<span class="c">건축법 제55조 · 제56조 — 대지에 건축물이 둘 이상이면 건축면적 · 연면적의 합계</span></div>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">내용</th></tr></thead><tbody><tr><td class="">대지면적</td><td class="">대지의 수평투영면적 — 건축선과 도로 사이의 대지, 대지 안 도시 · 군계획시설(도로 · 공원 등) 부지는 제외(건축법 시행령 제119조 제1항 제1호)</td></tr><tr><td class="">건축면적</td><td class="">외벽(없으면 외곽 기둥) 중심선으로 둘러싸인 수평투영면적 — 처마 · 차양 등 1m 이상 돌출 부분 산정 특례(같은 항 제2호)</td></tr><tr><td class="">연면적(용적률 산정)</td><td class="">각 층 바닥면적의 합계에서 ① 지하층 ② 지상층 부속 주차용 면적 ③ 초고층 · 준초고층 피난안전구역 ④ 경사지붕 아래 대피공간을 뺌(같은 항 제4호)</td></tr><tr><td class="">추정 층수</td><td class="">연면적 ÷ 건축면적(소수 버림) — 건축면적을 모든 층에 같게 쓴다고 본 참고값이며 높이 · 일조 · 주차 기준은 따지지 않음</td></tr></tbody></table></div></div>
+<h3 id="s4-4">4-4. 전북 14개 시·군 조례</h3>
+<p class="mono" style="font-size:13px;color:var(--text2)">LawMCP(국가법령정보센터 자치법규) 원문 대조 2026-10-15 · 아래 「차이」는 시행령 상한과 다른 용도지역만 적었습니다(건폐 = 건폐율, 용적 = 용적률, %)</p>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">시 · 군</th><th class="">조례 · 조문 · 시행</th><th class="">시행령 상한과의 차이</th></tr></thead><tbody><tr><td class="">전주</td><td class="">전주시 도시계획 조례 제45조·제47조<br><span style="color:var(--text2);font-size:13px">시행 2026-04-13</span></td><td class="">제1종 전용주거 건폐 50→40, 제2종 전용주거 건폐 50→40 · 용적 150→100, 준주거 건폐 70→60, 중심상업 건폐 90→80 · 용적 1,500→1,100, 일반상업 건폐 80→70 · 용적 1,300→900, 근린상업 건폐 70→60 · 용적 900→700, 유통상업 건폐 80→60 · 용적 1,100→700, 전용공업 건폐 70→60, 일반공업 건폐 70→60, 준공업 건폐 70→60, 보전녹지 용적 80→50, 보전관리 용적 80→50, 자연환경보전 규정 없음</td></tr><tr><td class="">군산</td><td class="">군산시 도시계획 조례 제55조·제60조<br><span style="color:var(--text2);font-size:13px">시행 2025-04-15</span></td><td class="">준주거 용적 500→400, 중심상업 용적 1,500→1,200, 일반상업 용적 1,300→1,000, 근린상업 용적 900→700, 유통상업 용적 1,100→800, 전용공업 용적 300→250, 준공업 건폐 70→60 · 용적 400→300</td></tr><tr><td class="">익산</td><td class="">익산시 도시계획 조례 제55조·제60조<br><span style="color:var(--text2);font-size:13px">시행 2025-12-31</span></td><td class="">제1종 전용주거 용적 100→80, 준주거 용적 500→350, 중심상업 건폐 90→80 · 용적 1,500→1,000, 일반상업 용적 1,300→800, 근린상업 용적 900→600, 유통상업 건폐 80→70 · 용적 1,100→700, 자연환경보전 용적 80→50</td></tr><tr><td class="">정읍</td><td class="">정읍시 도시계획 조례 제53조·제58조<br><span style="color:var(--text2);font-size:13px">시행 2026-04-10</span></td><td class="">21개 용도지역 모두 시행령 상한과 같음</td></tr><tr><td class="">남원</td><td class="">남원시 도시계획 조례 제57조·제62조<br><span style="color:var(--text2);font-size:13px">시행 2026-09-18</span></td><td class="">중심상업 용적 1,500→1,300, 일반상업 용적 1,300→1,000, 근린상업 용적 900→700, 유통상업 용적 1,100→800</td></tr><tr><td class="">김제</td><td class="">김제시 도시계획 조례 제57조·제62조<br><span style="color:var(--text2);font-size:13px">시행 2025-12-16</span></td><td class="">21개 용도지역 모두 시행령 상한과 같음</td></tr><tr><td class="">완주</td><td class="">완주군 계획 조례 제47조·제52조<br><span style="color:var(--text2);font-size:13px">시행 2025-12-18</span></td><td class="">21개 용도지역 모두 시행령 상한과 같음</td></tr><tr><td class="">진안</td><td class="">진안군 계획 조례 제53조·제55조<br><span style="color:var(--text2);font-size:13px">시행 2026-03-30</span></td><td class="">21개 용도지역 모두 시행령 상한과 같음</td></tr><tr><td class="">무주</td><td class="">무주군 군계획 조례 제42조·제47조<br><span style="color:var(--text2);font-size:13px">시행 2025-12-10</span></td><td class="">준주거 용적 500→400, 중심상업 건폐 90→80 · 용적 1,500→1,000, 일반상업 용적 1,300→800, 근린상업 용적 900→700, 유통상업 용적 1,100→700</td></tr><tr><td class="">장수</td><td class="">장수군 군계획 조례 제57조·제62조<br><span style="color:var(--text2);font-size:13px">시행 2026-10-01</span></td><td class="">21개 용도지역 모두 시행령 상한과 같음</td></tr><tr><td class="">임실</td><td class="">임실군 계획 조례 제44조·제45조<br><span style="color:var(--text2);font-size:13px">시행 2026-02-25</span></td><td class="">제1종 전용주거 규정 없음, 제2종 전용주거 규정 없음, 제3종 일반주거 규정 없음, 준주거 용적 500→400, 중심상업 규정 없음, 일반상업 용적 1,300→800, 근린상업 규정 없음, 유통상업 규정 없음, 전용공업 규정 없음, 일반공업 용적 350→300, 준공업 용적 400→300, 생산녹지 용적 100→80, 자연녹지 용적 100→80</td></tr><tr><td class="">순창</td><td class="">순창군 계획 조례 제55조·제59조<br><span style="color:var(--text2);font-size:13px">시행 2026-08-18</span></td><td class="">21개 용도지역 모두 시행령 상한과 같음</td></tr><tr><td class="">고창</td><td class="">고창군 계획 조례 제57조·제62조<br><span style="color:var(--text2);font-size:13px">시행 2025-12-31</span></td><td class="">21개 용도지역 모두 시행령 상한과 같음</td></tr><tr><td class="">부안</td><td class="">부안군 군계획 조례 제57조·제62조<br><span style="color:var(--text2);font-size:13px">시행 2025-07-18</span></td><td class="">21개 용도지역 모두 시행령 상한과 같음</td></tr></tbody></table></div></div></div>
+<h3 id="s4-5">4-5. 조례 단서·조건부 값</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">시 · 군</th><th class="">용도지역</th><th class="">조건부 값(조문)</th></tr></thead><tbody><tr><td class="">전주</td><td class="">자연녹지</td><td class="">제45조② 유원지 건폐율 30%·공원 20% 이하</td></tr><tr><td class="">전주</td><td class="">중심상업</td><td class="">제47조 단서 주거복합건축물·오피스텔 용적률 700% 이하</td></tr><tr><td class="">전주</td><td class="">일반상업</td><td class="">제47조 단서 주거복합건축물·오피스텔 용적률 600% 이하</td></tr><tr><td class="">전주</td><td class="">근린상업</td><td class="">제47조 단서 주거복합건축물·오피스텔 용적률 500% 이하</td></tr><tr><td class="">전주</td><td class="">유통상업</td><td class="">제47조 단서 오피스텔 용적률 400% 이하</td></tr><tr><td class="">전주</td><td class="">준공업</td><td class="">제45조①21호 산업단지·준산업단지 건폐율 80% 이하 · 제47조 단서 공동주택 용적률 200% 이하</td></tr><tr><td class="">전주</td><td class="">계획관리</td><td class="">제47조 성장관리계획(구역) 수립 지역 용적률 125% 이하</td></tr><tr><td class="">전주</td><td class="">전용공업 · 일반공업</td><td class="">제45조①21호 산업단지·준산업단지 건폐율 80% 이하</td></tr><tr><td class="">군산</td><td class="">자연녹지</td><td class="">제55조①16호 단서 유원지 건폐율 30% 이하</td></tr><tr><td class="">군산</td><td class="">계획관리</td><td class="">제55조①19호 단서 기존 공장·창고·연구소(심의) 건폐율 50% 이하 · 제60조 성장관리계획(구역) 수립 지역 용적률 125% 이하</td></tr><tr><td class="">군산</td><td class="">전용공업</td><td class="">제60조 산업단지 안 용적률 300% 이하</td></tr><tr><td class="">군산</td><td class="">준공업</td><td class="">제60조 산업단지 안 용적률 400% 이하</td></tr><tr><td class="">익산</td><td class="">계획관리</td><td class="">제60조①19호 단서 성장관리계획(구역) 수립 지역 용적률 125% 이하</td></tr><tr><td class="">김제</td><td class="">자연녹지</td><td class="">제57조①16호 단서 유원지 건폐율 30%·공원 20% 이하</td></tr><tr><td class="">김제</td><td class="">계획관리</td><td class="">제57조①19호 단서 기존 공장 등(기반시설 인정·폭 8m 이상 도로) 건폐율 50% 이하</td></tr><tr><td class="">완주</td><td class="">계획관리</td><td class="">제52조⑥ 성장관리계획(구역) 수립 지역 용적률 125% 이하</td></tr><tr><td class="">무주</td><td class="">중심상업 · 일반상업 · 근린상업 · 유통상업</td><td class="">제47조③ 주거복합건물 주거용 부분 용적률 400% 이하(위원회 심의 시 상향)</td></tr><tr><td class="">무주</td><td class="">계획관리</td><td class="">제48조③ 성장관리계획(구역) 수립 지역 용적률 125% 이하</td></tr><tr><td class="">장수</td><td class="">계획관리</td><td class="">제62조 19호 단서 성장관리계획(구역) 수립 지역 용적률 125% 이하</td></tr><tr><td class="">임실</td><td class="">일반공업</td><td class="">제45조①5호 산업단지·농공단지 등 용적률 350% 이하</td></tr><tr><td class="">순창</td><td class="">계획관리</td><td class="">제59조 19호 단서 성장관리계획(구역) 수립 지역 용적률 125% 이하</td></tr><tr><td class="">고창</td><td class="">생산녹지 · 자연녹지 · 생산관리 · 농림</td><td class="">제57조 성장관리계획구역 건폐율 30% 이하</td></tr><tr><td class="">고창</td><td class="">계획관리</td><td class="">제57조 성장관리계획구역 건폐율 50% 이하 · 제62조 19호 단서 성장관리계획(구역) 수립 지역 용적률 125% 이하</td></tr><tr><td class="">부안</td><td class="">계획관리</td><td class="">제57조①19호 단서 「성장관리방안 수립 지역 125퍼센트 이내 완화」(원문 표기 그대로 — 건폐율 조문의 125%는 용적률 문구 전재로 보여 확인 필요)</td></tr></tbody></table></div></div></div>
+<p>조건부 값은 대지가 해당 구역(성장관리계획구역 · 산업단지 등)이거나 해당 용도(주거복합건축물 · 오피스텔 · 공동주택 등)일 때만 적용되므로, 앱은 계산에 넣지 않고 결과 화면 · A4 계산서에 안내만 합니다. 부안군 군계획 조례 제57조 제1항 제19호 단서는 건폐율 조문에 「125퍼센트 이내에서 완화」로 적혀 있어 용적률 문구를 옮겨 적은 오기로 보이므로, 적용 전 부안군에 확인하십시오.</p>
+<h3 id="s4-6">4-6. 지구단위계획 완화</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">구분</th><th class="">내용</th></tr></thead><tbody><tr><td class="">도시지역 내 지구단위계획구역</td><td class="">공공시설 부지 제공 · 공개공지 초과 설치 · 공동개발 등으로 완화하는 건폐율 · 용적률은 해당 용도지역 건폐율의 150 % · 용적률의 200 %를 초과할 수 없음(시행령 제46조 제10항 — 제1항 ~ 제4항 · 제7항 대상). 준주거지역 특례(제11항 · 제12항 140 %) 등 별도 조항 있음</td></tr><tr><td class="">도시지역 외 지구단위계획구역</td><td class="">해당 용도지역 또는 개발진흥지구 건폐율의 150 % · 용적률의 200 % 이내 완화(시행령 제47조 제1항 본문)</td></tr><tr><td class="">산업 · 유통개발진흥지구</td><td class="">계획관리지역 건폐율 60 %(시행령 제84조 제4항 제2호 가목, 2024. 5. 28. 개정), 그 진흥지구에 지구단위계획구역을 지정하면 그 건폐율의 120 % 이내 = 72 %(제47조 제1항 단서)</td></tr><tr><td class="">조례 vs 지구단위계획</td><td class="">지구단위계획구역에서는 조례에도 불구하고 시행령 제84조 범위에서 건폐율을 완화할 수 있음(제46조 제4항) — 지구단위계획 결정도서가 우선이므로 토지이음에서 확인</td></tr></tbody></table></div></div>
+<h3 id="s4-7">4-7. 산정 범위·한계</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">내용</th></tr></thead><tbody><tr><td class="">계산하는 것</td><td class="">21개 용도지역 기본 건폐율 · 용적률(시행령 상한 · 전북 14개 시 · 군 조례 본문), 대지면적 기준 최대 건축면적 · 연면적</td></tr><tr><td class="">안내만 하는 것</td><td class="">조례 단서(성장관리계획구역 · 산업단지 · 주거복합 등), 2024.5.28 계획관리지역 완화, 지구단위계획 완화 범위</td></tr><tr><td class="">다루지 않는 것</td><td class="">용도지구(취락 · 방화 · 방재 · 개발진흥 등) · 구역별 건폐율 · 용적률(시행령 제84조 제4항 이하 · 제85조 제3항 이하와 조례 해당 조문), 임대주택 · 공공시설 제공 · 사회복지시설 기부 등 용적률 완화, 건축법상 대지 안의 공지 · 높이 · 일조, 둘 이상 용도지역에 걸친 대지(법 제84조)</td></tr><tr><td class="">조례 범위</td><td class="">전북특별자치도 14개 시 · 군만 내장(2026-10-15 원문). 그 밖 시 · 도는 시행령 상한만 — 조례는 자치법규정보시스템(elis.go.kr) · 국가법령정보센터에서 확인</td></tr></tbody></table></div></div>
+<h3 id="s4-8">4-8. v5.1.0 정정 (2026-10-15)</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">기존</th><th class="">정정</th></tr></thead><tbody><tr><td class="">조례값</td><td class="">31곳 수록(전북 7곳 포함), 같은 값을 여러 지자체에 반복 입력 — 전북 7곳 294개 값 중 108개가 원문과 다름</td><td class="">전북 14개 시 · 군 원문값(LawMCP 대조) · 조문 · 시행일 · 일련번호 기재, 전북 외 24곳 삭제(조례 미내장 안내)</td></tr><tr><td class="">예 — 익산시 준주거 용적률</td><td class="">400 %</td><td class="">350 %(익산시 도시계획 조례 제60조 제1항 제6호)</td></tr><tr><td class="">예 — 익산시 제1종 일반주거 용적률</td><td class="">180 %</td><td class="">200 %(같은 항 제3호)</td></tr><tr><td class="">예 — 군산 · 정읍 등 중심상업 건폐율</td><td class="">80 %</td><td class="">90 %(각 조례 원문 — 시행령 상한과 같음)</td></tr><tr><td class="">시 · 군 목록</td><td class="">전북 13곳(순창군 없음), 7곳만 조례값</td><td class="">14곳 모두 조례값</td></tr><tr><td class="">규정 없는 용도지역</td><td class="">—</td><td class="">시행령 상한 표시 + 「규정 없음」 안내</td></tr><tr><td class="">조례 단서</td><td class="">—</td><td class="">「⚠ 조건부 값」 안내(결과 화면 · A4)</td></tr><tr><td class="">시행령 시행일 표기</td><td class="">2026. 7. 1.(법률 시행일) · 이용안내 「제35628호 · 2025.10.2 시행」</td><td class="">2026. 8. 18. 공포 · 2026. 9. 18. 시행</td></tr><tr><td class="">완화 근거 표기</td><td class="">조문번호 없음</td><td class="">제46조 제10항 · 제47조 제1항(단서) · 제84조 제4항 제2호 가목</td></tr><tr><td class="">조례 기준일 표시</td><td class="">조례 기준일이 화면에 나오지 않음(데이터 위치 오류)</td><td class="">조례 근거 상자에 조문 · 시행일 표시</td></tr></tbody></table></div></div></div>
+<p>예전 판으로 만든 계산서는 다시 계산하십시오. 전북 7곳의 용적률은 대부분 달라졌습니다.</p>
+</section>
+<section class="ch" id="ch5"><h2><span class="n">05</span>실무 작업 방법</h2>
+<h3 id="s5-1">5-1. 단계별 절차</h3>
+<div class="svgbox"><svg viewBox="0 0 900 210" role="img" aria-label="건폐율 용적률 검토 흐름: 지자체와 조례를 고르고 용도지역을 선택한 뒤 대지면적을 넣으면 시행령 상한과 조례 적용값을 비교하고 최대 건축면적과 연면적을 계산해 A4 계산서로 남긴다">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2D3A8C"/></marker></defs>
+<style>.b{fill:#E9ECF8;stroke:#2D3A8C;stroke-width:1.5}.o{fill:#FDF1E7;stroke:#C97A3A;stroke-width:1.5}.t{font:600 14px 'Noto Sans KR','Noto Sans KR Local',sans-serif;fill:#1A1A2E}.s{font:12px 'Noto Sans KR','Noto Sans KR Local',sans-serif;fill:#4A4F66}.l{stroke:#2D3A8C;stroke-width:1.6;fill:none;marker-end:url(#ar)}</style>
+<rect class="b" x="10" y="20" width="200" height="72" rx="10"/><text class="t" x="22" y="48">① 지자체 · 조례</text><text class="s" x="22" y="72">전북 14개 시 · 군 내장</text>
+<rect class="b" x="240" y="20" width="200" height="72" rx="10"/><text class="t" x="252" y="48">② 용도지역</text><text class="s" x="252" y="72">21개 — 도시 · 관리 · 농림</text>
+<rect class="b" x="470" y="20" width="200" height="72" rx="10"/><text class="t" x="482" y="48">③ 시행령 vs 조례</text><text class="s" x="482" y="72">조례 우선 · 조건부 값</text>
+<rect class="o" x="700" y="20" width="190" height="72" rx="10"/><text class="t" x="712" y="48">④ A4 계산서</text><text class="s" x="712" y="72">인쇄 · PDF · JPG</text>
+<path class="l" d="M210,56 L238,56"/><path class="l" d="M440,56 L468,56"/><path class="l" d="M670,56 L698,56"/>
+<rect class="b" x="470" y="122" width="420" height="66" rx="10"/><text class="t" x="482" y="148">대지면적 × 건폐율 = 최대 건축면적</text><text class="s" x="482" y="171">대지면적 × 용적률 = 최대 연면적(지상 · 제119조 제외 면적 별도)</text>
+<path class="l" d="M570,96 L570,120"/>
+</svg></div>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">단계</th><th class="">내용</th></tr></thead><tbody><tr><td class="">① 토지이용계획 확인</td><td class="">토지이음(eum.go.kr)에서 지번의 용도지역 · 용도지구 · 용도구역 · 지구단위계획 여부를 먼저 확인합니다</td></tr><tr><td class="">② 지자체 · 용도지역</td><td class="">앱에서 시 · 도 → 시 · 군 → 용도지역을 고릅니다(대지가 두 용도지역에 걸치면 각각 계산 — 법 제84조)</td></tr><tr><td class="">③ 조례값 · 조건부 값</td><td class="">조례 근거(조문 · 시행일)를 확인하고, 조건부 값(성장관리계획구역 등)에 해당하는지 판단합니다</td></tr><tr><td class="">④ 대지면적</td><td class="">도시 · 군계획시설 · 건축선 후퇴 부분을 뺀 대지면적을 넣습니다(건축법 시행령 제119조 제1항 제1호)</td></tr><tr><td class="">⑤ 계획 반영</td><td class="">최대 건축면적 · 연면적을 배치 · 규모 검토의 상한으로 쓰고, 용적률 제외 면적(지하층 · 부속 주차 등)을 따로 산정합니다</td></tr><tr><td class="">⑥ 기록</td><td class="">A4 계산서를 PDF · JPG로 남겨 설계 검토서에 첨부합니다</td></tr></tbody></table></div></div>
+<h3 id="s5-2">5-2. 허가 전 확인</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">항목</th><th class="">확인</th></tr></thead><tbody><tr><td class="">조례 개정</td><td class="">내장 조례는 2026-10-15 기준입니다 — 허가 신청 전 자치법규정보시스템에서 현행 조례 시행일을 다시 확인</td></tr><tr><td class="">지구단위계획</td><td class="">결정도서의 건폐율 · 용적률(기준 · 허용 · 상한 용적률)이 조례보다 우선</td></tr><tr><td class="">용도지구 · 구역</td><td class="">취락지구 · 개발진흥지구 · 방화지구 · 농공단지 · 산업단지 등은 조례의 별도 조문으로 정함</td></tr><tr><td class="">완화 특례</td><td class="">임대주택 · 공공시설 제공 · 사회복지시설 기부 · 방재지구 등 용적률 완화는 조례 해당 항을 확인하고 허가권자와 협의</td></tr></tbody></table></div></div>
+</section>
+<section class="ch" id="ch6"><h2><span class="n">06</span>문제 해결·FAQ</h2>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">증상</th><th class="">해결</th></tr></thead><tbody><tr><td class="">조례값이 안 나와요</td><td class="">전북특별자치도와 시 · 군을 골랐는지 확인하십시오. 전북 외 시 · 도는 조례가 내장되어 있지 않아 시행령 상한만 나옵니다</td></tr><tr><td class="">「규정 없음」이 떠요</td><td class="">그 조례가 해당 용도지역을 정하지 않은 경우입니다(예: 임실군 전용주거 · 중심상업, 전주시 자연환경보전) — 시행령 상한을 표시합니다</td></tr><tr><td class="">조건부 값은 계산에 들어가나요</td><td class="">아니요. 해당 구역 · 용도에 맞는지 설계자가 판단해 따로 적용합니다</td></tr><tr><td class="">조례가 시행령보다 높을 수 있나요</td><td class="">없습니다. 조례는 시행령 범위 안에서 정합니다(법 제77조 · 제78조) — 앱 데이터도 상한 이하인지 검증했습니다</td></tr><tr><td class="">예전 판과 값이 달라요</td><td class="">v5.1.0에서 조례 원문대로 정정했습니다(<a href="#s4-8">4-8</a>)</td></tr><tr><td class="">화면이 예전 판이에요</td><td class="">새로 고침(Ctrl+F5) 또는 앱을 닫았다 다시 여십시오</td></tr></tbody></table></div></div>
+</section>
+<section class="ch" id="ch7"><h2><span class="n">부록</span></h2>
+<h3 id="a1">A1. 예제 입력값</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">예제</th><th class="">지자체</th><th class="">용도지역</th><th class="">대지면적</th><th class="">조례</th></tr></thead><tbody><tr><td class="">예제 A</td><td class="">전북 익산시</td><td class="">준주거지역</td><td class="">500㎡</td><td class="">익산시 도시계획 조례 제55조·제60조</td></tr><tr><td class="">예제 B</td><td class="">전북 익산시</td><td class="">계획관리지역</td><td class="">1,000㎡</td><td class="">익산시 도시계획 조례 제55조·제60조</td></tr><tr><td class="">예제 C</td><td class="">전북 전주시</td><td class="">일반상업지역</td><td class="">800㎡</td><td class="">전주시 도시계획 조례 제45조·제47조</td></tr></tbody></table></div></div></div>
+<h3 id="a2">A2. 예제 결과</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">예제</th><th class="">시행령(건폐 · 용적 %)</th><th class="">조례(건폐 · 용적 %)</th><th class="">최대 건축면적(㎡)</th><th class="">최대 연면적(㎡)</th><th class="">판정</th></tr></thead><tbody><tr><td class="">예제 A</td><td class="">70 · 500</td><td class="">70 · 350</td><td class="">350</td><td class="">1,750</td><td class="">조례 강화</td></tr><tr><td class="">예제 B</td><td class="">40 · 100</td><td class="">40 · 100</td><td class="">400</td><td class="">1,000</td><td class="">동일</td></tr><tr><td class="">예제 C</td><td class="">80 · 1,300</td><td class="">70 · 900</td><td class="">560</td><td class="">7,200</td><td class="">조례 강화</td></tr></tbody></table></div></div></div>
+<h3 id="a3">A3. 버전 변경 내역</h3>
+<div class="k1"><div class="tbl"><table><thead><tr><th class="">버전</th><th class="">내용</th></tr></thead><tbody><tr><td class="">Ver-5.1 · v5.1.0 (2026-10-15)</td><td class="">전북특별자치도 14개 시 · 군 도시 · 군계획 조례 원문 내장(<a href="#s4-8">4-8</a>), 전북 외 24곳 삭제, 조례 단서 「조건부 값」 안내, 시행령 시행일(2026. 9. 18.) 정정, 제46조 · 제47조 근거 표기, 탭 막대 「📘 매뉴얼」 · 사용자 매뉴얼</td></tr><tr><td class="">Ver-5.0 (2026-09)</td><td class="">MANMIN 디자인 통일(헤더 · 탭 · 요약 스트립), A4 계산서 · JPG 저장, PWA</td></tr></tbody></table></div></div>
+<h3 id="a4">A4. 용어</h3>
+<div class="brk"><div class="k1"><div class="tbl"><table><thead><tr><th class="">용어</th><th class="">뜻</th></tr></thead><tbody><tr><td class="">건폐율</td><td class="">대지면적에 대한 건축면적의 비율(건축법 제55조)</td></tr><tr><td class="">용적률</td><td class="">대지면적에 대한 연면적의 비율(건축법 제56조) — 지하층 등은 연면적에서 뺌</td></tr><tr><td class="">용도지역</td><td class="">토지의 이용 · 건축물의 용도 · 건폐율 · 용적률 · 높이를 제한하기 위해 도시 · 군관리계획으로 정하는 지역(법 제36조) — 21개로 세분(시행령 제30조)</td></tr><tr><td class="">시행령 상한</td><td class="">시행령 제84조 · 제85조가 정한 용도지역별 최대한도 — 앱의 「법령 최대치」</td></tr><tr><td class="">조례 적용값</td><td class="">시 · 군 도시 · 군계획 조례가 시행령 범위에서 정한 값 — 실제 허가 기준</td></tr><tr><td class="">조건부 값</td><td class="">조례 단서 · 호가 특정 구역 · 용도에만 주는 값(성장관리계획구역 125 % 등)</td></tr><tr><td class="">성장관리계획구역</td><td class="">개발압력이 높은 지역의 계획적 관리를 위해 지정하는 구역(법 제75조의2) — 조례가 계획관리지역 용적률 등을 완화</td></tr></tbody></table></div></div></div>
+</section></main></div>
+<footer class="foot">© 2026 김만민 건축사 · ㈜대성건축사사무소 · 건폐율 · 용적률 조례 적용 계산기 사용자 매뉴얼 Ver-5.1 · 국토계획법 시행령 제84조 · 제85조 (2026. 9. 18. 시행) · 전북 14개 시 · 군 도시 · 군계획 조례 <span class="rev">· 화면 대응 개정 2026-10-15</span></footer>
+<div class="pfoot"><span>건폐율 · 용적률 조례 적용 계산기 사용자 매뉴얼 Ver-5.1</span><span>2026-10-15</span></div>
+<div id="lb" role="dialog" aria-label="그림 확대"><img alt=""></div>
+<button class="totop" aria-label="맨 위로">↑</button>
+<script>
+(function(){
+  var lb=document.getElementById('lb'),li=lb.querySelector('img');
+  document.querySelectorAll('figure.shot .frame').forEach(function(f){f.addEventListener('click',function(){li.src=f.querySelector('img').src;li.alt=f.querySelector('img').alt;lb.classList.add('open');});});
+  lb.addEventListener('click',function(){lb.classList.remove('open');li.removeAttribute('src');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open');});
+  document.querySelector('.totop').addEventListener('click',function(){window.scrollTo(0,0);});
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id);});}});},{rootMargin:'0px 0px -70% 0px'});
+    document.querySelectorAll('section.ch,h3[id]').forEach(function(s){io.observe(s);});
+  }
+})();
+/* 좁은 화면 표 쌓기 준비: 숫자 칸이 없는 표에 stack 표시, 각 칸에 머리글(data-th) 복사 */
+(function(){document.querySelectorAll('.tbl').forEach(function(t){var tb=t.querySelector('table');if(!tb||!tb.tHead)return;
+ if(tb.querySelector('td.num,th.num'))return;var hs=[].map.call(tb.tHead.rows[0].cells,function(c){return c.textContent.trim()});
+ [].forEach.call(tb.tBodies[0].rows,function(r){[].forEach.call(r.cells,function(c,i){if(hs[i])c.setAttribute('data-th',hs[i])})});t.classList.add('stack');if(hs.length===2)t.classList.add('c2')})})();
+</script>
+</body></html>
