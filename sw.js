@@ -20,7 +20,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'gukto-v5.1.1';
+const CACHE  = 'gukto-v5.1.2';
 const ORPHAN = ['gukto-v1.0'];
 const ASSETS = [
   './', './index.html', './manifest.json',
