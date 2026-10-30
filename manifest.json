@@ -1,27 +1,80 @@
 {
-  "name": "건폐율·용적률 조례 적용 계산기 · MANMIN Ver-5.1",
-  "short_name": "국토이용",
+  "name": "MANMIN 건축 · 건폐율 · 용적률 조례 적용 계산기",
+  "short_name": "건폐용적",
   "description": "국토계획법 시행령 제84조·제85조 + 전북 14개 시·군 도시·군계획 조례 기준 건폐율·용적률·건축면적·연면적 자동 계산 · A4 검토 계산서 — MANMIN Ver-5.1 | ARCHITECT KIM MANMIN",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f4f6f9",
-  "theme_color": "#15803d",
+  "theme_color": "#785a28",
   "orientation": "portrait-primary",
   "lang": "ko",
-  "categories": ["utilities", "productivity"],
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
   "icons": [
-    { "src": "./icons/icon-72x72.png",   "sizes": "72x72",   "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-96x96.png",   "sizes": "96x96",   "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable any" },
-    { "src": "./icons/icon-256x256.png", "sizes": "256x256", "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "any" },
-    { "src": "./icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable any" }
+    {
+      "src": "./icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "./icons/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
   ],
   "screenshots": [
-    { "src": "./icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "form_factor": "narrow" }
+    {
+      "src": "./icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
   ]
 }
