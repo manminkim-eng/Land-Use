@@ -20,7 +20,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'gukto-v5.1.5';   /* 2026-10-31 v5.1.4 — 설치 배너 z-index 500 → 1250 */
+const CACHE  = 'gukto-v5.1.6';   /* 2026-10-31 v5.1.4 — 설치 배너 z-index 500 → 1250 */
 const ORPHAN = ['gukto-v1.0'];
 const ASSETS = [
   './', './index.html', './manifest.json',
