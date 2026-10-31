@@ -1,5 +1,5 @@
 {
-  "name": "MANMIN 건축 · 건폐율 · 용적률 조례 적용 계산기",
+  "name": "MANMIN 건폐용적",
   "short_name": "건폐용적",
   "description": "국토계획법 시행령 제84조·제85조 + 전북 14개 시·군 도시·군계획 조례 기준 건폐율·용적률·건축면적·연면적 자동 계산 · A4 검토 계산서 — MANMIN Ver-5.1 | ARCHITECT KIM MANMIN",
   "start_url": "./index.html",
