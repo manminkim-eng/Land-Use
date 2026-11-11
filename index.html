@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>건폐율·용적률 조례 적용 계산기 · MANMIN Ver-5.1</title>
+<title>건폐율·용적률 조례 적용 계산기 · MANMIN Ver-6.1</title>
 <!-- 링크 미리보기(네이버 · 카카오 · SNS) — 2026-10-30 전수 정비 -->
 <link rel="canonical" href="https://manminkim-eng.github.io/Land-Use/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="MANMIN ENGINEERING">
 <meta property="og:locale" content="ko_KR">
-<meta property="og:title" content="건폐율·용적률 조례 적용 계산기 · MANMIN Ver-5.1">
+<meta property="og:title" content="건폐율·용적률 조례 적용 계산기 · MANMIN Ver-6.1">
 <meta property="og:description" content="국토계획법 + 지자체 조례 기준 건폐율·용적률 자동 계산기 | ARCHITECT KIM MANMIN">
 <meta property="og:url" content="https://manminkim-eng.github.io/Land-Use/">
 <meta property="og:image" content="https://manminkim-eng.github.io/Land-Use/og-card.jpg">
@@ -17,9 +17,9 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="건폐율·용적률 조례 적용 계산기 · MANMIN Ver-5.1">
+<meta property="og:image:alt" content="건폐율·용적률 조례 적용 계산기 · MANMIN Ver-6.1">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="건폐율·용적률 조례 적용 계산기 · MANMIN Ver-5.1">
+<meta name="twitter:title" content="건폐율·용적률 조례 적용 계산기 · MANMIN Ver-6.1">
 <meta name="twitter:description" content="국토계획법 + 지자체 조례 기준 건폐율·용적률 자동 계산기 | ARCHITECT KIM MANMIN">
 <meta name="twitter:image" content="https://manminkim-eng.github.io/Land-Use/og-card.jpg">
 
@@ -745,7 +745,7 @@ footer{border-top-color:#e4e9f0;background:#fff;} .foot-nm{color:#785a28;} .foot
         <h1 class="hdr-h1">건폐율 · 용적률 조례 적용 계산기</h1>
         <div class="hdr-sub">
           국토계획법 최대치 + 지자체 도시계획조례 실제 적용값 동시 산출 · 건축면적·연면적 · A4 검토 계산서
-          <span class="hdr-manmin">MANMIN · Ver-5.1</span>
+          <span class="hdr-manmin">MANMIN · Ver-6.1</span>
         </div>
       </div>
     </div>
@@ -957,7 +957,7 @@ footer{border-top-color:#e4e9f0;background:#fff;} .foot-nm{color:#785a28;} .foot
     <div class="card" id="rcard" style="display:none">
       <div class="card-head">
         <div class="ctitle"><span class="cdot"></span>판정 결과</div>
-        <span class="ver-pill" style="background:#fbf6ea;border:1px solid #f1dfb5;color:#785a28;font-family:var(--font-mono);font-size:10px;padding:4px 11px;border-radius:20px">MANMIN Ver-5.1</span>
+        <span class="ver-pill" style="background:#fbf6ea;border:1px solid #f1dfb5;color:#785a28;font-family:var(--font-mono);font-size:10px;padding:4px 11px;border-radius:20px">MANMIN Ver-6.1</span>
       </div>
 
       <div class="zone-row">
@@ -1064,7 +1064,7 @@ footer{border-top-color:#e4e9f0;background:#fff;} .foot-nm{color:#785a28;} .foot
     </div>
     <div id="a4-body"><div style="color:#94a3b8;font-size:11px;padding:10px;">「검토 입력·결과」 탭에서 지자체·용도지역을 선택하고 계산을 실행하세요.</div></div>
     <div class="a4-footer">
-      <span>건폐율·용적률 조례 적용 계산기 [MANMIN-Ver5.1]</span>
+      <span>건폐율·용적률 조례 적용 계산기 [MANMIN-Ver6.1]</span>
       <span>국토계획법 시행령 제84조·제85조 · 도시계획조례</span>
       <span>작성일: <span id="a4-foot-date">—</span></span>
     </div>
@@ -1077,7 +1077,7 @@ footer{border-top-color:#e4e9f0;background:#fff;} .foot-nm{color:#785a28;} .foot
 <footer>
   <div class="foot-inner">
     <div>
-      <div class="foot-nm">MANMIN Ver-5.1</div>
+      <div class="foot-nm">MANMIN Ver-6.1</div>
       <div class="foot-desc">건폐율·용적률 자동 계산기 · 조례 기준 적용 · 국토계획법 시행령 제84조·제85조 [시행 2026. 9. 18.] · 전북 14개 시·군 조례 내장</div>
     </div>
     <div class="foot-copy">ARCHITECT KIM MANMIN · © 2026</div>
@@ -1612,7 +1612,7 @@ function printRes(){
   const z=LAW[curKey]; const sqm=parseFloat(document.getElementById('inp-sqm').value);
   const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
   const effCov=ord?ord.cov:z.cov,effFar=ord?ord.far:z.far;
-  let txt=`\n╔══════════════════════════╗\n║  MANMIN Ver-5.1            ║\n║  건폐율·용적률 계산기      ║\n║  조례 기준 적용            ║\n╚══════════════════════════╝\n`;
+  let txt=`\n╔══════════════════════════╗\n║  MANMIN Ver-6.1            ║\n║  건폐율·용적률 계산기      ║\n║  조례 기준 적용            ║\n╚══════════════════════════╝\n`;
   txt+=`\n📍 용도지역: ${z.name} (${z.cat})\n`;
   if(curSido)txt+=`🗺 지자체: ${curSido}${curSigungu?' '+curSigungu:''}\n`;
   txt+=`\n📜 법령 최대치:\n   건폐율: ${z.cov}% 이하 / 용적률: ${z.far}% 이하\n`;
@@ -1622,7 +1622,7 @@ function printRes(){
     txt+=`   최대 건축면적: ${(sqm*effCov/100).toFixed(1)}㎡\n`;
     txt+=`   최대 연면적: ${(sqm*effFar/100).toFixed(1)}㎡\n`;
   }
-  txt+=`\n⚖ 근거: 국토계획법 시행령 제84조·제85조 + 지자체 조례\n산출일시: ${new Date().toLocaleString('ko-KR')}\n© 2025 MANMIN Ver-5.1`;
+  txt+=`\n⚖ 근거: 국토계획법 시행령 제84조·제85조 + 지자체 조례\n산출일시: ${new Date().toLocaleString('ko-KR')}\n© 2025 MANMIN Ver-6.1`;
   const w=window.open('','_blank','width=440,height=640');
   if(w){w.document.write(`<pre style="font-family:monospace;padding:22px;background:#0B1B2E;color:#00E5C8;font-size:13px;line-height:1.9;">${txt}</pre>`);w.document.close();w.print();}
 }
@@ -1631,7 +1631,7 @@ function copyRes(){
   const z=LAW[curKey];const sqm=parseFloat(document.getElementById('inp-sqm').value);
   const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
   const effCov=ord?ord.cov:z.cov,effFar=ord?ord.far:z.far;
-  let txt=`[MANMIN Ver-5.1 건폐율·용적률 계산기]\n용도지역: ${z.name}`;
+  let txt=`[MANMIN Ver-6.1 건폐율·용적률 계산기]\n용도지역: ${z.name}`;
   if(curSido)txt+=` / 지자체: ${curSido}${curSigungu?' '+curSigungu:''}`;
   txt+=`\n법령: 건폐율 ${z.cov}% / 용적률 ${z.far}%`;
   if(ord)txt+=`\n조례: 건폐율 ${ord.cov}% / 용적률 ${ord.far}%`;
@@ -1703,7 +1703,7 @@ function downloadJpg(){
   const a=document.createElement('a');
   const z=LAW[curKey];
   const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
-  const fname=`MANMIN_Ver-5.1_${z?z.name.replace(/\s/g,'_'):'결과'}_${new Date().toLocaleDateString('ko-KR').replace(/\./g,'').replace(/\s/g,'')}.jpg`;
+  const fname=`MANMIN_Ver-6.1_${z?z.name.replace(/\s/g,'_'):'결과'}_${new Date().toLocaleDateString('ko-KR').replace(/\./g,'').replace(/\s/g,'')}.jpg`;
   a.href=jpgDataUrl; a.download=fname; a.click();
   setStatus('save-status','✅ JPG 저장 완료!','ok');
 }
@@ -1714,11 +1714,11 @@ function shareJpgNative(){
     .then(r=>r.blob())
     .then(blob=>{
       const z=LAW[curKey];
-      const file=new File([blob],'MANMIN_Ver-5.1_결과.jpg',{type:'image/jpeg'});
+      const file=new File([blob],'MANMIN_Ver-6.1_결과.jpg',{type:'image/jpeg'});
       if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
         navigator.share({
-          title:'MANMIN Ver-5.1 건폐율·용적률 결과',
-          text:`${z?z.name:''} 건폐율·용적률 판정 결과 | MANMIN Ver-5.1`,
+          title:'MANMIN Ver-6.1 건폐율·용적률 결과',
+          text:`${z?z.name:''} 건폐율·용적률 판정 결과 | MANMIN Ver-6.1`,
           files:[file]
         }).then(()=>setStatus('share-status','✅ 공유 완료!','ok'))
           .catch(()=>setStatus('share-status','공유를 취소했습니다.',''));
@@ -1736,10 +1736,10 @@ function closeJpgPreview(){
 /* ── SHARE FUNCTIONS ── */
 function getShareText(){
   const z=LAW[curKey];
-  if(!z)return'MANMIN Ver-5.1 건폐율·용적률 계산기';
+  if(!z)return'MANMIN Ver-6.1 건폐율·용적률 계산기';
   const ord=curOrdKey&&ORDINANCE[curOrdKey]?ORDINANCE[curOrdKey][curKey]:null;
   const effCov=ord?ord.cov:z.cov, effFar=ord?ord.far:z.far;
-  let txt=`[MANMIN Ver-5.1] ${z.name}\n건폐율 ${effCov}% / 용적률 ${effFar}%`;
+  let txt=`[MANMIN Ver-6.1] ${z.name}\n건폐율 ${effCov}% / 용적률 ${effFar}%`;
   if(curSido)txt+=`\n지자체: ${curSido}${curSigungu?' '+curSigungu:''}`;
   const sqm=parseFloat(document.getElementById('inp-sqm').value);
   if(!isNaN(sqm)&&sqm>0)txt+=`\n대지 ${sqm}㎡ → 건축 ${(sqm*effCov/100).toFixed(0)}㎡ / 연면 ${(sqm*effFar/100).toFixed(0)}㎡`;
@@ -1773,7 +1773,7 @@ function shareNative(){
   const txt=getShareText();
   if(navigator.share){
     navigator.share({
-      title:'MANMIN Ver-5.1 건폐율·용적률 결과',
+      title:'MANMIN Ver-6.1 건폐율·용적률 결과',
       text:txt,
       url:location.href
     }).then(()=>setStatus('share-status','✅ 공유 완료!','ok'))
@@ -1929,7 +1929,7 @@ window.exportA4Jpg=function(){
   markLongTables(el); var segs=mmSegments(el), fullH=Math.max(mmContentHeight(el),1);
   html2canvas(el,{scale:2,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',logging:false,width:el.scrollWidth,height:fullH,windowWidth:el.scrollWidth,windowHeight:fullH,scrollX:0,scrollY:0}).then(function(canvas){
     restoreScale(); var now=new Date(), ts=now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'_'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
-    var base='국토이용_건폐율용적률_계산서_MANMIN-Ver5.0_'+ts;
+    var base='국토이용_건폐율용적률_계산서_MANMIN-Ver6.1_'+ts;
     if(!segs||!segs.length){ mmDownload(canvas.toDataURL('image/jpeg',0.95), base+'.jpg'); toast('✅ JPG 저장 완료!'); return; }
     var S=canvas.width/el.scrollWidth, PAGE_W=MM_PAGE.W, PAGE_H=MM_PAGE.H, mmPerPx=210/PAGE_W, topPx=MM_PAGE.MT/mmPerPx;
     var shots=segs.map(function(sg,idx){ var h=Math.max(1,Math.round((sg[1]-sg[0])*S)); var tmp=document.createElement('canvas'); tmp.width=Math.round(PAGE_W*S); tmp.height=Math.round(PAGE_H*S); var ctx=tmp.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,tmp.width,tmp.height); ctx.drawImage(canvas,0,Math.round(sg[0]*S),canvas.width,h,0,Math.round(topPx*S),canvas.width,h); if(segs.length>1){ var fs=Math.round(9*S); ctx.fillStyle='#9CA3AF'; ctx.font='700 '+fs+'px Orbitron, "JetBrains Mono", monospace'; ctx.textAlign='left'; ctx.textBaseline='alphabetic'; ctx.fillText((idx+1)+' / '+segs.length, Math.round(MM_PAGE.ML/mmPerPx*S), Math.round((MM_PAGE.H-MM_PAGE.MB/mmPerPx+fs/S*0.4)*S)); } return tmp.toDataURL('image/jpeg',0.95); });
@@ -2171,10 +2171,10 @@ window.exportA4Jpg=function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 </script>
-<!-- MM-PROJECT:BEGIN v1.1 -->
+<!-- MM-PROJECT:BEGIN v1.2 -->
 <script id="mm-project-js" data-tool="국토이용" data-pos="bottom:198px;right:18px" data-map="{&quot;사업명&quot;:&quot;#a4ProjName&quot;,&quot;작성자&quot;:&quot;#a4Author&quot;,&quot;위치&quot;:&quot;-&quot;,&quot;발주처&quot;:&quot;-&quot;,&quot;연면적&quot;:&quot;-&quot;,&quot;지상층&quot;:&quot;-&quot;,&quot;지하층&quot;:&quot;-&quot;,&quot;높이&quot;:&quot;-&quot;,&quot;구조&quot;:&quot;-&quot;}">
-/* MANMIN 공통 건물개요 원본 manmin-project.js v1.1 (2026-11-08, 작업지시서 §25-6-51 · v1.0 §25-6-50)
-   정본: Z:\MIN-A\01.만민자료\02.설계자료\11.개발자료\65.개발자료[건물개요]\버전s-1.1\manmin-project-v1.1\
+/* MANMIN 공통 건물개요 원본 manmin-project.js v1.2 (2026-11-09, 작업지시서 §25-6-52 · v1.1 §25-6-51 · v1.0 §25-6-50)
+   정본: Z:\MIN-A\01.만민자료\02.설계자료\11.개발자료\65.개발자료[건물개요]\버전s-1.2\manmin-project-v1.2\
    도구에는 inject.py 가 MM-PROJECT:BEGIN · MM-PROJECT:END 표식 사이에 그대로 끼워 넣음(외부 링크 없음 · 오프라인 · Z: 사본 단독 동작). 도구에서 직접 고치지 말 것.
    하는 일: 같은 현장의 표지 정보 · 건물 수치를 localStorage「MANMIN_PROJECT_V1」에 담고 다른 도구에서 불러옴(같은 주소 manminkim-eng.github.io 아래 공유).
      저장 = 지금 도구 값을 담음(이 도구에 없는 항목은 저장값 그대로) · 불러오기 = 채울 값을 목록으로 먼저 보여 주고 확인하면 채움(이미 입력된 칸은 직접 체크해야 덮어씀)
@@ -2185,7 +2185,7 @@ window.exportA4Jpg=function(){
    기타 설정: data-tool(저장한 도구 이름) · data-pos(단추 위치 CSS, 기본 "top:10px;right:12px" — 도구의 머리 글자 · 떠 있는 단추와 겹치지 않는 자리로 지정) */
 (function () {
   var me = document.currentScript; if (!me || window.MMProject) return;
-  var KEYNAME = 'MANMIN_PROJECT_V1', VER = 'v1.1';
+  var KEYNAME = 'MANMIN_PROJECT_V1', VER = 'v1.2';
   var KEYS = ['사업명', '위치', '발주처', '작성자', '연면적', '지상층', '지하층', '높이', '구조'];
   var NUM = { 연면적: 1, 지상층: 1, 지하층: 1, 높이: 1 };
   /* 이름표 정규식 — 사업명은 공통 인쇄 원본 KEY 와 같음 */
@@ -2289,7 +2289,7 @@ window.exportA4Jpg=function(){
     + '.mm-proj-back{position:fixed;inset:0;z-index:2147483002;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:12px}'
     + '.mm-proj-dlg{background:#fff;border-radius:12px;max-width:560px;width:100%;max-height:calc(100vh - 24px);overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.25)}'
     + '.mm-proj-dlg h3{margin:0;padding:14px 16px 4px;font-size:16px;color:' + theme + '}.mm-proj-dlg .mm-proj-note{padding:0 16px 8px;font-size:12px;color:#6b7280}'
-    + '.mm-proj-dlg table{width:100%;min-width:0;max-width:100%;table-layout:auto;border-collapse:collapse;font-size:13px}.mm-proj-dlg th,.mm-proj-dlg td{padding:6px 8px;border-top:1px solid #eef0f3;text-align:left;vertical-align:top;word-break:break-all}'
+    + '.mm-proj-dlg table{width:100%;min-width:0;max-width:100%;table-layout:auto;border-collapse:collapse;font-size:13px}.mm-proj-dlg th,.mm-proj-dlg td{padding:6px 8px;border-top:1px solid #eef0f3;text-align:left;vertical-align:top;white-space:normal;word-break:break-all}'
     + '.mm-proj-dlg th{font-weight:600;color:#374151;white-space:nowrap;background:#f9fafb}.mm-proj-dlg td.mm-proj-old{color:#9ca3af}.mm-proj-dlg .mm-proj-warn{color:#b45309;font-size:11px}'
     + '.mm-proj-foot{display:flex;gap:8px;justify-content:flex-end;padding:12px 16px}.mm-proj-foot button{padding:7px 14px;font-size:13px;border-radius:8px;border:1px solid #d1d5db;background:#fff;cursor:pointer}'
     + '.mm-proj-foot button.mm-proj-ok{background:' + theme + ';border-color:' + theme + ';color:#fff;font-weight:600}'

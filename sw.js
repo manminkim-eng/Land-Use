@@ -1,4 +1,5 @@
 /* ═══════════════════════════════════════════════════
+   v6.1.0 (2026-11-12) — 건물개요 공통 원본 MM-PROJECT v1.1 → v1.2(불러오기 창 칸 줄바꿈 · 저장값 같음, 정밀검토 B5 · 작업지시서 §25-6-76) · 캐시명 v6.1.0 (종전 gukto-v5.1.10)
    v5.1.0 회차 2026-10-15 — 시행령 시행일(2026-09-18) 정정 · 전북 14개 시·군 도시·군계획 조례 원문 내장 · 매뉴얼(/manual/) 캐시 제외 · 캐시명 v5.1.0
    S3-0 회차 2026-09-04 — R27 html2canvas 클론 정화 동반 캐시명 v5.0.2
    R25 회차 2026-09-04 — 자기 접두어 캐시 조회 · cors 프리캐시 · opaque 가드 · 캐시명 v5.0.1 (S10)
@@ -20,7 +21,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'gukto-v5.1.10';   /* 2026-10-31 v5.1.4 — 설치 배너 z-index 500 → 1250 */
+const CACHE  = 'gukto-v6.1.0';   /* 2026-10-31 v5.1.4 — 설치 배너 z-index 500 → 1250 */
 const ORPHAN = ['gukto-v1.0'];
 const ASSETS = [
   './', './index.html', './manifest.json',
