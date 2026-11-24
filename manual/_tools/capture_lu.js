@@ -3,16 +3,17 @@
 // 예제 값은 손으로 옮기지 않는다 — 계산 뒤 앱 화면의 표시값과 mmSnap() 결과를 읽어 _example.json 에 기록한다.
 const {chromium}=require(process.env.MM_PW||'playwright');const fs=require('fs');const path=require('path');const {setup,server}=require('./serve');
 const repo=path.resolve(process.argv[2]),out=path.resolve(process.argv[3]);fs.mkdirSync(out,{recursive:true});
-const VW=+(process.env.MM_VW||1440),VH=+(process.env.MM_VH||900),DSF=+(process.env.MM_DSF||1.25),PORT=8902;
+const VW=+(process.env.MM_VW||1440),VH=+(process.env.MM_VH||900),DSF=+(process.env.MM_DSF||1.25),PORT=+(process.env.MM_PORT||8902);
 /* 예제 A = 익산시 준주거지역 대지 500㎡ — 시행령 70 % · 500 % ↔ 익산시 도시계획 조례 70 % · 350 % (조례가 더 엄격)
    예제 B = 익산시 계획관리지역 대지 1,000㎡ — 40 % · 100 % 동일 · 조례 단서(성장관리계획 125 %) · 시행령 제47조 안내
-   예제 C = 전주시 일반상업지역 대지 800㎡ — 시행령 80 % · 1,300 % ↔ 전주시 도시계획 조례 70 % · 900 % */
+   예제 C = 전주시 일반상업지역 대지 800㎡ — 시행령 80 % · 1,300 % ↔ 전주시 도시계획 조례 70 % · 900 %
+   Ver-6.1(웹 v6.1.4) — 고정 날짜 2026-11-24 · s21 A4 최신성 경고 · s22 대지면적 입력 오류 A4 · s23 이용안내 「📝 개정 메모」 추가 */
 const EX={
  A:{pn:'익산시 ○○동 근린생활시설 신축공사',au:'김만민',sido:'전북',sgg:'익산시',tab:'urban',maj:'주거',key:'준주거',sqm:500},
  B:{pn:'익산시 ○○면 제조업소 신축공사',au:'김만민',sido:'전북',sgg:'익산시',tab:'manage',key:'계획관리',sqm:1000},
  C:{pn:'전주시 ○○동 업무시설 신축공사',au:'김만민',sido:'전북',sgg:'전주시',tab:'urban',maj:'상업',key:'일반상업',sqm:800},
 };
-const FREEZE=`(()=>{const T=new Date(2026,9,15,10,0,0).getTime();const D=Date;class F extends D{constructor(...a){if(a.length)super(...a);else super(T);}static now(){return T;}}window.Date=F;window.alert=()=>{};window.confirm=()=>true;try{localStorage.clear();localStorage.setItem('pwa-dismissed','1');}catch(e){}})()`;
+const FREEZE=`(()=>{const T=new Date(2026,10,24,10,0,0).getTime();const D=Date;class F extends D{constructor(...a){if(a.length)super(...a);else super(T);}static now(){return T;}}window.Date=F;window.alert=()=>{};window.confirm=()=>true;try{localStorage.clear();localStorage.setItem('pwa-dismissed','1');}catch(e){}})()`;
 const HIDE='#toast,.toast,#pwa-banner,#ios-guide-modal,#pwa-install-bar{display:none!important}.result-panel{position:static!important;max-height:none!important;overflow:visible!important}#rcard,#cmp-banner{animation:none!important}';
 const HELP=`window.__vis=e=>e&&e.getClientRects().length>0;
 window.__find=sel=>{if(sel.startsWith('nth:')){const [q,i]=sel.slice(4).split('|');return [...document.querySelectorAll(q)].filter(__vis)[+i]||null;}
@@ -32,18 +33,21 @@ const SHOTS=[
  {id:'s01_overview',pre:"__run('A')",clip:'viewport',m:[['.tab-bar-inner','작업 탭 · 매뉴얼'],['.sum-bar','요약 스트립'],['.step-bar','진행 단계'],[IN,'입력 패널'],['#cmp-banner','법령 vs 조례 비교'],['#rcard','판정 결과'],['#fab-group','초기화 · 이용안내']]},
  {id:'s02_tabs',clip:'header.app-header',m:[['nth:.tab-bar-inner .tb|0','검토 입력 · 결과'],['nth:.tab-bar-inner .tb|1','A4 계산서'],['.tb-manual','매뉴얼'],['.hdr-right','근거 · 시행일']]},
  {id:'s03_project',clip:'nth:.region-panel|0',m:[['#a4ProjName','공사명'],['#a4Author','작성자']]},
- {id:'s04_region',clip:'nth:.region-panel|1',m:[['#sel-sido','광역시 · 도'],['#sel-sigungu','시 · 군 (전북 14곳)'],['#region-note','조례 적용 안내 — 조문 · 시행일']]},
+ {id:'s04_region',clip:'nth:.region-panel|1',m:[['#sel-sido','광역시 · 도'],['#sel-sigungu','시 · 군 (전북 14곳)'],['#region-note','조례 적용 안내 — 조문 · 시행일 · 단서 위치']]},
  {id:'s05_zone',clip:'.tabrow',union:'.calc-btn',m:[['nth:.tabrow .tab|0','도시지역'],['nth:.tabrow .tab|1','관리지역'],['nth:.tabrow .tab|2','농림 · 자연'],['#maj-urban','대분류'],['#min-urban','세부 용도지역'],['#inp-sqm','대지면적 ㎡'],['#inp-py','평 환산'],['.calc-btn','계산']]},
  {id:'s06_compare',clip:'#cmp-banner',m:[['nth:.cb-col|0','국토계획법(시행령) 최대치'],['nth:.cb-col|1','조례 적용값'],['#c-diff','판정 — 조례가 더 엄격']]},
  {id:'s07_result',clip:'#rcard',crop:900,m:[['.zone-row','용도지역'],['nth:.rbox|0','건폐율 — 시행령 · 조례'],['nth:.rbox|1','용적률 — 시행령 · 조례'],['#area-calc','대지면적 기준 계산'],['#r-note','적용 기준']]},
- {id:'s08_notes',clip:'#r-note',union:'#r-tags',m:[['#ord-date-info','조례 근거 — 조문 · 시행일'],['#ord-warn','조례 강화 경고']]},
- {id:'s09_planned',pre:"__run('B')",wait:800,clip:'#rcard',crop:1100,m:[['nth:.rbox|0','건폐율 40 %'],['nth:.rbox|1','용적률 100 %'],['#special-note','2024.5.28 완화 — 제84조④ · 제47조①'],['#ord-date-info','조건부 값 — 성장관리계획 125 %']]},
+ {id:'s08_notes',clip:'#r-note',union:'#r-tags',m:[['#ord-date-info','조례 근거 — 조문 · 시행일 · 단서 위치'],['#ord-warn','조례 강화 경고']]},
+ {id:'s09_planned',pre:"__run('B')",wait:800,clip:'#rcard',crop:1100,m:[['nth:.rbox|0','건폐율 40 %'],['nth:.rbox|1','용적률 100 %'],['#special-note','2024.5.28 완화 — 제84조④ · 제47조① 단서(72 % 요건)'],['#ord-date-info','조건부 값 — 성장관리계획 125 %']]},
  {id:'s10_jeonju',pre:"__run('C')",wait:800,clip:'#cmp-banner',union:'#area-calc',m:[['nth:.cb-col|0','시행령 80 % · 1,300 %'],['nth:.cb-col|1','전주시 조례 70 % · 900 %'],['#area-calc','대지 800㎡ 기준']]},
  {id:'s11_table',pre:"__run('A');document.getElementById('tbl-wrap').classList.add('open');document.getElementById('tbl-ico').classList.add('open')",wait:800,clip:'.tbl-card',crop:1500,m:[['.tbl-toggle','일람표 펼치기'],['#tbl-region-label','적용 조례 표시'],['nth:#tbl-body tr|1','법령 · 조례 나란히']]},
  {id:'s12_modal',pre:"document.getElementById('tbl-wrap').classList.remove('open');openLaw()",wait:700,fixed:true,clip:'#law-ov .modal-box',m:[]},
+ {id:'s23_modal_memo',pre:"openLaw();(()=>{const bx=document.querySelector('#law-ov .modal-box');const t=bx.querySelector('.mm-law-memo');bx.scrollTop+=t.getBoundingClientRect().top-bx.getBoundingClientRect().top-260;})()",wait:600,fixed:true,clip:'#law-ov .modal-box',m:[['#law-ov .mm-law-memo','📝 개정 메모 (2026-11-24 확인)']]},
  {id:'s13_modal_law',pre:"(()=>{const bx=document.querySelector('#law-ov .modal-box');const t=[...bx.querySelectorAll('.msec-title')].find(x=>x.textContent.includes('근거'));bx.scrollTop+=t.getBoundingClientRect().top-bx.getBoundingClientRect().top-70;})()",wait:500,fixed:true,clip:'#law-ov .modal-box',post:"closeLaw()",m:[]},
  {id:'s14_a4',pre:"__run('A');goTab('print');scrollTo(0,0)",wait:1500,clip:'viewport',m:[['.mm-btn-print','인쇄 / PDF'],['.mm-btn-jpg','JPG 저장'],['#a4Page','A4 계산서']]},
  {id:'s15_a4page',clip:'#a4Page',crop:2600,m:[['.a4-head2','공사명 · 근거 · 작성일'],['nth:#a4Page .a4-sub|0','1. 검토 조건'],['nth:#a4Page .a4-sub|1','2. 법령 vs 조례'],['nth:#a4Page .a4-sub|2','3. 대지면적 기준 산정'],['nth:#a4Page .a4-sub|3','4. 용도지역별 법정 상한'],['nth:#a4Page .a4-sub|4','5. 적용 기준 · 유의사항']]},
+ {id:'s21_a4_stale',pre:"__run('A');(()=>{const x=document.getElementById('inp-sqm');x.value='600';syncPy();})();goTab('print');renderA4();scrollTo(0,0)",wait:1200,clip:'#a4Page',crop:560,post:"__run('A')",m:[['.a4-stale','계산 뒤 입력이 바뀌었습니다 — 다시 계산']]},
+ {id:'s22_a4_bad',pre:"__run('A');(()=>{const x=document.getElementById('inp-sqm');x.value='0';syncPy();})();calculate();goTab('print');scrollTo(0,0)",wait:1200,clip:'#a4Page',crop:560,post:"__run('A')",m:[['nth:#a4Page .a4-meta-table td.mono|0','대지면적 입력 오류 — 면적 산정 생략']]},
  {id:"s19_proj_menu",pre:"goTab('main');localStorage.setItem('MANMIN_PROJECT_V1',JSON.stringify({\"사업명\": \"익산시 ○○동 근린생활시설 신축공사\", \"작성자\": \"김만민 건축사\", \"높이\": \"15.5\", \"updated\": \"2026-11-08 10:00\", \"from\": \"일조사선\"}));window.scrollTo(0,0);document.querySelector('.mm-proj-btn').click()",wait:700,clip:'viewport',post:"document.querySelectorAll('.mm-proj-menu').forEach(e=>e.remove())",m:[[".mm-proj-btn", "「🏢 건물개요」 단추(오른쪽 아래)"], [".mm-proj-menu button[data-a=\"save\"]", "저장 — 지금 값 담기"], [".mm-proj-menu button[data-a=\"load\"]", "불러오기"], [".mm-proj-menu button[data-a=\"exp\"]", "파일로 내보내기(.json)"], [".mm-proj-menu button[data-a=\"imp\"]", "파일 가져오기"]]},
  {id:"s20_proj_load",pre:"(()=>{window.__mmK=['사업명','작성자','높이'];window.__mmB=__mmK.map(k=>MMProject.fields(k).map(e=>e.value));const __sv=(e,v)=>{const d=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');d.set.call(e,v);e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));};const e=MMProject.fields('사업명')[0];if(e)__sv(e,'');(()=>{const a=MMProject.fields('작성자')[0];if(a&&!a.value){const d=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');d.set.call(a,'김만민');a.dispatchEvent(new Event('input',{bubbles:true}));}})();localStorage.setItem('MANMIN_PROJECT_V1',JSON.stringify({\"사업명\": \"익산시 ○○동 근린생활시설 신축공사\", \"작성자\": \"김만민 건축사\", \"높이\": \"15.5\", \"updated\": \"2026-11-08 10:00\", \"from\": \"일조사선\"}));MMProject.load();})()",wait:900,fixed:true,clip:'.mm-proj-dlg',post:"(()=>{document.querySelectorAll('.mm-proj-back').forEach(e=>e.remove());const __sv=(e,v)=>{const d=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');d.set.call(e,v);e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));};__mmK.forEach((k,i)=>MMProject.fields(k).forEach((e,j)=>{if(e.value!==__mmB[i][j])__sv(e,__mmB[i][j]);}));localStorage.removeItem('MANMIN_PROJECT_V1');})()",m:[[".mm-proj-dlg input[type=checkbox]", "체크한 항목만 채움(빈 칸은 체크된 채로)"], [".mm-proj-dlg .mm-proj-warn", "이미 입력된 칸 — 직접 체크해야 덮어씀"], [".mm-proj-dlg .mm-proj-ok", "채우기"]]},
 ];
@@ -63,6 +67,8 @@ const SHOTS=[
   if(S.id==='s01_overview')ex.A=await pg.evaluate('__ex()');
   if(S.id==='s09_planned')ex.B=await pg.evaluate('__ex()');
   if(S.id==='s10_jeonju')ex.C=await pg.evaluate('__ex()');
+  if(S.id==='s21_a4_stale')ex.stale=await pg.evaluate(()=>{const e=document.querySelector('#a4Page .a4-stale');return e?e.innerText.trim():null;});
+  if(S.id==='s22_a4_bad')ex.bad=await pg.evaluate(()=>({snap:mmSnap()&&{sqm:mmSnap().sqm,bad:mmSnap().sqmBad,bld:mmSnap().bld},area:getComputedStyle(document.getElementById('area-calc')).display,a4:document.getElementById('a4Page').innerText.replace(/\s+/g,' ').slice(0,400)}));
   if(S.id==='s15_a4page')ex.A_a4=await pg.evaluate(()=>document.getElementById('a4Page').innerText.replace(/\s+/g,' '));
   const info=await pg.evaluate(({S,VW,VH})=>{
    const abs=e=>{const r=e.getBoundingClientRect();return {x:r.left+scrollX,y:r.top+scrollY,w:r.width,h:r.height};};
