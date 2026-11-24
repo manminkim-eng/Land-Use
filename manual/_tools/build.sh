@@ -1,6 +1,6 @@
 #!/bin/bash
 # 매뉴얼 전체 재생성: 캡처 → WebP → HTML → PDF → 좁은 화면 점검   usage: bash build.sh <repoDir> <rawDir>
-# 환경: MM_PW(playwright 경로)
+# 환경: MM_PW(playwright 경로) · MM_PORT(로컬 서버 포트, 캡처 · PDF 공용)
 set -e; REPO="$(cd "$1" && pwd)"; RAW="$2"; mkdir -p "$RAW"; RAW="$(cd "$RAW" && pwd)"; cd "$(dirname "$0")"; M="$REPO/manual"; mkdir -p "$M/images"
 node capture_lu.js "$REPO" "$RAW" > "$RAW/_log.json"
 python3 - "$RAW" "$M" <<'PY'
@@ -13,5 +13,5 @@ for f in sorted(glob.glob(raw+'/s*.png')):
 shutil.copy(raw+'/_marks.json',M+'/images/_marks.json'); shutil.copy(raw+'/_example.json',M+'/_tools/_example.json')
 PY
 MANUAL_DIR="$M" python3 gen_manual_lu.py
-node pdf_lu.js "$M" 건폐율용적률_사용자매뉴얼_Ver-5.1.pdf "건폐율 · 용적률 조례 적용 계산기 사용자 매뉴얼 Ver-5.1"
+node pdf_lu.js "$M" 건폐율용적률_사용자매뉴얼_Ver-6.1.pdf "건폐율 · 용적률 조례 적용 계산기 사용자 매뉴얼 Ver-6.1"
 node audit_responsive.js "$M/index.html" > "$RAW/_audit.json"
