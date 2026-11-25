@@ -1,4 +1,5 @@
 /* ═══════════════════════════════════════════════════
+   v6.1.5 (2026-11-25) — 헤더 고정 — 공통 원본 MM-HEADER v1.1 주입(태블릿 · 데스크톱만 — 폭 768px · 높이 600px 이상, 휴대폰은 고정 없음 · 머리+탭 sticky · 내리면 제목 한 줄+탭으로 접힘 · 다른 sticky 패널 top 보정) — 계산 · 인쇄 불변 · MIN 「추천안대로 승인」 · 「추천안대로 진행해줘」(모바일 제외) · 캐시명 v6.1.5 (종전 v6.1.4)
    v6.1.4 (2026-11-24) — 건축 2차 교차검증 반영: A4 대지면적 0 · 음수 산정 막음 · 계산 스냅샷(요약 · A4 일치) · 입력 변경 안내 · 제46조⑩ 안내(도시지역 전 용도지역 · 완화 상한) · 제47조① 단서 72 % 요건 · 제85조 ③~⑪ · 용적률 하한 병기 · 조례 4곳 시행일 · 일련번호(값 불변) · 조례 단서 위치 안내 · 개정 메모 — 계산값 불변 · 캐시명 v6.1.4 (종전 v6.1.3)
    v6.1.3 (2026-11-12) — html2canvas 1.4.1 머리 태그 SRI(integrity sha384 · crossorigin) · 공통 인쇄 원본 MM-PRINT v1.0 → v1.1(지연 로더도 SRI)(정밀검토 B8 · html2canvas SRI) — 화면 · 계산 · 인쇄 불변 · 작업지시서 §25-6-87 · 캐시명 v6.1.3 (종전 v6.1.2)
    v6.1.2 (2026-11-12) — Pretendard CSS SRI(integrity · crossorigin)(정밀검토 C2) — 화면 · 계산 · 인쇄 불변 · 작업지시서 §25-6-82 · 캐시명 v6.1.2 (종전 v6.1.1)
@@ -25,7 +26,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'gukto-v6.1.4';   /* 2026-10-31 v5.1.4 — 설치 배너 z-index 500 → 1250 */
+const CACHE  = 'gukto-v6.1.5';   /* 2026-10-31 v5.1.4 — 설치 배너 z-index 500 → 1250 */
 const ORPHAN = ['gukto-v1.0'];
 const ASSETS = [
   './', './index.html', './manifest.json',
