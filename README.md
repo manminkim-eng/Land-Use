@@ -92,3 +92,14 @@
 **함정 3건(§20-16)** — ① 22 JPG 엔진 `mmBlocks` 가 소제목+표 병합 블록에 `split` 을 승계하지 않아 `.long` 표가 원자로 취급됨(1쪽 500/987) → 승계 추가 + `markLongTables` 에 `.splitok` 마커 ② 원본 토스트가 `#toast`(id) 라 인쇄 숨김 `.toast` 에 안 걸림 → `#toast` 추가 ③ ≤640 `.a4-panel` 좌우 20 → 0(35 동일).
 
 **PDF 점검(MIN 캡처 2026-09-04 · §20-17)** — ① collapse 표의 바깥 오른쪽 선·마지막 행 아래 선이 PDF 에서 누락 → **화면·JPG·PDF 공통**으로 `border-collapse:separate` + 셀 자체 선(첫 열 좌선 · th 위선 · 첫 행 위선)으로 전환(R24) ③ JPG·미리보기 마지막 행 아래선 소실 — 원본 전역 `tr:last-child td{border-bottom:none}`(0,1,2) 가 `.a4-tbl td`(0,1,1) 를 이김 → `.a4-page tr:last-child td{border-bottom:…}` 추가 · JPG 픽셀 검사 3표 사방 1.00 ② `td.r`·`.mono` 안 한글이 generic monospace 로 자간 벌어짐 → 서체 스택에 `Noto Sans KR` 삽입.
+
+---
+
+## 📜 저작권 · 사용 범위
+
+© 2026 김만민 건축사 (MANMIN). All rights reserved.
+
+- **허용**: 웹 주소로 접속해 사용 · 앱 설치(PWA) · 도구가 만든 계산서 · 검토서를 본인 업무에 사용
+- **금지**(사전 서면 허락 없이): 소스 코드 · 계산 로직 · 법규 데이터 · 화면 디자인 · 매뉴얼의 복제 · 수정 · 재배포 · 다른 사이트 게시, 상업적 재사용, AI 학습 · 데이터셋 수집
+- 계산 · 검토 결과는 참고 자료이며 최종 판단과 책임은 사용자에게 있습니다.
+- 자세한 조건: [LICENSE](LICENSE)
